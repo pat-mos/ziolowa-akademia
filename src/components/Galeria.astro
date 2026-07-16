@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import g1 from '../assets/img/galeria-1.jpeg';
+import g2 from '../assets/img/galeria-2.jpeg';
+import g3 from '../assets/img/galeria-3.jpeg';
+import g4 from '../assets/img/galeria-4.jpeg';
+
+const zdjecia = [g1, g2, g3, g4];
+// Powielamy listę, aby pas przewijał się w nieskończoność bez przerwy.
+const petla = [...zdjecia, ...zdjecia];
+---
+<section class="section galeria">
+  <div class="container">
+    <span class="eyebrow">Nasze zajęcia</span>
+    <h2 class="section-title">Chwile uchwycone podczas warsztatów</h2>
+  </div>
+
+  <div class="marquee">
+    <div class="track">
+      {petla.map((img) => (
+        <Image src={img} alt="Zdjęcie z warsztatów Ziołowej Akademii" widths={[400, 800]} sizes="400px" />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    margin-top: 40px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scroll 30s linear infinite;
+  }
+  .track img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    outline: 1px solid oklch(0 0 0 / 0.1);   /* subtelny obrys — głębia */
+    outline-offset: -1px;
+    flex-shrink: 0;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  /* Szanujemy ustawienie "ogranicz animacje" w systemie */
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; flex-wrap: nowrap; overflow-x: auto; }
+  }
+</style>

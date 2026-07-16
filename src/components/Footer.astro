@@ -1,0 +1,99 @@
+---
+const rok = new Date().getFullYear();
+// UWAGA: te same dane placeholder co w sekcji kontaktu — podmień na prawdziwe.
+const email = 'kontakt@ziolowa-akademia.pl';
+const telefon = '+48 000 000 000';
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <!-- Marka: logo (wgraj public/img/logo.png) z tekstowym fallbackiem -->
+      <div class="footer-brand">
+        <a href="#top" class="footer-logo">
+          <img
+            src="/img/logo-mark.png"
+            alt="Ziołowa Akademia — Monika Wierus-Wieczorek"
+            width="140"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+          />
+          <span class="footer-logo-text" style="display:none">Ziołowa&nbsp;Akademia</span>
+        </a>
+        <p>Warsztaty edukacyjne, spacery botaniczne i kąpiele leśne — dla dzieci i dorosłych.</p>
+      </div>
+
+      <nav class="footer-col">
+        <h4>Nawigacja</h4>
+        <a href="#o-mnie">O mnie</a>
+        <a href="#oferta">Zajęcia</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <a href={`mailto:${email}`}>{email}</a>
+        <a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a>
+        <span class="footer-muted">Województwo śląskie · cała Polska</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {rok} Ziołowa Akademia · Monika Wierus-Wieczorek</span>
+      <span class="footer-muted">Wszelkie prawa zastrzeżone.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--white);
+    border-top: 1px solid var(--line);
+    padding-top: 72px;
+    /* zapas na dole, by linia copyright nie chowała się pod paskiem blur */
+    padding-bottom: 72px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+  }
+
+  .footer-logo img { display: block; height: auto; max-width: 140px; }
+  .footer-logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.01em; }
+  .footer-brand p {
+    color: var(--muted);
+    margin-top: 20px;
+    max-width: 34ch;
+    line-height: 1.6;
+  }
+
+  .footer-col { display: flex; flex-direction: column; gap: 12px; }
+  .footer-col h4 {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .footer-col a { font-weight: 600; width: fit-content; transition: color .15s ease; }
+  .footer-col a:hover { color: var(--lime-dark); }
+  .footer-muted { color: var(--muted); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .footer-top { grid-template-columns: 1fr; gap: 36px; }
+    .footer-bottom { flex-direction: column; text-align: center; align-items: center; }
+  }
+</style>

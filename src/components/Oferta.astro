@@ -1,0 +1,739 @@
+---
+import { Image } from 'astro:assets';
+import img1 from '../assets/img/oferta-1.jpeg';
+import img2 from '../assets/img/oferta-2.jpeg';
+import img3 from '../assets/img/oferta-3.jpeg';
+
+// Dane oferty. Pole `full` to dłuższy tekst pokazywany w oknie (modalu)
+// po kliknięciu karty — do swobodnej edycji/rozbudowy.
+const tabs = [
+  {
+    id: 'dzieci',
+    label: 'Dla dzieci',
+    puste: false,
+    items: [
+      {
+        img: img1,
+        title: 'Mały zielarz',
+        subtitle: 'Odkrywamy Moc Ziół',
+        text: 'Pachnące warsztaty ziołowe — dzieci poznają świat roślin, ich zapachy i smaki, które czekają tuż obok nas.',
+        intro: [
+          'Mali Zielarze – Odkrywamy Moc Ziół to pachnące, pełne odkryć warsztaty, podczas których dzieci poznają niezwykły świat ziół i roślin. Uczestnicy przekonają się, że wiele cennych roślin rośnie tuż obok nas – na łąkach, w ogrodach i parkach, a natura kryje w sobie mnóstwo zapachów, kolorów i smaków.',
+          'To zajęcia, które łączą naukę z praktycznym działaniem i świetną zabawą. Dzieci uczą się poprzez doświadczenie – oglądają, dotykają, wąchają i samodzielnie tworzą własne mieszanki ziołowe. Warsztaty rozwijają ciekawość świata, uważność oraz uczą, jak w bezpieczny i świadomy sposób korzystać z darów natury.',
+        ],
+        program: [
+          { h: 'Poznajemy świat ziół', p: 'Wspólnie odkrywamy najpopularniejsze zioła, ich zapach, wygląd i zastosowanie. Rozmawiamy o tym, gdzie rosną i dlaczego od wieków są obecne w naszym życiu.' },
+          { h: 'Tworzymy własną herbatkę ziołową', p: 'Każde dziecko komponuje swoją własną mieszankę herbatki ziołowej, którą następnie pakuje do ozdobnego opakowania i oznacza własnoręcznie wykonaną etykietą.' },
+          { h: 'Zioła wszystkimi zmysłami', p: 'Poprzez zabawę i proste doświadczenia dzieci poznają rośliny za pomocą wzroku, dotyku i zapachu. Uczą się uważnej obserwacji i odkrywania świata przyrody wszystkimi zmysłami.' },
+          { h: 'Zioła w domowej apteczce', p: 'Rozmawiamy o tym, jak rośliny od wieków wykorzystywano w domach oraz jak mądrze i bezpiecznie korzystać z ich właściwości.' },
+        ],
+        info: [
+          ['Wiek uczestników', 'od 5 lat'],
+          ['Czas trwania', '1 godzina'],
+          ['Liczba uczestników', 'minimum 10 osób'],
+        ],
+        provided: [
+          'wszystkie materiały potrzebne do wykonania mieszanki ziołowej',
+          'suszone zioła',
+          'opakowania na herbatę i etykiety',
+          'opiekę doświadczonego edukatora',
+        ],
+        price: '40 zł',
+        priceUnit: '/ uczestnik',
+        priceNote: 'W przypadku większych grup oraz stałej współpracy warunki ustalane są indywidualnie.',
+        benefits: [
+          'poznają najpopularniejsze zioła i ich właściwości',
+          'nauczą się rozpoznawać rośliny za pomocą zmysłów',
+          'dowiedzą się, jak świadomie i bezpiecznie korzystać z darów natury',
+          'rozwiną ciekawość, uważność i spostrzegawczość',
+          'zabiorą do domu własnoręcznie przygotowaną mieszankę herbatki ziołowej',
+        ],
+      },
+      {
+        img: img2,
+        title: 'Mali Ogrodnicy',
+        subtitle: 'Odkrywamy Świat Roślin',
+        text: 'Pełne zielonych odkryć warsztaty — dzieci poznają tajemnice ogrodu i samodzielnie sadzą własną roślinkę.',
+        intro: [
+          'Mali Ogrodnicy – Odkrywamy Świat Roślin to pełne zielonych odkryć warsztaty, podczas których dzieci poznają fascynujący świat roślin i tajemnice ogrodu. Uczestnicy przekonają się, jak rosną kwiaty i zioła, czego potrzebują do życia oraz dlaczego warto dbać o otaczającą nas przyrodę.',
+          'To zajęcia, które łączą naukę z praktycznym działaniem i świetną zabawą. Dzieci uczą się poprzez doświadczenie – obserwują, dotykają, wąchają, badają i samodzielnie sadzą własne rośliny. Warsztaty rozwijają ciekawość świata, uczą odpowiedzialności oraz pokazują, że pielęgnowanie roślin może być prawdziwą przygodą.',
+        ],
+        program: [
+          { h: 'Poznajemy świat roślin', p: 'Wspólnie odkrywamy różnorodne gatunki ziół i kwiatów. Rozpoznajemy ich zapachy, kolory i kształty oraz rozmawiamy o tym, czego rośliny potrzebują, aby zdrowo rosnąć.' },
+          { h: 'Świat pod lupą', p: 'Za pomocą lup sprawdzamy, co kryje się w ziemi i jakie organizmy w niej żyją. Dzieci przekonają się, że nawet niewielki fragment ogrodu skrywa wiele fascynujących tajemnic.' },
+          { h: 'Praca prawdziwego ogrodnika', p: 'Uczestnicy poznają podstawowe narzędzia ogrodnicze i dowiedzą się, do czego służą oraz jak bezpiecznie z nich korzystać podczas pielęgnacji roślin.' },
+          { h: 'Sadzimy własną roślinkę', p: 'Każde dziecko samodzielnie posadzi wybraną sadzonkę zioła lub kwiatu, podleje ją i oznaczy własnoręcznie przygotowaną etykietą. Gotową roślinę zabierze do domu, aby obserwować jej wzrost i dalej o nią dbać.' },
+        ],
+        info: [
+          ['Wiek uczestników', 'od 4 lat'],
+          ['Czas trwania', '60 minut'],
+          ['Liczba uczestników', 'minimum 10 osób'],
+        ],
+        provided: [
+          'wszystkie materiały potrzebne do wykonania warsztatów',
+          'lupy i narzędzia ogrodnicze',
+          'sadzonki ziół i kwiatów',
+          'ziemię i doniczki',
+          'mazaki oraz etykiety',
+          'opiekę doświadczonego edukatora',
+        ],
+        price: '40 zł',
+        priceUnit: '/ uczestnik',
+        priceNote: 'W przypadku większych grup oraz stałej współpracy warunki ustalane są indywidualnie.',
+        benefits: [
+          'poznają podstawowe gatunki ziół i kwiatów',
+          'dowiedzą się, czego potrzebują rośliny do wzrostu',
+          'poznają podstawowe narzędzia ogrodnicze i ich zastosowanie',
+          'rozwiną ciekawość, uważność oraz umiejętność obserwacji przyrody',
+          'nauczą się samodzielnie sadzić i pielęgnować rośliny',
+          'zabiorą do domu własnoręcznie posadzoną roślinkę',
+        ],
+      },
+      {
+        img: img3,
+        title: 'Zielarsko-Herbaciane Przygody',
+        subtitle: 'Odkrywamy świat herbat i ziół',
+        text: 'Dzieci odkrywają świat herbat i ziół, komponują własną mieszankę i biorą udział w efektownym eksperymencie.',
+        intro: [
+          'Zielarsko-Herbaciane Przygody to wyjątkowe warsztaty edukacyjne, podczas których dzieci odkrywają fascynujący świat herbat, ziół i roślin. Wspólnie poznajemy bogactwo natury wszystkimi zmysłami – oglądamy, dotykamy, wąchamy i smakujemy, przekonując się, że w filiżance herbaty kryje się wiele niezwykłych historii.',
+          'Podczas warsztatów dzieci dowiadują się, skąd pochodzi herbata, czym różni się od naparu ziołowego oraz poznają najpopularniejsze zioła i ich zastosowanie. Zajęcia łączą edukację, eksperymenty i twórczą zabawę, rozwijając ciekawość, kreatywność oraz uważność na otaczającą przyrodę.',
+        ],
+        program: [
+          { h: 'Odkrywamy świat herbat i ziół', p: 'Dzieci poznają różne rodzaje herbat oraz najpopularniejsze zioła wykorzystywane do przygotowywania aromatycznych naparów. Dowiadują się, skąd pochodzą, jak wyglądają oraz czym różni się prawdziwa herbata od naparu ziołowego.' },
+          { h: 'Tworzymy własną herbatkę', p: 'Każdy uczestnik komponuje własną mieszankę ziół, kwiatów i suszonych owoców. Gotową herbatkę pakuje do ekologicznego opakowania i ozdabia własnoręcznie przygotowaną etykietą.' },
+          { h: 'Magiczna herbata – pokaz zmiany kolorów', p: 'Dzieci uczestniczą w niezwykłym eksperymencie z naparem z kwiatów klitorii ternateńskiej, nazywanej niebieską herbatą. Obserwują, jak po dodaniu kilku kropel soku z cytryny napar zmienia kolor z niebieskiego na fioletowy lub różowy. To efektowne doświadczenie pokazuje, że przyroda potrafi zaskakiwać, a jednocześnie w prosty sposób wyjaśnia zjawiska zachodzące w świecie roślin.' },
+          { h: 'Degustacja naparów', p: 'Na zakończenie wspólnie degustujemy aromatyczne napary owocowe i ziołowe, poznając ich smak, zapach oraz sposoby przygotowania.' },
+        ],
+        info: [
+          ['Wiek uczestników', 'od 4 lat'],
+          ['Czas trwania', 'około 60 minut'],
+          ['Liczba uczestników', 'minimum 10 osób'],
+        ],
+        provided: [
+          'wszystkie materiały potrzebne do warsztatów',
+          'bogaty wybór herbat liściastych, ziół, kwiatów i suszonych owoców',
+          'opakowania i etykiety',
+          'materiały plastyczne',
+          'degustację naparów',
+          'opiekę doświadczonego prowadzącego',
+        ],
+        price: '40 zł',
+        priceUnit: '/ uczestnik',
+        priceNote: 'W przypadku większych grup oraz stałej współpracy warunki ustalane są indywidualnie.',
+        benefits: [
+          'poznają świat herbat i ziół',
+          'nauczą się rozróżniać herbatę od naparu ziołowego',
+          'samodzielnie przygotują własną mieszankę herbacianą',
+          'wezmą udział w efektownym eksperymencie z niebieską herbatą',
+          'rozwiną zmysły oraz kreatywność',
+          'zabiorą do domu własnoręcznie przygotowaną herbatkę',
+        ],
+      },
+      {
+        img: img1,
+        title: 'Botaniczna Pracownia Natury',
+        subtitle: 'Kreatywne Warsztaty Przyrodnicze',
+        text: 'Twórcze warsztaty inspirowane przyrodą z elementami hortiterapii — dzieci tworzą własną botaniczną pamiątkę.',
+        intro: [
+          'Botaniczna Pracownia Natury to twórcze warsztaty inspirowane przyrodą, podczas których dzieci odkrywają piękno świata roślin, łącząc kreatywną zabawę z poznawaniem botaniki. Uczestnicy przekonają się, że natura może być niewyczerpanym źródłem inspiracji, a z pozornie zwyczajnych darów przyrody można stworzyć wyjątkowe dzieła.',
+          'Warsztaty zostały wzbogacone o elementy hortiterapii, czyli zajęcia wykorzystujące kontakt z roślinami i materiałami naturalnymi do wspierania rozwoju dziecka. Obcowanie z naturą pobudza wszystkie zmysły, pomaga wyciszyć emocje, rozwija uważność, koncentrację oraz kreatywność. Praca z naturalnymi materiałami daje dzieciom poczucie sprawczości, zachęca do samodzielnego odkrywania świata i buduje wrażliwość na otaczającą przyrodę.',
+          'To zajęcia, które łączą edukację przyrodniczą z twórczym działaniem. Dzieci uczą się poprzez obserwację, dotyk, zapach i kreatywne eksperymentowanie z naturalnymi materiałami. Poznają różnorodne rośliny, ich wygląd, faktury oraz niezwykłe właściwości.',
+        ],
+        program: [
+          { h: 'Poznajemy botaniczne skarby', p: 'Wspólnie odkrywamy różnorodne rośliny oraz naturalne materiały, takie jak mech, szyszki, gałązki, liście, kwiaty i nasiona. Dzieci poznają ich wygląd, strukturę oraz dowiadują się, jaką rolę pełnią w przyrodzie.' },
+          { h: 'Natura wszystkimi zmysłami', p: 'Dzieci poznają bogactwo faktur, kolorów i zapachów natury. Poprzez zabawę i doświadczenia rozwijają zmysły, uczą się uważnej obserwacji oraz odkrywają, jak kontakt z przyrodą wpływa na nasze samopoczucie.' },
+          { h: 'Tworzymy własne dzieło inspirowane naturą', p: 'Każdy uczestnik wybiera jedną z przygotowanych propozycji i tworzy własną, niepowtarzalną botaniczną pamiątkę.' },
+        ],
+        options: [
+          { h: 'Dwa botaniczne magnesy na lodówkę', price: '40 zł', p: 'Dzieci tworzą własne kompozycje z wykorzystaniem mchu, szyszek, suszonych kwiatów, liści, nasion oraz innych naturalnych elementów dekoracyjnych.' },
+          { h: 'Dekoracyjna drewniana ramka na zdjęcie', price: '45 zł', p: 'Uczestnicy ozdabiają ramkę naturalnymi materiałami, tworząc wyjątkową dekorację inspirowaną światem roślin.' },
+          { h: 'Dwa mydełka glicerynowe', price: '40 zł', p: 'Dzieci wykonują własne pachnące mydełka glicerynowe z dodatkami inspirowanymi naturą, poznając właściwości wybranych składników roślinnych.' },
+          { h: 'Tabliczka florencka i ziołowy woreczek zapachowy', price: '40 zł', p: 'Uczestnicy tworzą dekoracyjną tabliczkę zapachową oraz własny woreczek wypełniony aromatycznymi ziołami. To wyjątkowa praca, która łączy piękno, zapach i kontakt z naturalnymi materiałami.' },
+          { h: 'Odciski roślin w glinie', price: '40 zł', p: 'Dwa własnoręcznie wykonane dzieła. Dzieci tworzą trwałe pamiątki z wykorzystaniem liści i roślin, odciskając ich wzory w glinie. Podczas pracy poznają różnorodność kształtów i struktur występujących w świecie przyrody.' },
+        ],
+        info: [
+          ['Wiek uczestników', 'od 4 lat'],
+          ['Czas trwania', '50 minut'],
+          ['Liczba uczestników', 'minimum 10 osób'],
+        ],
+        provided: [
+          'wszystkie materiały potrzebne do wykonania wybranej pracy',
+          'naturalne elementy dekoracyjne: mech, szyszki, liście, kwiaty, nasiona i zioła',
+          'glinę, mydło glicerynowe oraz materiały plastyczne',
+          'opiekę doświadczonego edukatora',
+        ],
+        price: '40–45 zł',
+        priceUnit: '/ uczestnik',
+        priceNote: 'Cena zależy od wybranej pracy. W przypadku większych grup oraz stałej współpracy warunki ustalane są indywidualnie.',
+        benefits: [
+          'poznają różnorodne rośliny i naturalne materiały',
+          'dowiedzą się, jaką rolę rośliny odgrywają w przyrodzie',
+          'rozwiną kreatywność, wyobraźnię oraz zdolności manualne',
+          'będą doskonalić koncentrację, cierpliwość i uważność poprzez kontakt z naturą',
+          'rozwiną zmysły, doświadczając różnorodnych faktur, zapachów i kolorów',
+          'nauczą się wykorzystywać dary przyrody w twórczy sposób',
+          'odkryją, że kontakt z naturą sprzyja wyciszeniu i dobremu samopoczuciu',
+          'zabiorą do domu własnoręcznie wykonaną wyjątkową pamiątkę',
+        ],
+      },
+    ],
+  },
+  { id: 'dorosli', label: 'Dla dorosłych', puste: true, items: [] },
+  { id: 'firmy', label: 'Dla firm', puste: true, items: [] },
+];
+
+// (usunięto podgląd z powielaniem — poniżej są już prawdziwe oferty z materiałów)
+---
+<section class="section oferta" id="oferta">
+  <div class="container">
+    <span class="eyebrow">Oferta</span>
+    <h2 class="section-title">Zajęcia dopasowane do uczestników</h2>
+
+    <div class="tabs" role="tablist">
+      {tabs.map((t, i) => (
+        <button class:list={['tab', { active: i === 0 }]} data-tab={t.id} role="tab">{t.label}</button>
+      ))}
+    </div>
+
+    {tabs.map((t, i) => (
+      <div class:list={['panel', { active: i === 0 }]} data-panel={t.id}>
+        {t.puste ? (
+          <div class="cards cards--single">
+            <article class="offer-card is-placeholder">
+              <div class="ph-img" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg>
+              </div>
+              <div class="offer-body">
+                <h3>Wkrótce</h3>
+                <p>Przygotowujemy ofertę dla tej grupy — już niedługo pojawią się tu nowe zajęcia. Zapraszamy wkrótce!</p>
+              </div>
+            </article>
+          </div>
+        ) : (
+          <div class="carousel at-start">
+            <button class="car-arrow car-prev" aria-label="Poprzednie">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
+            </button>
+            <div class="cards" data-track>
+              {t.items.map((it) => (
+                <article
+                  class="offer-card"
+                  tabindex="0"
+                  role="button"
+                  data-title={it.title}
+                  data-subtitle={it.subtitle || ''}
+                >
+                  <Image src={it.img} alt={it.title} widths={[400, 700]} sizes="360px" />
+                  <div class="offer-body">
+                    <h3>{it.title}</h3>
+                    <p>{it.text}</p>
+                    <span class="offer-link">Dowiedz się więcej →</span>
+                  </div>
+
+                  {/* Ukryta, bogata treść pokazywana w popoverze */}
+                  <template class="offer-detail">
+                    {it.program ? (
+                      <div class="od">
+                        {it.intro.map((p) => <p class="od-lead">{p}</p>)}
+
+                        <h4 class="od-h">Program warsztatów</h4>
+                        <ul class="od-program">
+                          {it.program.map((s) => (
+                            <li><strong>{s.h}</strong><span>{s.p}</span></li>
+                          ))}
+                        </ul>
+
+                        {it.options && (
+                          <div class="od-opts-wrap">
+                            <h4 class="od-h">Do wyboru</h4>
+                            <ul class="od-options">
+                              {it.options.map((o) => (
+                                <li>
+                                  <div class="od-opt-head">
+                                    <strong>{o.h}</strong>
+                                    <span class="od-opt-price">{o.price}</span>
+                                  </div>
+                                  <span>{o.p}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        <div class="od-cols">
+                          <div>
+                            <h4 class="od-h">Informacje</h4>
+                            <ul class="od-info">
+                              {it.info.map(([k, v]) => (
+                                <li><span class="od-k">{k}</span><span class="od-v">{v}</span></li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 class="od-h">Zapewniamy</h4>
+                            <ul class="od-check">
+                              {it.provided.map((p) => <li>{p}</li>)}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <h4 class="od-h">Po warsztatach dzieci</h4>
+                        <ul class="od-check">
+                          {it.benefits.map((b) => <li>{b}</li>)}
+                        </ul>
+
+                        {/* cena zawsze na samym dole */}
+                        <div class="od-price">
+                          <div class="od-price-main">
+                            <span class="od-price-amount">{it.price}</span>
+                            <span class="od-price-unit">{it.priceUnit}</span>
+                          </div>
+                          <p class="od-price-note">{it.priceNote}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div class="od">
+                        {(it.full || '').split('\n\n').map((p) => <p class="od-lead">{p}</p>)}
+                      </div>
+                    )}
+                  </template>
+                </article>
+              ))}
+            </div>
+            <button class="car-arrow car-next" aria-label="Następne">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+            </button>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- Okno (modal) z rozwiniętym opisem zajęć -->
+<div class="modal" id="offer-modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" data-close aria-label="Zamknij">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+    </button>
+    <div class="modal-scroll">
+      <div class="modal-content">
+        <h3 id="modal-title"></h3>
+        <p class="modal-subtitle" id="modal-subtitle"></p>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#kontakt" class="btn btn-lime" data-close>Zapytaj o termin</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = [...document.querySelectorAll('.tab')];
+  const panels = document.querySelectorAll('.panel');
+  let currentIndex = 0;
+  tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', () => {
+      if (idx === currentIndex) return;
+      const dir = idx > currentIndex ? 1 : -1; // w prawo / w lewo
+      currentIndex = idx;
+      const id = tab.getAttribute('data-tab');
+      tabs.forEach((t) => t.classList.remove('active'));
+      panels.forEach((p) => p.classList.remove('active', 'slide-in'));
+      tab.classList.add('active');
+      const panel = document.querySelector(`[data-panel="${id}"]`) as HTMLElement | null;
+      if (panel) {
+        // panel wjeżdża z tej strony, w którą nawigujemy
+        panel.style.setProperty('--from', dir * 34 + 'px');
+        // `slide-in` włącza animację tylko przy przełączeniu, nie przy starcie strony
+        panel.classList.add('active', 'slide-in');
+      }
+    });
+  });
+
+  // --- Modal ---
+  import Lenis from 'lenis';
+
+  // Smooth scroll (bezwładność jak na stronie) wewnątrz popovera.
+  // Osobna instancja Lenisa na kontenerze treści; żyje tylko gdy modal otwarty.
+  let modalLenis = null;
+  let modalRaf = null;
+  function startModalScroll(m) {
+    const wrapper = m.querySelector('.modal-scroll');
+    const content = m.querySelector('.modal-content');
+    if (!wrapper || !content || modalLenis) return;
+    modalLenis = new Lenis({ wrapper, content, duration: 1.1 });
+    const loop = (time) => {
+      modalLenis?.raf(time);
+      modalRaf = requestAnimationFrame(loop);
+    };
+    modalRaf = requestAnimationFrame(loop);
+  }
+  function stopModalScroll() {
+    if (modalRaf) cancelAnimationFrame(modalRaf);
+    modalRaf = null;
+    modalLenis?.destroy();
+    modalLenis = null;
+  }
+
+  const modal = document.getElementById('offer-modal');
+  const titleEl = modal.querySelector('#modal-title');
+  const subtitleEl = modal.querySelector('#modal-subtitle') as HTMLElement;
+  const bodyEl = modal.querySelector('.modal-body');
+
+  function openModal(card) {
+    titleEl.textContent = card.dataset.title;
+    const sub = card.dataset.subtitle || '';
+    subtitleEl.textContent = sub;
+    subtitleEl.style.display = sub ? 'block' : 'none';
+    // Klonujemy bogatą treść z ukrytego szablonu karty.
+    const detail = card.querySelector('.offer-detail');
+    bodyEl.innerHTML = detail ? detail.innerHTML : '';
+    const scroller = modal.querySelector('.modal-scroll');
+    if (scroller) scroller.scrollTop = 0;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    window.lenis?.stop();
+    startModalScroll(modal);
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    window.lenis?.start();
+    stopModalScroll();
+  }
+
+  document.querySelectorAll('.offer-card:not(.is-placeholder)').forEach((card) => {
+    card.addEventListener('click', () => openModal(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card); }
+    });
+  });
+  modal.querySelectorAll('[data-close]').forEach((el) =>
+    el.addEventListener('click', closeModal)
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // --- Karuzela: strzałki + fade zależne od pozycji przewinięcia ---
+  document.querySelectorAll('.carousel').forEach((car) => {
+    const track = car.querySelector('[data-track]') as HTMLElement | null;
+    if (!track) return;
+    const step = () => {
+      const card = track.querySelector('.offer-card') as HTMLElement | null;
+      const gap = 24;
+      return card ? card.offsetWidth + gap : 360;
+    };
+    // ustaw klasy at-start / at-end (sterują fade i strzałkami)
+    const update = () => {
+      // tolerancja 8px — drobne drgnięcie scrolla (np. snap) nie przełączy stanu
+      const atStart = track.scrollLeft <= 8;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
+      car.classList.toggle('at-start', atStart);
+      car.classList.toggle('at-end', atEnd);
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // przelicz też po przełączeniu zakładki (panel bywa ukryty przy starcie)
+    document.querySelectorAll('.tab').forEach((t) =>
+      t.addEventListener('click', () => setTimeout(update, 60))
+    );
+    update();
+
+    car.querySelector('.car-prev')?.addEventListener('click', () =>
+      track.scrollBy({ left: -step(), behavior: 'smooth' })
+    );
+    car.querySelector('.car-next')?.addEventListener('click', () =>
+      track.scrollBy({ left: step(), behavior: 'smooth' })
+    );
+  });
+</script>
+
+<style>
+  .tabs {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 40px;
+    justify-content: center;   /* wyśrodkowane pod nagłówkiem */
+  }
+  .tab {
+    padding: 10px 22px; border-radius: var(--radius-pill);
+    border: 2px solid var(--line); background: transparent;
+    font-family: var(--font); font-weight: 700; font-size: 1rem;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .tab:hover { border-color: #b7cfa0; }
+  .tab:active { transform: scale(.96); }
+  /* aktywna zakładka: tło cream + subtelny zielony obrys (nie czarny, nie jak przycisk) */
+  .tab.active { background: var(--cream); border-color: #a9c47f; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+  /* Animacja TYLKO przy realnym przełączeniu zakładki (klasę dodaje JS).
+     Bez tego panel wjeżdżał z fade przy pierwszym renderze strony. */
+  .panel.active.slide-in { animation: panelIn .32s cubic-bezier(.2, .8, .2, 1) both; }
+  /* wejście kierunkowe — z boku, w stronę nawigacji (zmienna --from ustawiana w JS) */
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateX(var(--from, 24px)); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .panel.active.slide-in { animation: none; }
+  }
+
+  /* --- Karuzela --- */
+  .carousel { position: relative; }
+  .cards {
+    --fade-l: 0px;                /* lewy fade dopiero po przewinięciu (JS) */
+    --fade-r: 110px;             /* prawy fade widoczny, gdy jest kolejna karta */
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 8px 0;               /* miejsce na poświatę hover */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    /* fade na brzegach — sterowany klasami .at-start / .at-end */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent 100%);
+  }
+  .cards::-webkit-scrollbar { display: none; }
+  /* Uwaga: klasa `at-start` jest też w HTML (server-side), bo karuzela zawsze
+     startuje na pozycji 0. Bez tego przez moment — zanim ruszy JS — migał
+     lewy fade i strzałka wstecz. */
+  /* po przewinięciu pojawia się lewy fade; na końcu znika prawy */
+  .carousel:not(.at-start) .cards { --fade-l: 110px; }
+  .carousel.at-end .cards { --fade-r: 0px; }
+  .car-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    cursor: pointer;
+    z-index: 3;
+    display: grid; place-items: center;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .car-arrow svg { display: block; }
+  .car-arrow:hover { background: var(--cream); }
+  .car-arrow:active { transform: translateY(-50%) scale(.96); }
+  .car-prev { left: -14px; }
+  .car-next { right: -14px; }
+  /* optyczne wyśrodkowanie chevronów (grot przesuwa masę na bok) */
+  .car-prev svg { margin-left: -2px; }
+  .car-next svg { margin-right: -2px; }
+  /* strzałki pojawiają się tylko wtedy, gdy jest gdzie przewijać */
+  .carousel.at-start .car-prev,
+  .carousel.at-end .car-next {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .car-arrow {
+    opacity: 1;
+    transition: opacity .2s ease, background .15s ease;
+  }
+  @media (max-width: 640px) { .car-arrow { display: none; } }
+
+  .offer-card {
+    flex: 0 0 340px;              /* stała szerokość karty w karuzeli */
+    scroll-snap-align: start;
+    background: #f0f5f2;          /* ten sam odcień co FAQ i testimoniale */
+    border-radius: var(--radius); overflow: hidden;
+    border: 2px solid transparent;
+    display: flex; flex-direction: column;
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  }
+  /* focus (klawiatura) zawsze; hover tylko dla myszy */
+  .offer-card:focus-visible {
+    outline: none;
+    border-color: var(--lime-dark);
+    box-shadow: 0 0 0 4px rgba(200, 233, 76, .25);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .offer-card:hover {
+      border-color: var(--lime-dark);
+      box-shadow: 0 0 0 4px rgba(200, 233, 76, .25);
+    }
+  }
+  .offer-card:active { transform: scale(.96); }
+  .offer-card.is-placeholder:active { transform: none; }
+  .offer-card img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+  .offer-body { padding: 24px; }
+  .offer-body h3 { font-size: 1.25rem; margin-bottom: 8px; }
+  .offer-body p { color: var(--muted); font-size: .98rem; }
+  .offer-link { display: inline-block; margin-top: 14px; font-weight: 700; color: var(--ink); }
+
+  /* Karta-placeholder „Wkrótce" dla pustych zakładek — wygląd jak karty dzieci */
+  .offer-card.is-placeholder { cursor: default; }
+  .offer-card.is-placeholder:hover { transform: none; box-shadow: var(--shadow); }
+  .ph-img {
+    aspect-ratio: 4 / 3;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, #eef2ec, #e2ebe0);
+    color: #aebfa7;
+  }
+  .ph-img svg { width: 48px; height: 48px; display: block; }
+  .offer-card.is-placeholder .offer-body h3 { color: var(--ink); }
+  /* pojedyncza karta „Wkrótce" wyśrodkowana, szerokość jak karty dzieci */
+  .cards--single { display: flex; justify-content: center; }
+  .cards--single .offer-card { width: 100%; max-width: calc((100% - 48px) / 3); }
+  @media (max-width: 900px) {
+    .cards--single .offer-card { max-width: 420px; }
+  }
+
+  /* --- Modal --- */
+  .modal {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .18s ease;   /* zamknięcie: szybciej */
+    will-change: opacity;
+  }
+  .modal.open { opacity: 1; pointer-events: auto; transition: opacity .28s ease; }
+  .modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(20,30,18,.55); backdrop-filter: blur(3px);
+  }
+  .modal-dialog {
+    position: relative; z-index: 1;
+    background: var(--white); border-radius: var(--radius);
+    max-width: 640px; width: 100%; max-height: 85vh;
+    display: flex; flex-direction: column;   /* treść + przypięta stopka */
+    overflow: hidden;                        /* zaokrąglone rogi trzymają kształt */
+    box-shadow: 0 30px 80px rgba(0,0,0,.3);
+    transform: translateY(18px) scale(.96);
+    transition: transform .18s cubic-bezier(.2, .8, .2, 1);   /* zamknięcie: szybciej */
+  }
+  /* przewijalny obszar treści */
+  .modal-scroll {
+    overflow-y: auto;
+    padding: 40px 40px 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* przypięta biała belka z przyciskiem */
+  .modal-foot {
+    flex-shrink: 0;
+    padding: 20px 40px;
+    background: var(--white);
+    border-top: 1px solid var(--line);
+  }
+  .modal.open .modal-dialog { transform: none; transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    .modal, .modal-dialog { transition: none; }
+    .modal-dialog { transform: none; }
+  }
+  /* padding-right: 48px = X (40px szer. przy right:24) + 24px odstępu od tytułu */
+  .modal-dialog h3 { font-size: 1.6rem; margin-bottom: 2px; padding-right: 48px; }
+  .modal-subtitle {
+    color: var(--lime-dark);
+    font-weight: 800;
+    letter-spacing: .01em;
+    margin: 0 0 20px;
+  }
+  /* przycisk „na hug" w przypiętej stopce — szerokość treści, do lewej */
+  .modal-foot .btn { margin: 0; width: auto; }
+
+  /* --- Bogata treść popovera oferty --- */
+  .od-lead { color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+  .od-h {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 28px 0 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .od-lead + .od-h { border-top: none; padding-top: 0; margin-top: 20px; }
+
+  .od-program { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .od-program li { display: flex; flex-direction: column; gap: 3px; }
+  .od-program strong { color: var(--ink); font-weight: 800; }
+  .od-program span { color: var(--muted); font-size: .95rem; line-height: 1.55; }
+
+  /* „Do wyboru" — warianty prac z własnymi cenami */
+  .od-options { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+  .od-options li { display: flex; flex-direction: column; gap: 4px; }
+  .od-opt-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .od-opt-head strong { color: var(--ink); font-weight: 800; }
+  .od-opt-price {
+    flex-shrink: 0;
+    background: var(--cream);
+    border-radius: var(--radius-pill);
+    padding: 3px 12px;
+    font-weight: 800;
+    font-size: .85rem;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .od-options li > span { color: var(--muted); font-size: .95rem; line-height: 1.55; }
+
+  .od-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 520px) { .od-cols { grid-template-columns: 1fr; gap: 8px; } }
+
+  .od-info { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .od-info li { display: flex; flex-direction: column; }
+  .od-k { color: var(--muted); font-size: .82rem; }
+  .od-v { color: var(--ink); font-weight: 700; }
+
+  .od-check { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .od-check li {
+    position: relative;
+    padding-left: 26px;
+    color: var(--muted);
+    font-size: .95rem;
+    line-height: 1.5;
+  }
+  .od-check li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .42em;
+    width: 14px; height: 8px;
+    border-left: 2px solid var(--lime-dark);
+    border-bottom: 2px solid var(--lime-dark);
+    transform: rotate(-45deg);
+  }
+
+  /* wyróżniona cena */
+  .od-price {
+    margin: 28px 0 8px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px;
+  }
+  .od-price-main { display: flex; align-items: baseline; gap: 8px; }
+  .od-price-amount { font-size: 2.4rem; font-weight: 900; color: var(--ink); letter-spacing: -0.02em; }
+  .od-price-unit { font-size: 1.05rem; font-weight: 700; color: var(--muted); }
+  .od-price-note { margin: 8px 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+  .modal-close {
+    position: absolute; top: 24px; right: 24px;   /* min. 24px od krawędzi */
+    z-index: 2;
+    width: 40px; height: 40px; border-radius: 50%; border: none;
+    background: var(--cream); cursor: pointer;
+    color: var(--ink);
+    display: grid; place-items: center;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .modal-close:active { transform: scale(.96); }
+  .modal-close:hover { background: var(--line); }
+
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; max-width: 420px; }
+  }
+</style>

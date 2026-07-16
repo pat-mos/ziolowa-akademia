@@ -1,0 +1,61 @@
+---
+// Górna nawigacja w formie "pigułki" na tle hero.
+---
+<header class="nav">
+  <div class="nav-pill">
+    <a href="#top" class="nav-logo" aria-label="Ziołowa Akademia — strona główna">
+      <img
+        src="/img/logo-mark.png"
+        alt="Ziołowa Akademia"
+        class="nav-logo-img"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+      />
+      <span class="nav-logo-text" style="display:none">Ziołowa Akademia</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#o-mnie">O mnie</a>
+      <a href="#oferta">Zajęcia</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#kontakt" class="btn btn-lime nav-cta">Zapisz się</a>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;      /* zawsze widoczna, podąża za scrollem */
+    top: 24px;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+  .nav-pill {
+    max-width: 800px;      /* węższa nawigacja, jak w oryginale */
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 12px 12px 28px;
+    background: rgba(245, 244, 238, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow);
+  }
+  .nav-logo { display: flex; align-items: center; }
+  .nav-logo-img { height: 44px; width: auto; display: block; }
+  .nav-logo-text { font-weight: 800; font-size: 1.15rem; }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    margin-left: auto;
+    font-weight: 600;
+  }
+  .nav-links a:hover { color: var(--muted); }
+  .nav-cta { padding: 10px 24px; }
+
+  /* Na telefonie chowamy środkowe linki — zostaje logo + przycisk */
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    .nav-pill { padding-left: 20px; }
+  }
+</style>

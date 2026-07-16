@@ -1,0 +1,175 @@
+/* =========================================================
+   STYLE GLOBALNE — Ziołowa Akademia
+   Tu trzymamy "zmienne" (kolory, odstępy) i podstawowy reset.
+   Zmieniając wartości w :root, zmieniasz wygląd całej strony.
+   ========================================================= */
+
+/* Czcionka Nunito (self-hosted, ładowana z pakietu @fontsource) */
+@import '@fontsource/nunito/400.css';
+@import '@fontsource/nunito/600.css';
+@import '@fontsource/nunito/700.css';
+@import '@fontsource/nunito/800.css';
+@import '@fontsource/nunito/900.css';
+
+:root {
+  /* Kolory marki (OKLCH — perceptualnie równomierne, łatwe do strojenia) */
+  --lime: oklch(0.882 0.181 120.5);   /* limonkowy akcent (przyciski) */
+  --lime-dark: oklch(0.828 0.182 121.8); /* limonka na hover */
+  --ink: oklch(0.270 0.030 139);      /* ciemna zieleń — główny tekst */
+  --muted: oklch(0.507 0.033 138.8);  /* przygaszony tekst */
+  --cream: oklch(0.966 0.008 98.9);   /* jasne tło sekcji */
+  --white: oklch(1 0 0);
+  --line: oklch(0.918 0.014 97.5);    /* delikatne linie/obramowania */
+
+  /* Wygląd */
+  --radius: 22px;           /* zaokrąglenie kart */
+  --radius-pill: 999px;     /* pełne zaokrąglenie (pigułka) */
+  --shadow: 0 10px 30px rgba(31, 42, 28, 0.08);
+  --container: 1400px;      /* maks. szerokość treści (padding 80px w środku) */
+
+  --font: 'Nunito', system-ui, -apple-system, sans-serif;
+}
+
+/* --- Reset / podstawy --- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Rezerwacja miejsca na pasek przewijania — brak skoku przy otwieraniu modalu */
+html { scrollbar-gutter: stable; }
+
+/* Style wymagane przez smooth-scroll Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;         /* brak sztucznego pogrubienia/kursywy */
+}
+
+/* height:auto sprawia, że obrazy skalują się zgodnie z proporcjami,
+   a nie sztywnym atrybutem height dodawanym przez Astro. */
+img { max-width: 100%; display: block; height: auto; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; text-wrap: balance; }
+
+p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej linii */
+
+/* --- Elementy wielokrotnego użytku --- */
+
+/* Wyśrodkowany kontener o stałej maks. szerokości */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 80px;
+}
+@media (max-width: 768px) {
+  .container { padding-inline: 24px; }
+}
+
+/* Odstęp pionowy między sekcjami */
+.section { padding-block: 88px; }
+
+/* Treść przewija się NAD hero (które jest fixed w tle).
+   Bez własnego z-index (tylko position:relative), żeby nie tworzyć
+   kontekstu stackingu — dzięki temu modale (z-index 100) wychodzą
+   ponad nawigację, a treść i tak maluje się nad hero (kolejność DOM). */
+.page-content {
+  position: relative;
+  margin-top: 100vh;         /* startuje pod pierwszym ekranem = hero */
+  background: var(--white);
+}
+
+/* Pasek z progresywnym blurem u dołu ekranu (maskuje nadchodzącą sekcję) */
+.page-bottom-blur {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40px;
+  z-index: 45;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%);
+}
+
+/* Przycisk-pigułka */
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  /* Sprężysta animacja (jak we Framerze): lekkie powiększenie na hover,
+     wciśnięcie na kliknięcie. */
+  transition: transform .28s cubic-bezier(.34, 1.56, .64, 1),
+              background .2s ease, box-shadow .2s ease;
+}
+/* hover-scale tylko dla myszy — na dotyku nie zostaje „przyklejony" */
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: scale(1.03); }
+}
+.btn:active { transform: scale(.96); }
+
+.btn-lime { background: var(--lime); color: var(--ink); position: relative; overflow: hidden; }
+.btn-lime:hover { background: var(--lime-dark); }
+/* połysk przesuwający się przez przycisk */
+.btn-lime::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .55) 50%, transparent 65%);
+  transform: translateX(-130%);
+}
+@media (hover: hover) and (pointer: fine) {
+  /* jednorazowy przejazd połysku (bez poświaty) */
+  .btn-lime:hover::before {
+    transform: translateX(130%);
+    transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-lime::before { display: none; }
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+}
+.btn-outline:hover { background: var(--ink); color: var(--white); }
+
+/* Mały nagłówek nad sekcją (eyebrow) */
+.eyebrow {
+  display: block;
+  text-align: center;      /* nagłówki sekcji wyśrodkowane dla spójności */
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: .85rem;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  max-width: 24ch;
+  text-align: center;      /* wyśrodkowany nagłówek sekcji */
+  margin-inline: auto;
+  letter-spacing: -0.02em; /* lekko ujemny tracking dla dużych nagłówków */
+}

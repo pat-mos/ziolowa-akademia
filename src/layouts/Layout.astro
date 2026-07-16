@@ -1,0 +1,51 @@
+---
+// Layout = wspólny szkielet HTML dla każdej strony.
+// Właściwa treść trafia w miejsce <slot />.
+import '../styles/global.css';
+
+const {
+  title = 'Ziołowa Akademia — warsztaty i spacery botaniczne',
+  description = 'Warsztaty ziołowe, spacery botaniczne i kąpiele leśne dla przedszkoli, szkół oraz dorosłych. Edukacja przez kontakt z naturą.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Pasek z blurem u dołu ekranu — maskuje nadchodzącą sekcję -->
+    <div class="page-bottom-blur" aria-hidden="true"></div>
+
+    <script>
+      // Smooth scroll z bezwładnością (jak we Framerze) — biblioteka Lenis.
+      import Lenis from 'lenis';
+      const lenis = new Lenis({ duration: 1.1 });
+      // Udostępniamy globalnie, by modale mogły zatrzymać przewijanie strony.
+      (window as any).lenis = lenis;
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Kliknięcia w linki-kotwice (#sekcja) też płynnie przewijają.
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const href = a.getAttribute('href') || '';
+          if (href.length > 1) {
+            e.preventDefault();
+            lenis.scrollTo(href);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

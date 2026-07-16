@@ -1,0 +1,154 @@
+---
+// Sekcja „Wartość dla uczestników" — treść 1:1 jak w oryginale.
+// Styl kafli odwzorowany z Framera: wysokie kafle z dużym, pogrubionym
+// tekstem wypełniającym kafel (tło #f0f5f2, zaokrąglenie 32px).
+const items = [
+  'Zajęcia oparte na doświadczeniu i pracy z naturą',
+  'Rozwój uważności, ciekawości i koncentracji',
+  'Edukacja dla dzieci oraz regenerujące spotkania dla dorosłych',
+  'Doświadczanie natury dla dorosłych',
+];
+---
+<section class="section wartosci">
+  <div class="container">
+    <h2 class="section-title">Wartość dla uczestników</h2>
+
+    <div class="grid">
+      {items.map((text, i) => (
+        <article class="card">
+          <p>{text}</p>
+          {/* Grafika przy dole karty. Wgraj pliki do public/img/ jako
+              wartosc-1.png … wartosc-4.png — pojawią się automatycznie.
+              Dopóki pliku nie ma, obrazek znika (onerror). */}
+          <img
+            class="card-graphic"
+            src={`/img/wartosc-${i + 1}.jpg`}
+            style={`-webkit-mask-image:url(/img/maska-${i + 1}.svg);mask-image:url(/img/maska-${i + 1}.svg)`}
+            alt=""
+            aria-hidden="true"
+            onerror="this.remove()"
+          />
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Blob pojawia się, gdy karta wjedzie w widok (z lekkim opóźnieniem kolejno).
+  const cards = document.querySelectorAll('.wartosci .card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const g = el.querySelector('.card-graphic') as HTMLElement | null;
+        if (g) g.style.transitionDelay = (el.dataset.i || '0') + 'ms';
+        el.classList.add('in-view');
+        io.unobserve(el);
+      }
+    });
+  }, { threshold: 0.25 });
+  cards.forEach((c, i) => {
+    (c as HTMLElement).dataset.i = String(i * 120);
+    io.observe(c);
+  });
+
+  // Lekki parallax POZIOMY: karty dryfują na boki z różną prędkością podczas
+  // przewijania. Ten sam kierunek, różne prędkości → delikatnie się rozjeżdżają,
+  // ale nigdy na siebie nie nachodzą (względne przesunięcie < odstępu 20px).
+  // Sterowany scrollem (nie ciągła pętla) + zapamiętana pozycja kart,
+  // żeby nie wymuszać przeliczania layoutu (reflow) w każdej klatce.
+  const speeds = [34, 18, 28, 12];
+  const els = [...cards] as HTMLElement[];
+  let centers: number[] = [];
+  const measure = () => {
+    centers = els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return r.top + window.scrollY + r.height / 2; // środek karty w dokumencie
+    });
+  };
+  const render = () => {
+    const mid = window.scrollY + window.innerHeight / 2;
+    els.forEach((el, i) => {
+      const rel = (mid - centers[i]) / window.innerHeight; // ~ -0.5..0.5
+      el.style.transform = `translateX(${(rel * speeds[i % speeds.length]).toFixed(1)}px)`;
+    });
+  };
+  let ticking = false;
+  const onScroll = () => {
+    if (!ticking) { requestAnimationFrame(() => { render(); ticking = false; }); ticking = true; }
+  };
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    measure();
+    render();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => { measure(); render(); });
+  }
+</script>
+
+<style>
+  .grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: stretch;         /* wszystkie karty równej wysokości */
+  }
+  .card {
+    position: relative;           /* dla blobu na absolucie */
+    overflow: hidden;             /* przycina blob do zaokrąglonych rogów */
+    background: #f0f5f2;          /* jak w oryginale */
+    border-radius: 32px;
+    padding: 30px;
+    height: 400px;                /* równa wysokość wszystkich kart */
+    display: flex;
+    flex-direction: column;       /* tekst u góry */
+  }
+  /* Duży, pogrubiony (black) napis u góry kafla */
+  .card p {
+    position: relative;
+    z-index: 1;                   /* tekst nad blobem */
+    font-size: 1.5rem;            /* ~24px jak w oryginale */
+    font-weight: 900;
+    line-height: 1.2;
+    color: #000;
+  }
+  /* Blob wycentrowany, wchodzi lekko pod dolną krawędź karty */
+  .card-graphic {
+    position: absolute;
+    left: 50%;
+    margin-left: -69%;            /* wycentrowanie przy szerokości 138% */
+    bottom: -44px;                /* chowa się pod dolną krawędź (przycięty) */
+    width: 138%;                  /* ~18% większy */
+    height: 250px;                /* większy blob */
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    /* maska w kształcie bloba (ustawiana per karta w atrybucie style) */
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-position: center;
+    mask-position: center;
+    /* stan początkowy do animacji pojawiania */
+    opacity: 0;
+    transform: translateY(24px) scale(.92);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
+  }
+  /* gdy karta wjedzie w widok — blob „wskakuje" */
+  .card.in-view .card-graphic {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-graphic { transition: none; opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+const pytania = [
+  {
+    q: 'Czy dojeżdżacie do klienta?',
+    a: 'Tak. Wszystkie warsztaty realizujemy z dojazdem do klienta. Standardowo prowadzimy zajęcia na terenie województwa śląskiego, jednak w przypadku większych grup lub rezerwacji kilku bloków warsztatowych dojeżdżamy również do innych regionów Polski.',
+  },
+  {
+    q: 'Czy materiały są wliczone w cenę warsztatów?',
+    a: 'Tak. Cena warsztatów obejmuje wszystkie niezbędne materiały, surowce i narzędzia potrzebne do przeprowadzenia zajęć. Nie pobieramy żadnych dodatkowych opłat za wyposażenie.',
+  },
+  {
+    q: 'Czy uczestnicy muszą przynieść własne materiały lub narzędzia?',
+    a: 'Nie. Zapewniamy komplet materiałów oraz wszystkie potrzebne akcesoria. Uczestnicy mogą skupić się wyłącznie na dobrej zabawie i tworzeniu własnych prac.',
+  },
+  {
+    q: 'Co się dzieje z warsztatami w przypadku złej pogody?',
+    a: 'Jeżeli warunki pogodowe uniemożliwiają realizację zajęć w terenie, warsztaty przenosimy do sali udostępnionej przez placówkę lub – po wcześniejszym uzgodnieniu – przekładamy je na inny dogodny termin.',
+  },
+  {
+    q: 'Jak można zarezerwować termin warsztatów?',
+    a: 'Rezerwacji można dokonać telefonicznie lub mailowo. Chętnie pomożemy dobrać odpowiedni termin, temat warsztatów oraz ofertę dopasowaną do wieku uczestników i liczebności grupy.',
+  },
+  {
+    q: 'Czy wystawiacie faktury dla szkół, przedszkoli i firm?',
+    a: 'Tak. Wystawiamy faktury dla szkół, przedszkoli, firm, instytucji oraz innych podmiotów. Rozliczenie przebiega sprawnie i zgodnie z obowiązującymi przepisami.',
+  },
+];
+---
+<section class="section faq">
+  <div class="container">
+    <div class="faq-head">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="section-title">Najczęstsze pytania</h2>
+      <p>Nie znalazłeś odpowiedzi? Napisz do nas — chętnie pomożemy.</p>
+    </div>
+
+    <div class="faq-list">
+      {pytania.map((p) => (
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>{p.q}</span>
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            </span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              <p>{p.a}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Animowana rozwijanka (akordeon): płynnie rozwija wysokość odpowiedzi
+  // i obraca ikonę „+"/„×". Otwarcie jednego pytania zamyka pozostałe.
+  const items = document.querySelectorAll('.faq-item');
+  items.forEach((item) => {
+    const btn = item.querySelector('.faq-q');
+    btn?.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      items.forEach((it) => {
+        it.classList.remove('open');
+        it.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Nagłówek na górze (jedna kolumna, jak w oryginale) */
+  .faq-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
+  .faq-head p { color: var(--muted); margin: 18px 0 24px; }
+
+  /* Lista pytań pod spodem */
+  .faq-list {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Pytanie = wypełniony, zaokrąglony kafel #f0f5f2 (jak w oryginale) */
+  .faq-item {
+    background: #f0f5f2;
+    border-radius: 32px;
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 24px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #000;
+  }
+  .faq-icon {
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    flex-shrink: 0;
+    transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+  }
+  .faq-icon svg { display: block; }
+  /* „+" obraca się o 45° → wygląda jak „×" po otwarciu */
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* Płynne rozwijanie wysokości dzięki grid-template-rows 0fr → 1fr */
+  .faq-a {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .3s cubic-bezier(.2, .8, .2, 1);
+  }
+  .faq-item.open .faq-a { grid-template-rows: 1fr; }
+  .faq-a-inner { overflow: hidden; }
+  .faq-a p { color: var(--muted); padding: 0 30px 28px; }
+
+  @media (max-width: 520px) {
+    .faq-q { padding: 20px 24px; font-size: 1.05rem; }
+    .faq-a p { padding: 0 24px 24px; }
+  }
+</style>
