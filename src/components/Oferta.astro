@@ -236,7 +236,10 @@ const tabs = [
                     )}
                     <h3>{it.title}</h3>
                     <p>{it.text}</p>
-                    <span class="offer-link">Dowiedz się więcej →</span>
+                    <span class="offer-link">
+                      Dowiedz się więcej
+                      <span class="offer-link-arrow" aria-hidden="true">→</span>
+                    </span>
                   </div>
 
                   {/* Ukryta, bogata treść pokazywana w popoverze */}
@@ -561,7 +564,7 @@ const tabs = [
     border: 2px solid transparent;
     display: flex; flex-direction: column;
     cursor: pointer;
-    transition: border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+    transition: border-color .15s ease, box-shadow .2s ease, transform .2s cubic-bezier(.2, .8, .2, 1);
   }
   /* focus (klawiatura) zawsze; hover tylko dla myszy */
   .offer-card:focus-visible {
@@ -573,12 +576,25 @@ const tabs = [
     .offer-card:hover {
       border-color: var(--lime-dark);
       box-shadow: 0 0 0 4px rgba(200, 233, 76, .25);
+      transform: translateY(-2px);
     }
+    /* strzałka rusza w prawo */
+    .offer-card:hover .offer-link-arrow { transform: translateX(4px); }
+    /* wciśnięcie przy myszy — zachowaj uniesienie, dodaj scale */
+    .offer-card:hover:active { transform: translateY(-2px) scale(.96); }
+  }
+  /* bez ruchu przy „ogranicz animacje" — zostaje sam obrys/poświata */
+  @media (prefers-reduced-motion: reduce) {
+    .offer-card,
+    .offer-link-arrow { transition: none; }
+    .offer-card:hover { transform: none; }
+    .offer-card:hover .offer-link-arrow { transform: none; }
   }
   .offer-card:active { transform: scale(.96); }
   .offer-card.is-placeholder:active { transform: none; }
   .offer-card img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
-  .offer-body { padding: 24px; }
+  /* flex:1 + kolumna → karty równej wysokości, link zawsze przy dole */
+  .offer-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
   /* Tagi: krótkie metadane (wiek, czas) — nad tytułem, pod zdjęciem */
   .offer-tags {
     list-style: none;
@@ -599,11 +615,26 @@ const tabs = [
   }
   .offer-body h3 { font-size: 1.25rem; margin-bottom: 8px; }
   .offer-body p { color: var(--muted); font-size: .98rem; }
-  .offer-link { display: inline-block; margin-top: 14px; font-weight: 700; color: var(--ink); }
+  /* margin-top:auto dopycha link do dołu — równy poziom na wszystkich kartach */
+  .offer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    width: fit-content;
+  }
+  /* strzałka przesuwa się przy najechaniu na kartę */
+  .offer-link-arrow {
+    display: inline-block;
+    transition: transform .2s cubic-bezier(.2, .8, .2, 1);
+  }
 
   /* Karta-placeholder „Wkrótce" dla pustych zakładek — wygląd jak karty dzieci */
   .offer-card.is-placeholder { cursor: default; }
-  .offer-card.is-placeholder:hover { transform: none; box-shadow: var(--shadow); }
+  .offer-card.is-placeholder:hover { transform: none; box-shadow: none; border-color: transparent; }
   .ph-img {
     aspect-ratio: 4 / 3;
     display: grid; place-items: center;

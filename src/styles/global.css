@@ -78,8 +78,14 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   .container { padding-inline: 24px; }
 }
 
-/* Odstęp pionowy między sekcjami */
-.section { padding-block: 88px; }
+/* Rytm pionowy: sekcje nie mają własnego paddingu — odstęp 160px daje
+   kontener (gap). Jedno miejsce, jedna liczba. */
+.section { padding-block: 0; }
+
+/* Wyjątek: sekcje z własnym tłem potrzebują wewnętrznego oddechu,
+   inaczej kolorowe tło przykleiłoby się do tekstu. */
+.o-mnie,
+.galeria { padding-block: 160px; }
 
 /* --- Ciepłe tło tylko w wybranych sekcjach ---
    Baza strony jest biała (lepszy kontrast). Ciepły akcent + delikatny
@@ -102,6 +108,17 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   position: relative;
   margin-top: 100vh;         /* startuje pod pierwszym ekranem = hero */
   background: var(--white);
+  /* rytm pionowy całej strony — jedna liczba zamiast paddingów w sekcjach */
+  display: flex;
+  flex-direction: column;
+  gap: 160px;
+  /* gap działa tylko MIĘDZY sekcjami — pierwsza (Wartość) potrzebuje
+     własnego odstępu od góry, żeby nie kleiła się do hero */
+  padding-top: 160px;
+}
+@media (max-width: 768px) {
+  .page-content { gap: 88px; padding-top: 88px; }
+  .o-mnie, .galeria { padding-block: 88px; }
 }
 
 /* Pasek z progresywnym blurem u dołu ekranu (maskuje nadchodzącą sekcję) */

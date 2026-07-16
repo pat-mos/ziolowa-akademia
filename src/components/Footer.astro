@@ -41,13 +41,20 @@ const telefon = '+48 000 000 000';
       <span class="footer-muted">Wszelkie prawa zastrzeżone.</span>
     </div>
   </div>
+
+  {/* Wielki wordmark domykający stronę */}
+  <div class="footer-wordmark" aria-hidden="true">Ziołowa Akademia</div>
 </footer>
 
 <style>
   .footer {
-    background: var(--white);
-    border-top: 1px solid var(--line);
-    padding-top: 72px;
+    background: var(--ink);
+    color: var(--white);
+    /* Łukowata („kopulasta") górna krawędź: promienie eliptyczne —
+       poziomo 50% (oba górne rogi spotykają się w środku), pionowo 90px. */
+    border-radius: 50% 50% 0 0 / 90px 90px 0 0;
+    overflow: hidden;                 /* wielki napis nie wychodzi poza łuk */
+    padding-top: 140px;               /* zapas na łuk */
     /* zapas na dole, by linia copyright nie chowała się pod paskiem blur */
     padding-bottom: 72px;
   }
@@ -59,10 +66,14 @@ const telefon = '+48 000 000 000';
     padding-bottom: 48px;
   }
 
-  .footer-logo img { display: block; height: auto; max-width: 140px; }
+  .footer-logo img {
+    display: block; height: auto; max-width: 140px;
+    /* logo to czarna kreska — na ciemnym tle trzeba je rozjaśnić do bieli */
+    filter: brightness(0) invert(1);
+  }
   .footer-logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.01em; }
   .footer-brand p {
-    color: var(--muted);
+    color: rgba(255, 255, 255, .72);
     margin-top: 20px;
     max-width: 34ch;
     line-height: 1.6;
@@ -73,27 +84,43 @@ const telefon = '+48 000 000 000';
     font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: .06em;
-    color: var(--muted);
+    color: rgba(255, 255, 255, .55);
     font-weight: 700;
     margin: 0 0 6px;
   }
   .footer-col a { font-weight: 600; width: fit-content; transition: color .15s ease; }
-  .footer-col a:hover { color: var(--lime-dark); }
-  .footer-muted { color: var(--muted); }
+  .footer-col a:hover { color: var(--lime); }
+  .footer-muted { color: rgba(255, 255, 255, .55); }
 
   .footer-bottom {
-    border-top: 1px solid var(--line);
+    border-top: 1px solid rgba(255, 255, 255, .14);
     padding-top: 28px;
     display: flex;
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
     font-size: .9rem;
-    color: var(--muted);
+    color: rgba(255, 255, 255, .55);
+  }
+
+  /* Wielki wordmark domykający stronę — subtelny, przycięty krawędzią stopki */
+  .footer-wordmark {
+    margin-top: 64px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: clamp(3rem, 13vw, 11rem);
+    font-weight: 900;
+    line-height: .85;
+    letter-spacing: -0.04em;
+    color: rgba(255, 255, 255, .10);
+    user-select: none;
+    pointer-events: none;
   }
 
   @media (max-width: 720px) {
     .footer-top { grid-template-columns: 1fr; gap: 36px; }
     .footer-bottom { flex-direction: column; text-align: center; align-items: center; }
+    .footer { border-radius: 50% 50% 0 0 / 48px 48px 0 0; padding-top: 88px; }
+    .footer-wordmark { margin-top: 40px; }
   }
 </style>
