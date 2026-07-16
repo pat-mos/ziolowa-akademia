@@ -19,6 +19,7 @@
   --muted: oklch(0.507 0.033 138.8);  /* przygaszony tekst */
   --cream: oklch(0.966 0.008 98.9);   /* jasne tło sekcji */
   --white: oklch(1 0 0);
+  --paper: oklch(0.988 0.006 95);     /* ciepła biel papieru — baza strony */
   --line: oklch(0.918 0.014 97.5);    /* delikatne linie/obramowania */
 
   /* Wygląd */
@@ -79,6 +80,19 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
 
 /* Odstęp pionowy między sekcjami */
 .section { padding-block: 88px; }
+
+/* --- Ciepłe tło tylko w wybranych sekcjach ---
+   Baza strony jest biała (lepszy kontrast). Ciepły akcent + delikatny
+   rozbłysk limonki dostają wyłącznie „O mnie" i galeria „Nasze zajęcia",
+   żeby odciąć je od reszty i wnieść ziołowy klimat. */
+.o-mnie,
+.galeria {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(60% 55% at 10% 0%, oklch(0.882 0.181 120.5 / .12), transparent 70%),
+    radial-gradient(50% 45% at 95% 100%, oklch(0.961 0.022 69.8 / .5), transparent 70%);
+  background-repeat: no-repeat;
+}
 
 /* Treść przewija się NAD hero (które jest fixed w tle).
    Bez własnego z-index (tylko position:relative), żeby nie tworzyć

@@ -16,6 +16,7 @@ const tabs = [
         img: img1,
         title: 'Mały zielarz',
         subtitle: 'Odkrywamy Moc Ziół',
+        tags: ['od 5 lat', '1 godzina'],
         text: 'Pachnące warsztaty ziołowe — dzieci poznają świat roślin, ich zapachy i smaki, które czekają tuż obok nas.',
         intro: [
           'Mali Zielarze – Odkrywamy Moc Ziół to pachnące, pełne odkryć warsztaty, podczas których dzieci poznają niezwykły świat ziół i roślin. Uczestnicy przekonają się, że wiele cennych roślin rośnie tuż obok nas – na łąkach, w ogrodach i parkach, a natura kryje w sobie mnóstwo zapachów, kolorów i smaków.',
@@ -53,6 +54,7 @@ const tabs = [
         img: img2,
         title: 'Mali Ogrodnicy',
         subtitle: 'Odkrywamy Świat Roślin',
+        tags: ['od 4 lat', '60 minut'],
         text: 'Pełne zielonych odkryć warsztaty — dzieci poznają tajemnice ogrodu i samodzielnie sadzą własną roślinkę.',
         intro: [
           'Mali Ogrodnicy – Odkrywamy Świat Roślin to pełne zielonych odkryć warsztaty, podczas których dzieci poznają fascynujący świat roślin i tajemnice ogrodu. Uczestnicy przekonają się, jak rosną kwiaty i zioła, czego potrzebują do życia oraz dlaczego warto dbać o otaczającą nas przyrodę.',
@@ -93,6 +95,7 @@ const tabs = [
         img: img3,
         title: 'Zielarsko-Herbaciane Przygody',
         subtitle: 'Odkrywamy świat herbat i ziół',
+        tags: ['od 4 lat', 'ok. 60 minut'],
         text: 'Dzieci odkrywają świat herbat i ziół, komponują własną mieszankę i biorą udział w efektownym eksperymencie.',
         intro: [
           'Zielarsko-Herbaciane Przygody to wyjątkowe warsztaty edukacyjne, podczas których dzieci odkrywają fascynujący świat herbat, ziół i roślin. Wspólnie poznajemy bogactwo natury wszystkimi zmysłami – oglądamy, dotykamy, wąchamy i smakujemy, przekonując się, że w filiżance herbaty kryje się wiele niezwykłych historii.',
@@ -133,6 +136,7 @@ const tabs = [
         img: img1,
         title: 'Botaniczna Pracownia Natury',
         subtitle: 'Kreatywne Warsztaty Przyrodnicze',
+        tags: ['od 4 lat', '50 minut'],
         text: 'Twórcze warsztaty inspirowane przyrodą z elementami hortiterapii — dzieci tworzą własną botaniczną pamiątkę.',
         intro: [
           'Botaniczna Pracownia Natury to twórcze warsztaty inspirowane przyrodą, podczas których dzieci odkrywają piękno świata roślin, łącząc kreatywną zabawę z poznawaniem botaniki. Uczestnicy przekonają się, że natura może być niewyczerpanym źródłem inspiracji, a z pozornie zwyczajnych darów przyrody można stworzyć wyjątkowe dzieła.',
@@ -225,6 +229,11 @@ const tabs = [
                 >
                   <Image src={it.img} alt={it.title} widths={[400, 700]} sizes="360px" />
                   <div class="offer-body">
+                    {it.tags && (
+                      <ul class="offer-tags">
+                        {it.tags.map((tag) => <li>{tag}</li>)}
+                      </ul>
+                    )}
                     <h3>{it.title}</h3>
                     <p>{it.text}</p>
                     <span class="offer-link">Dowiedz się więcej →</span>
@@ -570,6 +579,24 @@ const tabs = [
   .offer-card.is-placeholder:active { transform: none; }
   .offer-card img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
   .offer-body { padding: 24px; }
+  /* Tagi: krótkie metadane (wiek, czas) — nad tytułem, pod zdjęciem */
+  .offer-tags {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .offer-tags li {
+    background: var(--white);
+    color: var(--ink);
+    border-radius: var(--radius-pill);
+    padding: 5px 12px;
+    font-size: .78rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
   .offer-body h3 { font-size: 1.25rem; margin-bottom: 8px; }
   .offer-body p { color: var(--muted); font-size: .98rem; }
   .offer-link { display: inline-block; margin-top: 14px; font-weight: 700; color: var(--ink); }
