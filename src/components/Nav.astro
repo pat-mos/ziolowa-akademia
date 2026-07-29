@@ -18,6 +18,31 @@
       <a href="#kontakt">Kontakt</a>
     </nav>
     <a href="#kontakt" class="btn btn-lime nav-cta">Zapisz się</a>
+
+    {/* Hamburger — tylko na telefonie. Obie ikony siedzą w DOM i przenikają
+        się nawzajem, dzięki czemu przejście działa w obie strony bez JS-a. */}
+    <button
+      class="nav-burger"
+      id="nav-burger"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="nav-panel"
+    >
+      <span class="nav-burger-ic nav-burger-ic--menu" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      </span>
+      <span class="nav-burger-ic nav-burger-ic--zamknij" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+      </span>
+    </button>
+  </div>
+
+  {/* Panel mobilny — poza pigułką, żeby mógł się rozwijać pod nią */}
+  <div class="nav-panel" id="nav-panel">
+    <a href="#o-mnie">O mnie</a>
+    <a href="#oferta">Zajęcia</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#kontakt" class="btn btn-lime nav-panel-cta">Zapisz się</a>
   </div>
 </header>
 
@@ -50,12 +75,141 @@
     margin-left: auto;
     font-weight: 600;
   }
+  /* Sam napis ma 26px wysokości. min-height podnosi pole kliknięcia do 44px
+     bez zmiany wyglądu — pigułka i tak jest wyższa, więc nic się nie rozjeżdża.
+     Odstęp 32px gwarantuje, że pola sąsiadów się nie nakładają. */
+  .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
   .nav-links a:hover { color: var(--muted); }
   .nav-cta { padding: 10px 24px; }
 
-  /* Na telefonie chowamy środkowe linki — zostaje logo + przycisk */
+  /* --- Hamburger --- */
+  .nav-burger {
+    display: none;               /* na desktopie niepotrzebny */
+    position: relative;
+    width: 44px; height: 44px;   /* pełne pole dotyku */
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color .15s ease, transform .1s ease;
+  }
+  .nav-burger:active { transform: scale(.96); }
+  .nav-burger:hover { background: rgba(0, 0, 0, .05); }
+
+  /* Obie ikony leżą na sobie i przenikają się: skala 0.25→1, krycie 0→1,
+     rozmycie 4px→0. Trzymanie obu w DOM daje animację w obie strony bez
+     żadnej biblioteki. */
+  .nav-burger-ic {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity var(--duration-fast) var(--ease-in-out),
+                scale var(--duration-fast) var(--ease-in-out),
+                filter var(--duration-fast) var(--ease-in-out);
+  }
+  .nav-burger-ic--zamknij { opacity: 0; scale: .25; filter: blur(4px); }
+  .nav[data-open='true'] .nav-burger-ic--menu { opacity: 0; scale: .25; filter: blur(4px); }
+  .nav[data-open='true'] .nav-burger-ic--zamknij { opacity: 1; scale: 1; filter: blur(0); }
+
+  /* --- Panel mobilny --- */
+  .nav-panel {
+    display: none;
+    max-width: 800px;
+    margin: 10px auto 0;
+    padding: 12px;
+    background: rgba(245, 244, 238, 0.95);
+    backdrop-filter: blur(10px);
+    /* promień koncentryczny: 16 (link) + 12 (padding) = 28 */
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    /* visibility w przejściu, żeby zamknięty panel nie łapał tabulatora */
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 -8px;
+    transition: opacity var(--duration-quick) var(--ease-smooth-out),
+                translate var(--duration-quick) var(--ease-smooth-out),
+                visibility 0s linear var(--duration-quick);
+  }
+  .nav[data-open='true'] .nav-panel {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    transition: opacity var(--duration-fast) var(--ease-smooth-out),
+                translate var(--duration-fast) var(--ease-smooth-out),
+                visibility 0s;
+  }
+  .nav-panel a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding-inline: 16px;
+    border-radius: 16px;
+    font-weight: 700;
+    transition: background-color .15s ease;
+  }
+  .nav-panel a:hover { background: rgba(0, 0, 0, .05); }
+  .nav-panel-cta { justify-content: center; margin-top: 6px; }
+  .nav-panel-cta:hover { background: var(--lime-dark); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-burger-ic, .nav-panel { transition-duration: .01ms; }
+  }
+
+  /* Na telefonie linki i CTA przenoszą się z pigułki do panelu */
   @media (max-width: 720px) {
-    .nav-links { display: none; }
-    .nav-pill { padding-left: 20px; }
+    .nav-links, .nav-cta { display: none; }
+    .nav-burger { display: block; }
+    .nav-panel { display: flex; flex-direction: column; }
+    .nav-pill { padding: 12px 12px 12px 20px; }
   }
 </style>
+
+<script>
+  const nav = document.querySelector('.nav') as HTMLElement;
+  const burger = document.getElementById('nav-burger');
+  const panel = document.getElementById('nav-panel');
+  const waskiEkran = window.matchMedia('(max-width: 720px)');
+
+  const otwarty = () => nav.dataset.open === 'true';
+
+  const ustaw = (open: boolean) => {
+    nav.dataset.open = String(open);
+    burger?.setAttribute('aria-expanded', String(open));
+    // blokada scrolla jak w modalach — inaczej tło przewija się pod panelem
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) (window as any).lenis?.stop();
+    else (window as any).lenis?.start();
+  };
+
+  burger?.addEventListener('click', () => ustaw(!otwarty()));
+
+  // klik w link zamyka menu, żeby po skoku do sekcji nie zasłaniało treści
+  panel?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => ustaw(false))
+  );
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && otwarty()) {
+      ustaw(false);
+      burger?.focus();   // fokus wraca na przycisk, nie ucieka na początek strony
+    }
+  });
+
+  // klik poza nawigacją zamyka
+  document.addEventListener('click', (e) => {
+    if (otwarty() && !nav.contains(e.target as Node)) ustaw(false);
+  });
+
+  // po powiększeniu okna panel znika — bez tego zostałby otwarty
+  // razem z zablokowanym scrollem
+  waskiEkran.addEventListener('change', (e) => {
+    if (!e.matches && otwarty()) ustaw(false);
+  });
+</script>

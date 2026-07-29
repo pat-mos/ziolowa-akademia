@@ -15,12 +15,23 @@
   /* Kolory marki (OKLCH — perceptualnie równomierne, łatwe do strojenia) */
   --lime: oklch(0.882 0.181 120.5);   /* limonkowy akcent (przyciski) */
   --lime-dark: oklch(0.828 0.182 121.8); /* limonka na hover */
-  --ink: oklch(0.270 0.030 139);      /* ciemna zieleń — główny tekst */
+  --ink: oklch(0.270 0.030 139);      /* ciemna zieleń — główny tekst i stopka */
+  --herb: oklch(0.430 0.085 145);     /* średnia zieleń ziołowa — ciemne panele,
+                                         które nie mogą zlewać się ze stopką */
   --muted: oklch(0.507 0.033 138.8);  /* przygaszony tekst */
   --cream: oklch(0.966 0.008 98.9);   /* jasne tło sekcji */
   --white: oklch(1 0 0);
   --paper: oklch(0.988 0.006 95);     /* ciepła biel papieru — baza strony */
   --line: oklch(0.918 0.014 97.5);    /* delikatne linie/obramowania */
+
+  /* Pastele — ozdoby i chipsy. Ziołowe odpowiedniki przedszkolnych pasteli:
+     każdy inny, ale wszystkie z rodziny zieleni/ciepła, żeby strona nie
+     przestała być Ziołową Akademią. Jasność ~0.90 trzyma je na tyle jasno,
+     że ciemny tekst (--ink) ma na nich komfortowy kontrast. */
+  --pastel-limonka: oklch(0.915 0.095 122);   /* jasna limonka */
+  --pastel-szczaw:  oklch(0.900 0.070 158);   /* chłodna zieleń/szczaw */
+  --pastel-piasek:  oklch(0.925 0.055 78);    /* ciepły piaskowy */
+  --pastel-lipa:    oklch(0.905 0.050 25);    /* bladoróżowy kwiat lipy */
 
   /* Wygląd */
   --radius: 22px;           /* zaokrąglenie kart */
@@ -29,6 +40,17 @@
   --container: 1400px;      /* maks. szerokość treści (padding 80px w środku) */
 
   --font: 'Nunito', system-ui, -apple-system, sans-serif;
+
+  /* --- Skala ruchu (motion tokens, transitions.dev) ---
+     Wspólne czasy i krzywe dla całej strony, żeby przejścia nie rozjeżdżały
+     się między komponentami. Zainstalowany jest tylko wykorzystywany podzbiór.
+     Uwaga: --ease-smooth-out zastępuje dawny cubic-bezier(.2,.8,.2,1) — krzywa
+     jest bliska, ale nie identyczna. */
+  --duration-quick: 150ms;      /* zamknięcie modala/dropdownu */
+  --duration-fast: 250ms;       /* otwarcie modala/dropdownu, icon swap, slide zakładki */
+  --duration-very-slow: 500ms;  /* reveal treści */
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);  /* open/close, resize, pozycja */
+  --ease-in-out: ease-in-out;                          /* icon swap, reveal */
 }
 
 /* --- Reset / podstawy --- */
@@ -88,16 +110,80 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
 .galeria { padding-block: 160px; }
 
 /* --- Ciepłe tło tylko w wybranych sekcjach ---
-   Baza strony jest biała (lepszy kontrast). Ciepły akcent + delikatny
-   rozbłysk limonki dostają wyłącznie „O mnie" i galeria „Nasze zajęcia",
-   żeby odciąć je od reszty i wnieść ziołowy klimat. */
+   Baza strony jest biała (lepszy kontrast). Ciepły akcent dostają wyłącznie
+   „O mnie" i galeria „Nasze zajęcia", żeby odciąć je od reszty.
+   Tło musi być JEDNOLITE: falbanka na krawędziach to płaski kolor, więc każdy
+   gradient tutaj tworzyłby widoczny szew między brzuszkami a sekcją. */
 .o-mnie,
 .galeria {
   background-color: var(--paper);
-  background-image:
-    radial-gradient(60% 55% at 10% 0%, oklch(0.882 0.181 120.5 / .12), transparent 70%),
-    radial-gradient(50% 45% at 95% 100%, oklch(0.961 0.022 69.8 / .5), transparent 70%);
-  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* --- Falbanka: pofalowana krawędź z jadących w bok „brzuszków" ---
+   Rząd kół wyciętych z powtarzanego radial-gradientu. Rozstaw kół to --bump,
+   a promień --bump-r jest CELOWO większy od połowy rozstawu (0.6), więc koła
+   zachodzą na siebie i doliny między brzuszkami są płytkie i okrągłe zamiast
+   ostrych kolców. Animujemy background-position-x o cały rozstaw — po jednym
+   przesunięciu obrazek jest identyczny, więc pętla jest niewidoczna. */
+.falbanka-gora,
+.falbanka-dol {
+  --bump-r: calc(var(--bump) * 0.6);
+  position: relative;   /* kotwica dla pasków — bez tego uciekłyby w górę strony */
+}
+
+.falbanka-gora::before,
+.falbanka-dol::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--bump-r);
+  background-size: var(--bump) var(--bump);
+  background-repeat: repeat-x;
+  animation: falbanka-jedzie 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Górna krawędź: środki kół leżą na krawędzi sekcji (dole paska), więc widać
+   ich górne czapeczki wypychające się na sąsiednią sekcję. */
+.falbanka-gora::before {
+  top: calc(var(--bump-r) * -1);
+  background-image: radial-gradient(
+    circle at calc(var(--bump) / 2) var(--bump-r),
+    var(--falbanka-kolor) var(--bump-r),
+    transparent calc(var(--bump-r) + 0.5px)
+  );
+}
+
+/* Dolna krawędź: to samo do góry nogami — środki kół na górze paska. */
+.falbanka-dol::after {
+  top: 100%;
+  background-image: radial-gradient(
+    circle at calc(var(--bump) / 2) 0,
+    var(--falbanka-kolor) var(--bump-r),
+    transparent calc(var(--bump-r) + 0.5px)
+  );
+}
+
+/* Pełne background-position, nie samo -x: skrócona wersja bywa nieanimowana
+   w Safari. */
+@keyframes falbanka-jedzie {
+  from { background-position: 0 0; }
+  to   { background-position: var(--bump) 0; }
+}
+
+/* Falbanka to czysta dekoracja — przy „ogranicz ruch" ma stać w miejscu. */
+@media (prefers-reduced-motion: reduce) {
+  .falbanka-gora::before,
+  .falbanka-dol::after { animation: none; }
+}
+
+/* Sekcje z ciepłym tłem: brzuszki w kolorze tła, wychodzą na białą stronę. */
+.o-mnie,
+.galeria {
+  --bump: 100px;
+  --falbanka-kolor: var(--paper);
 }
 
 /* Treść przewija się NAD hero (które jest fixed w tle).
@@ -115,10 +201,60 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   /* gap działa tylko MIĘDZY sekcjami — pierwsza (Wartość) potrzebuje
      własnego odstępu od góry, żeby nie kleiła się do hero */
   padding-top: 160px;
+  /* Falbanka domykająca hero: treść najeżdża na hero białymi brzuszkami. */
+  --bump: 100px;
+  --falbanka-kolor: var(--white);
 }
 @media (max-width: 768px) {
-  .page-content { gap: 88px; padding-top: 88px; }
-  .o-mnie, .galeria { padding-block: 88px; }
+  .page-content { gap: 88px; padding-top: 88px; --bump: 64px; }
+  .o-mnie, .galeria { padding-block: 88px; --bump: 64px; }
+}
+
+/* --- Stopka najeżdża na Kontakt (ten sam trik co hero) ---
+   Hero stoi w tle, a treść po nim jedzie. Tu tak samo: Kontakt zatrzymuje się
+   pod górną krawędzią okna i zostaje, a stopka wsuwa się na niego falbanką.
+   `top`, nie `bottom`: sticky z `bottom` podciąga element, gdy ten dopiero
+   nadjeżdża, i PUSZCZA go, gdy go mijasz — czyli dokładnie odwrotnie.
+   z-index: Kontakt jest pozycjonowany, więc bez tej pary malowałby się NAD
+   stopką mimo wcześniejszej kolejności w DOM. */
+.kontakt {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+.footer { z-index: 1; }
+
+/* KRYTYCZNE: przyklejanie tylko wtedy, gdy sekcja mieści się w oknie.
+   Kontakt rośnie w dół, gdy kolumny się składają — na wąskim ekranie ma ~1195px.
+   Przyklejony górą do zera nigdy już nie odsłoni swojego dołu, więc koniec
+   formularza (z przyciskiem wyślij) stawał się nieosiągalny. Poniżej 1024px
+   sekcja jest za wysoka, więc zwyczajnie się przewija. */
+@media (max-width: 1024px) {
+  .kontakt { position: static; }
+}
+
+/* --- Wjazd sekcji przy przewijaniu ---
+   Reguły są pod `html.js-anim`, a tę klasę dokłada skrypt w <head> jeszcze
+   przed pierwszym malowaniem. Dzięki temu bez JS-a treść po prostu jest
+   widoczna, zamiast zostać na zawsze przezroczysta.
+
+   Animujemy WYŁĄCZNIE opacity. Świadomie bez transform i bez blur:
+   - transform na kontenerze tworzy nowy blok zawierający, a w Ofercie siedzą
+     w nim przyklejone karty — łatwo rozstroić stos;
+   - blur na każdej sekcji obciążałby GPU przez całe przewijanie, a strona ma
+     chodzić płynnie też na słabszym sprzęcie.
+   Samo opacity jest składane przez GPU i nie wymusza przeliczania układu. */
+html.js-anim .page-content .section > .container {
+  opacity: 0;
+  transition: opacity .6s cubic-bezier(.2, .8, .2, 1);
+}
+html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim .page-content .section > .container {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 /* Pasek z progresywnym blurem u dołu ekranu (maskuje nadchodzącą sekcję) */

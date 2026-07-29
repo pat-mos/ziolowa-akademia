@@ -44,14 +44,14 @@ const telefon = '+48 000 000 000';
             <span class="field-label">Imię</span>
             <span class="field-wrap">
               <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-              <input type="text" name="imie" placeholder="Jak masz na imię?" required />
+              <input type="text" name="imie" autocomplete="given-name" placeholder="Jak masz na imię?" required />
             </span>
           </label>
           <label class="field">
             <span class="field-label">Telefon <span class="field-opt">(opcjonalnie)</span></span>
             <span class="field-wrap">
               <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              <input type="tel" name="telefon" placeholder="np. 600 000 000" />
+              <input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="np. 600 000 000" />
             </span>
           </label>
         </div>
@@ -60,7 +60,7 @@ const telefon = '+48 000 000 000';
           <span class="field-label">E-mail</span>
           <span class="field-wrap">
             <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
-            <input type="email" name="email" placeholder="twoj@email.pl" required />
+            <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="twoj@email.pl" required />
           </span>
         </label>
 
@@ -73,7 +73,7 @@ const telefon = '+48 000 000 000';
         </label>
 
         <button type="submit" class="btn btn-lime">Wyślij wiadomość</button>
-        <p class="k-note">Formularz otworzy Twój program pocztowy z gotową wiadomością.</p>
+        <p class="k-note" role="status" aria-live="polite">Formularz otworzy Twój program pocztowy z gotową wiadomością.</p>
       </form>
     </div>
   </div>
@@ -113,27 +113,42 @@ const telefon = '+48 000 000 000';
     overflow: hidden;
   }
 
-  /* Lewy panel — ciemna zieleń */
+  /* Lewy panel — ta sama rodzina co formularz obok (--cream, hue 98.9),
+     tylko o krok ciemniejszy: 0.966 → 0.925 jasności, chroma odrobinę w górę,
+     żeby odcięcie czytało się jako ciepłe i zamierzone, a nie jak szara plama.
+     Celowo BLISKO formularza — chodzi o delikatny podział, nie o kontrast.
+     Panel jest jasny, więc cała typografia poniżej jest ciemna (kiedyś był
+     ciemnozielony z białym tekstem). */
   .k-info {
-    background: var(--ink);
-    color: var(--white);
+    background: oklch(0.925 0.014 98.9);
+    color: var(--ink);
     padding: 56px 48px;
   }
-  .k-info .eyebrow { text-align: left; color: rgba(255, 255, 255, .7); }
-  .k-info .section-title { text-align: left; margin-inline: 0; color: var(--white); }
-  .k-lead { color: rgba(255, 255, 255, .8); margin: 20px 0 32px; max-width: 40ch; }
+  .k-info .eyebrow { text-align: left; color: var(--muted); }
+  .k-info .section-title { text-align: left; margin-inline: 0; color: var(--ink); }
+  .k-lead { color: var(--muted); margin: 20px 0 32px; max-width: 40ch; }
 
   .k-details { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
-  .k-details li { display: flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, .9); overflow-wrap: anywhere; }
+  .k-details li { display: flex; align-items: center; gap: 12px; color: var(--ink); overflow-wrap: anywhere; }
   .k-ic {
     width: 40px; height: 40px; flex-shrink: 0;
     display: grid; place-items: center;
-    background: rgba(255, 255, 255, .08);
+    /* przyciemnienie zamiast rozjaśnienia — kółko musi się odciąć od jasnego tła */
+    background: rgba(0, 0, 0, .06);
     border-radius: 50%;
-    color: var(--lime);          /* kreska ikony w kolorze akcentu */
+    /* NIE --lime: limonka ma jasność 0.88 i na tak jasnym tle znika.
+       Ciemna zieleń trzyma ikonę czytelną. */
+    color: var(--herb);
   }
   .k-ic svg { width: 18px; height: 18px; display: block; }
-  .k-details a:hover { color: var(--lime); }
+  /* mail i telefon to najważniejsze linki na stronie — muszą dać się trafić
+     palcem, a sam tekst ma tylko 26px wysokości */
+  .k-details a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .k-details a:hover { color: var(--herb); }
 
   /* Prawy panel — jasny formularz */
   .k-form {

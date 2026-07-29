@@ -4,7 +4,7 @@ const rok = new Date().getFullYear();
 const email = 'kontakt@ziolowa-akademia.pl';
 const telefon = '+48 000 000 000';
 ---
-<footer class="footer">
+<footer class="footer falbanka-gora">
   <div class="container">
     <div class="footer-top">
       <!-- Marka: logo (wgraj public/img/logo.png) z tekstowym fallbackiem -->
@@ -22,14 +22,14 @@ const telefon = '+48 000 000 000';
       </div>
 
       <nav class="footer-col">
-        <h4>Nawigacja</h4>
+        <h3>Nawigacja</h3>
         <a href="#o-mnie">O mnie</a>
         <a href="#oferta">Zajęcia</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
 
       <div class="footer-col">
-        <h4>Kontakt</h4>
+        <h3>Kontakt</h3>
         <a href={`mailto:${email}`}>{email}</a>
         <a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a>
         <span class="footer-muted">Województwo śląskie · cała Polska</span>
@@ -42,21 +42,31 @@ const telefon = '+48 000 000 000';
     </div>
   </div>
 
-  {/* Wielki wordmark domykający stronę */}
-  <div class="footer-wordmark" aria-hidden="true">Ziołowa Akademia</div>
+  {/* Wielki wordmark domykający stronę. Przycinanie siedzi na własnym
+      wrapperze, a nie na stopce — inaczej `overflow: hidden` obcinałby
+      falbankę wystającą ponad górną krawędź. */}
+  <div class="footer-wordmark-clip" aria-hidden="true">
+    <div class="footer-wordmark">Ziołowa Akademia</div>
+  </div>
 </footer>
 
 <style>
   .footer {
     background: var(--ink);
     color: var(--white);
-    /* Łukowata („kopulasta") górna krawędź: promienie eliptyczne —
-       poziomo 50% (oba górne rogi spotykają się w środku), pionowo 90px. */
-    border-radius: 50% 50% 0 0 / 90px 90px 0 0;
-    overflow: hidden;                 /* wielki napis nie wychodzi poza łuk */
-    padding-top: 140px;               /* zapas na łuk */
+    /* Górna krawędź to falbanka (klasa `falbanka-gora` w global.css):
+       brzuszki w kolorze stopki wychodzą ponad nią, na sekcje powyżej.
+       Stąd BRAK overflow:hidden tutaj — przycinanie wordmarku ma własny
+       wrapper, żeby nie obciąć falbanki. */
+    --bump: 100px;
+    --falbanka-kolor: var(--ink);
+    padding-top: 100px;
     /* zapas na dole, by linia copyright nie chowała się pod paskiem blur */
     padding-bottom: 72px;
+  }
+
+  .footer-wordmark-clip {
+    overflow: hidden;   /* napis jest szerszy niż ekran i celowo wychodzi poza kadr */
   }
 
   .footer-top {
@@ -79,8 +89,10 @@ const telefon = '+48 000 000 000';
     line-height: 1.6;
   }
 
-  .footer-col { display: flex; flex-direction: column; gap: 12px; }
-  .footer-col h4 {
+  /* gap: 0, bo odstęp robi teraz padding samych linków (patrz niżej) —
+     inaczej sumowałby się z nim i lista by się rozjechała */
+  .footer-col { display: flex; flex-direction: column; gap: 0; }
+  .footer-col h3 {
     font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: .06em;
@@ -88,7 +100,16 @@ const telefon = '+48 000 000 000';
     font-weight: 700;
     margin: 0 0 6px;
   }
-  .footer-col a { font-weight: 600; width: fit-content; transition: color .15s ease; }
+  /* Link ma 26px tekstu — za mało na palec. padding-block rozciąga pole
+     dotyku do 44px, nie ruszając wyglądu samego napisu. */
+  .footer-col a {
+    font-weight: 600;
+    width: fit-content;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    transition: color .15s ease;
+  }
   .footer-col a:hover { color: var(--lime); }
   .footer-muted { color: rgba(255, 255, 255, .55); }
 
@@ -103,16 +124,32 @@ const telefon = '+48 000 000 000';
     color: rgba(255, 255, 255, .55);
   }
 
-  /* Wielki wordmark domykający stronę — subtelny, przycięty krawędzią stopki */
+  /* Wielki wordmark domykający stronę.
+     Fill jest SOLIDNY (nie biel z opacity) — przy kryciu nakładające się
+     glify („ł" na „o") sumowały się w ciemniejszą plamę. Ten kolor to
+     dokładny odpowiednik dawnej bieli 10% na tle --ink.
+     Napis jest szerszy niż ekran i celowo wychodzi poza kadr —
+     przycina go `.footer-wordmark-clip`. */
   .footer-wordmark {
-    margin-top: 64px;
-    text-align: center;
+    margin-top: 72px;
     white-space: nowrap;
-    font-size: clamp(3rem, 13vw, 11rem);
+    /* Napis gaśnie ku dołowi zamiast urywać się na twardo. Wcześniej robił to
+       ujemny margines + przycięcie, ale zostawiało to widoczne ścięcie glifów.
+       Maska działa na kolorze, więc znika też pod nią samo tło stopki. */
+    mask-image: linear-gradient(to bottom, #000 35%, transparent 92%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 92%);
+    /* Box przyjmuje szerokość tekstu i jest centrowany transformem.
+       `margin-inline: auto` by nie zadziałało — dla boxa szerszego od
+       rodzica marginesy auto zerują się i tekst kleiłby się do lewej. */
+    width: max-content;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(4rem, 19vw, 16rem);
     font-weight: 900;
-    line-height: .85;
-    letter-spacing: -0.04em;
-    color: rgba(255, 255, 255, .10);
+    line-height: .8;
+    letter-spacing: -0.02em;     /* luźniej — „ł" nie wchodzi już na „o" */
+    color: oklch(0.355 0.024 140.4);
     user-select: none;
     pointer-events: none;
   }
@@ -120,7 +157,7 @@ const telefon = '+48 000 000 000';
   @media (max-width: 720px) {
     .footer-top { grid-template-columns: 1fr; gap: 36px; }
     .footer-bottom { flex-direction: column; text-align: center; align-items: center; }
-    .footer { border-radius: 50% 50% 0 0 / 48px 48px 0 0; padding-top: 88px; }
+    .footer { --bump: 64px; padding-top: 64px; }
     .footer-wordmark { margin-top: 40px; }
   }
 </style>

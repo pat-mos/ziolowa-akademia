@@ -115,7 +115,7 @@ const pytania = [
     place-items: center;
     color: var(--ink);
     flex-shrink: 0;
-    transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+    transition: transform .3s var(--ease-smooth-out);
   }
   .faq-icon svg { display: block; }
   /* „+" obraca się o 45° → wygląda jak „×" po otwarciu */
@@ -125,7 +125,7 @@ const pytania = [
   .faq-a {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows .3s cubic-bezier(.2, .8, .2, 1);
+    transition: grid-template-rows .3s var(--ease-smooth-out);
   }
   .faq-item.open .faq-a { grid-template-rows: 1fr; }
   .faq-a-inner { overflow: hidden; }

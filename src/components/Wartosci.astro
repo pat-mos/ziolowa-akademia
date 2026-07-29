@@ -134,7 +134,7 @@ const items = [
     /* stan początkowy do animacji pojawiania */
     opacity: 0;
     transform: translateY(24px) scale(.92);
-    transition: opacity .5s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
+    transition: opacity var(--duration-very-slow) var(--ease-in-out), transform var(--duration-very-slow) var(--ease-in-out);
   }
   /* gdy karta wjedzie w widok — blob „wskakuje" */
   .card.in-view .card-graphic {

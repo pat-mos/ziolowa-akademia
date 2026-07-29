@@ -10,10 +10,14 @@ const bio = [
   'Pracuję z dziećmi z przedszkoli i szkół, a także prowadzę spokojne, regenerujące spotkania dla dorosłych. Każde zajęcia dopasowuję do wieku i potrzeb grupy, dbając o ciepłą, bezpieczną atmosferę.',
 ];
 ---
-<section class="section o-mnie" id="o-mnie">
+<section class="section o-mnie falbanka-gora falbanka-dol" id="o-mnie">
   <div class="container o-grid">
     <div class="o-photo">
       <Image src={portret} alt="Monika — twórczyni Ziołowej Akademii" widths={[400, 700]} sizes="(max-width: 800px) 90vw, 500px" />
+      {/* Iskierki na wierzchu zdjęcia — czysta dekoracja, stąd aria-hidden */}
+      <span class="o-iskra o-iskra--1" aria-hidden="true"></span>
+      <span class="o-iskra o-iskra--2" aria-hidden="true"></span>
+      <span class="o-iskra o-iskra--3" aria-hidden="true"></span>
     </div>
 
     <div class="o-text">
@@ -80,21 +84,45 @@ const bio = [
     modalLenis = null;
   }
 
+  // Element do przywrócenia fokusu po zamknięciu (przycisk „Więcej o mnie").
+  const triggerBtn = document.getElementById('o-mnie-btn');
+
+  // Uwięzienie Tab w oknie — aria-modal nie blokuje fokusu.
+  function trapTab(e) {
+    if (e.key !== 'Tab') return;
+    const lista = [...modal.querySelectorAll(
+      'a[href], button, textarea, input, [tabindex]:not([tabindex="-1"])'
+    )].filter((el) => el.offsetParent !== null);
+    if (!lista.length) return;
+    const pierwszy = lista[0];
+    const ostatni = lista[lista.length - 1];
+    if (e.shiftKey && document.activeElement === pierwszy) {
+      e.preventDefault(); ostatni.focus();
+    } else if (!e.shiftKey && document.activeElement === ostatni) {
+      e.preventDefault(); pierwszy.focus();
+    }
+  }
+
   const open = () => {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     window.lenis?.stop();
     startModalScroll();
+    modal.addEventListener('keydown', trapTab);
+    modal.querySelector('.modal-close')?.focus();
   };
   const close = () => {
+    if (!modal.classList.contains('open')) return;
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     window.lenis?.start();
     stopModalScroll();
+    modal.removeEventListener('keydown', trapTab);
+    triggerBtn?.focus();
   };
-  document.getElementById('o-mnie-btn')?.addEventListener('click', open);
+  triggerBtn?.addEventListener('click', open);
   modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 </script>
@@ -106,24 +134,82 @@ const bio = [
   .o-text .section-title { text-align: left; margin-inline: 0; }
   .o-grid {
     display: grid;
-    grid-template-columns: 574px 1fr;   /* zdjęcie 574px, tekst wypełnia resztę */
-    gap: 56px;
+    /* Kolumny w proporcjach, NIE sztywne 574px — przy sztywnej kolumnie zdjęcia
+       tekst ściskał się na tablecie do ~145px. minmax(0,…) pozwala kolumnom
+       zejść poniżej rozmiaru zawartości, bez tego siatka i tak by się rozpychała. */
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    /* 96px, a nie 56: plama za zdjęciem wystaje spod niego o ~36px w prawo
+       (inset -6%), więc przy 56px tekst miał od niej realnie tylko 20px
+       i wyglądał na przyklejony. Liczy się odstęp od plamy, nie od zdjęcia. */
+    column-gap: 96px;
+    row-gap: 32px;
     align-items: center;
   }
+  /* --- Zdjęcie w organicznym kształcie + plama i iskierki wokół ---
+     Kształt robi asymetryczny border-radius (osobne promienie poziome i
+     pionowe po ukośniku) — jedna „kropla", bez pliku graficznego.
+     `--blob` trzyma go w jednym miejscu, żeby plama pod spodem miała
+     dokładnie ten sam obrys co zdjęcie. */
+  .o-photo {
+    --blob: 58% 42% 47% 53% / 48% 45% 55% 52%;
+    position: relative;
+  }
+
+  /* Plama za zdjęciem: ten sam kształt, lekko obrócony i przesunięty,
+     żeby wystawał zza krawędzi. Odpowiednik ich obrazka „image-two”. */
+  .o-photo::before {
+    content: '';
+    position: absolute;
+    inset: 5% -6% -7% 4%;
+    background: var(--pastel-limonka);
+    border-radius: var(--blob);
+    transform: rotate(-5deg);
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .o-photo img {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    border-radius: var(--radius);
+    border-radius: var(--blob);
     box-shadow: var(--shadow);
     object-fit: cover;
     aspect-ratio: 574 / 559;  /* wymiary jak w oryginale */
-    outline: 1px solid oklch(0 0 0 / 0.1);   /* subtelny obrys — głębia */
+    /* Obrys musi być CZYSTĄ czernią z niskim kryciem, nie przygaszoną zielenią —
+       barwiony obrys łapie kolor tła pod spodem i czyta się jak brud na
+       krawędzi zdjęcia. Podąża za border-radius, więc działa i na kropli. */
+    outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
   }
+
+  /* Iskierki — czterokątne gwiazdki wycięte z kwadratu clip-path. */
+  .o-iskra {
+    position: absolute;
+    z-index: 2;
+    aspect-ratio: 1;
+    background: currentColor;
+    clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+    pointer-events: none;
+  }
+  .o-iskra--1 { width: 34px; top: 6%;  left: -3%;  color: var(--lime); }
+  .o-iskra--2 { width: 20px; top: 20%; left: 4%;   color: var(--herb); }
+  .o-iskra--3 { width: 26px; bottom: 8%; right: -2%; color: var(--pastel-piasek); }
   .o-text p { color: var(--muted); margin-top: 18px; max-width: 52ch; }
   .o-text .btn { margin-top: 28px; }
 
-  @media (max-width: 800px) {
+  /* Próg 900px, nie 800: przy 820px dwie kolumny już się nie mieszczą. */
+  @media (max-width: 900px) {
     .o-grid { grid-template-columns: 1fr; gap: 32px; }
+    /* zdjęcie nad tekstem nie powinno zjadać całego pierwszego ekranu */
+    .o-photo { max-width: 460px; margin-inline: auto; width: 100%; }
+    /* Wyrównanie do lewej ma sens TYLKO obok zdjęcia. Gdy kolumny się składają,
+       tekst musi wrócić na środek — inaczej ta jedna sekcja wisi przy lewej
+       krawędzi, podczas gdy Wartości, Oferta i FAQ są wyśrodkowane. */
+    .o-text { text-align: center; }
+    .o-text .eyebrow { text-align: center; }
+    .o-text .section-title { text-align: center; margin-inline: auto; }
+    .o-text p { margin-inline: auto; }
   }
 
   /* --- Modal (te same style co w ofercie) --- */
@@ -131,10 +217,10 @@ const bio = [
     position: fixed; inset: 0; z-index: 100;
     display: flex; align-items: center; justify-content: center; padding: 24px;
     opacity: 0; pointer-events: none;
-    transition: opacity .18s ease;   /* zamknięcie: szybciej */
+    transition: opacity var(--duration-quick) var(--ease-smooth-out);   /* zamknięcie: szybciej */
     will-change: opacity;
   }
-  .modal.open { opacity: 1; pointer-events: auto; transition: opacity .28s ease; }
+  .modal.open { opacity: 1; pointer-events: auto; transition: opacity var(--duration-fast) var(--ease-smooth-out); }
   .modal-backdrop {
     position: absolute; inset: 0;
     background: rgba(20,30,18,.55); backdrop-filter: blur(3px);
@@ -147,9 +233,9 @@ const bio = [
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0,0,0,.3);
     transform: translateY(18px) scale(.96);
-    transition: transform .18s cubic-bezier(.2, .8, .2, 1);   /* zamknięcie: szybciej */
+    transition: transform var(--duration-quick) var(--ease-smooth-out);   /* zamknięcie: szybciej */
   }
-  .modal.open .modal-dialog { transform: none; transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
+  .modal.open .modal-dialog { transform: none; transition: transform var(--duration-fast) var(--ease-smooth-out); }
   @media (prefers-reduced-motion: reduce) {
     .modal, .modal-dialog { transition: none; }
     .modal-dialog { transform: none; }
@@ -172,7 +258,7 @@ const bio = [
   .modal-close {
     position: absolute; top: 24px; right: 24px;   /* min. 24px od krawędzi */
     z-index: 2;
-    width: 40px; height: 40px; border-radius: 50%; border: none;
+    width: 44px; height: 44px; border-radius: 50%; border: none;
     background: var(--cream); cursor: pointer;
     color: var(--ink);
     display: grid; place-items: center;

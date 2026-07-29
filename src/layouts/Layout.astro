@@ -17,6 +17,25 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      // Zapala stany startowe wjazdu sekcji JESZCZE przed pierwszym malowaniem.
+      // Gdyby ta klasa szła z modułu na końcu <body>, treść mignęłaby w pełnym
+      // kryciu i dopiero potem zgasła.
+      (function () {
+        var html = document.documentElement;
+        // Bez IntersectionObservera nie ma czym odsłonić — nie chowamy nic.
+        if (!('IntersectionObserver' in window)) return;
+        html.classList.add('js-anim');
+        // BEZPIECZNIK. Treść czeka tu na JavaScript, więc awaria modułu
+        // (np. błąd importu Lenisa) zostawiłaby PUSTĄ stronę. Jeśli obserwator
+        // nie zdąży się zgłosić, odsłaniamy wszystko bez animacji.
+        // W karcie w tle moduł i tak wystartuje i ustawi tę flagę, więc
+        // bezpiecznik nie odbierze animacji komuś, kto otworzył link w tle.
+        setTimeout(function () {
+          if (!window.__wjazdGotowy) html.classList.remove('js-anim');
+        }, 2500);
+      })();
+    </script>
   </head>
   <body>
     <slot />
@@ -35,6 +54,29 @@ const {
         requestAnimationFrame(raf);
       }
       requestAnimationFrame(raf);
+
+      // --- Wjazd sekcji ---
+      // Jeden obserwator na całą stronę, a każdy kontener po odsłonięciu jest
+      // odpinany (`unobserve`). Po pokazaniu wszystkich sekcji koszt spada do
+      // zera — nic nie wisi na zdarzeniu scroll.
+      const doWjazdu = document.querySelectorAll('.page-content .section > .container');
+      const obserwator = new IntersectionObserver(
+        (wpisy) => {
+          wpisy.forEach((w) => {
+            if (!w.isIntersecting) return;
+            w.target.classList.add('widoczny');
+            obserwator.unobserve(w.target);
+          });
+        },
+        // 12% sekcji w kadrze wystarczy; margines -8% odpala rzecz odrobinę
+        // wcześniej, żeby fade kończył się mniej więcej wtedy, gdy sekcja
+        // jest już dobrze widoczna
+        { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+      );
+      doWjazdu.forEach((el) => obserwator.observe(el));
+      // Rozbraja bezpiecznik z <head> — obserwator wystartował i od teraz on
+      // odpowiada za odsłanianie.
+      (window as any).__wjazdGotowy = true;
 
       // Kliknięcia w linki-kotwice (#sekcja) też płynnie przewijają.
       document.querySelectorAll('a[href^="#"]').forEach((a) => {
