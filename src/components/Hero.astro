@@ -248,7 +248,10 @@ const poster = await getImage({ src: heroImg, width: 1920, format: 'webp' });
   .hero-content p {
     font-size: clamp(1.05rem, 2vw, 1.35rem);
     max-width: 46ch;
-    margin: 24px auto 32px;
+    margin: 24px auto 32px; /* 32px do CTA */
     opacity: .95;
+  }
+  .hero-content .btn {
+    margin-top: 0; /* odstęp robi margin-bottom akapitu */
   }
 </style>

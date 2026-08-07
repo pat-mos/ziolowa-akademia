@@ -41,7 +41,7 @@
   --radius: 22px;           /* zaokrąglenie kart */
   --radius-pill: 999px;     /* pełne zaokrąglenie (pigułka) */
   --shadow: 0 10px 30px rgba(31, 42, 28, 0.08);
-  --container: 1400px;      /* maks. szerokość treści (padding 80px w środku) */
+  --container: 1200px;      /* maks. szerokość treści */
 
   --font: 'Quicksand', system-ui, -apple-system, sans-serif;
   /* Krój nagłówkowy — geometryczny, mocniejszy charakter niż body */

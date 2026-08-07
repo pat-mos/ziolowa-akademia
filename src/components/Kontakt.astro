@@ -162,7 +162,11 @@ const film = '';
     border-color: oklch(0.55 0.09 155);
     box-shadow: 0 0 0 4px oklch(0.82 0.05 155 / 0.45);
   }
-  .k-form .btn { margin-top: 2px; width: 100%; }
+  .k-form .btn {
+    /* gap 12 + 20 = 32px od pola wyżej */
+    margin-top: 20px;
+    width: 100%;
+  }
   .k-note {
     font-size: .85rem;
     color: var(--muted);
