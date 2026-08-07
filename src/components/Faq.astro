@@ -75,9 +75,9 @@ const pytania = [
 </script>
 
 <style>
-  /* Nagłówek na górze (jedna kolumna, jak w oryginale) */
-  .faq-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
-  .faq-head p { color: var(--muted); margin: 18px 0 24px; }
+  /* Nagłówek na górze — jeden odstęp do listy (bez podwójnego dołu na p) */
+  .faq-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .faq-head p { color: var(--muted); margin: 18px 0 0; }
 
   /* Lista pytań pod spodem */
   .faq-list {
@@ -96,7 +96,7 @@ const pytania = [
   }
   .faq-q {
     width: 100%;
-    text-align: left;
+    text-align: start;
     background: none;
     border: none;
     padding: 24px 30px;
@@ -106,8 +106,9 @@ const pytania = [
     gap: 16px;
     cursor: pointer;
     font-family: var(--font);
-    font-weight: 800;
+    font-weight: var(--weight-ui);
     font-size: 1.2rem;
+    line-height: 1.4;
     color: #000;
   }
   .faq-icon {
@@ -115,21 +116,24 @@ const pytania = [
     place-items: center;
     color: var(--ink);
     flex-shrink: 0;
-    transition: transform .3s var(--ease-smooth-out);
+    width: 44px;
+    height: 44px;
+    transition: transform var(--duration-fast) var(--ease-smooth-out);
   }
   .faq-icon svg { display: block; }
   /* „+" obraca się o 45° → wygląda jak „×" po otwarciu */
   .faq-item.open .faq-icon { transform: rotate(45deg); }
 
-  /* Płynne rozwijanie wysokości dzięki grid-template-rows 0fr → 1fr */
+  /* Płynne rozwijanie wysokości dzięki grid-template-rows 0fr → 1fr
+     Accordion: ta sama długość open/close (--duration-fast). */
   .faq-a {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows .3s var(--ease-smooth-out);
+    transition: grid-template-rows var(--duration-fast) var(--ease-smooth-out);
   }
   .faq-item.open .faq-a { grid-template-rows: 1fr; }
   .faq-a-inner { overflow: hidden; }
-  .faq-a p { color: var(--muted); padding: 0 30px 28px; }
+  .faq-a p { color: var(--muted); padding: 0 30px 28px; line-height: var(--lh-body); }
 
   @media (max-width: 520px) {
     .faq-q { padding: 20px 24px; font-size: 1.05rem; }

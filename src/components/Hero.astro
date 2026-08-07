@@ -1,20 +1,47 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroImg from '../assets/img/hero.jpeg';
+
+// Pasek aktualności nad nagłówkiem — podmieniaj swobodnie.
+const aktualnosc = {
+  etykieta: 'Nowość',
+  tresc: 'Zapisy na warsztaty wiosenne — terminy marzec–maj',
+};
+
+const poster = await getImage({ src: heroImg, width: 1920, format: 'webp' });
 ---
 <section class="hero" id="top">
+  {/* Poster / fallback — widać przy ładowaniu i przy reduced-motion */}
   <Image
-    class="hero-bg"
+    class="hero-bg hero-bg--poster"
     src={heroImg}
-    alt="Grupa dzieci na spacerze leśną ścieżką wśród sosen"
+    alt=""
     widths={[768, 1280, 1920]}
     sizes="100vw"
     loading="eager"
     fetchpriority="high"
+    aria-hidden="true"
   />
+  <video
+    class="hero-bg hero-bg--video"
+    src="/video/hero.mp4"
+    poster={poster.src}
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    aria-hidden="true"
+  ></video>
   <div class="hero-overlay"></div>
 
   <div class="hero-content container">
+    {/* Pasek aktualności nad nagłówkiem — treść do edycji w `aktualnosc` */}
+    <a href="#oferta" class="hero-tag">
+      <span class="hero-tag-etykieta">{aktualnosc.etykieta}</span>
+      <span class="hero-tag-tresc">{aktualnosc.tresc}</span>
+    </a>
+
     {/* &nbsp; po jednoliterowych spójnikach — polska zasada: „i", „o", „z"
         nie mogą zostać sierotą na końcu linii */}
     <h1>Edukacja i&nbsp;doświadczenie natury dla dzieci i&nbsp;dorosłych</h1>
@@ -26,20 +53,37 @@ import heroImg from '../assets/img/hero.jpeg';
   </div>
 </section>
 
+<script>
+  // Bez autoplay przy „ogranicz animacje" — zostaje statyczny poster.
+  const video = document.querySelector<HTMLVideoElement>('.hero-bg--video');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function syncMotion() {
+    if (!video) return;
+    if (reduce.matches) {
+      video.pause();
+      video.removeAttribute('autoplay');
+    } else {
+      video.play().catch(() => {});
+    }
+  }
+  syncMotion();
+  reduce.addEventListener('change', syncMotion);
+</script>
+
 <style>
   .hero {
-    position: fixed;           /* przyklejone w tle — treść przewija się nad nim */
+    position: fixed;           /* desktop: przyklejone w tle */
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     z-index: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    /* Dodatkowy odstęp u góry, by nagłówek nie chował się za nawigacją */
     padding-top: 120px;
     padding-bottom: 60px;
   }
@@ -50,55 +94,138 @@ import heroImg from '../assets/img/hero.jpeg';
     height: 100%;
     object-fit: cover;
     z-index: -2;
+    pointer-events: none;
+    /* Przybliżenie wycina krawędzie — znak Gemini w prawym dolnym rogu */
+    transform: scale(1.22);
+    transform-origin: 42% 45%;
   }
-  /* Przyciemnienie, żeby biały tekst był czytelny na zdjęciu */
+  .hero-bg--video { z-index: -2; }
+  .hero-bg--poster { z-index: -3; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg--video { display: none; }
+  }
+  /* Przyciemnienie, żeby biały tekst był czytelny na filmie */
   .hero-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(20,30,18,.35), rgba(20,30,18,.45));
     z-index: -1;
   }
+  /* Miękka plama w prawym dolnym rogu — dobija watermark Gemini */
+  .hero-overlay::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: -2%;
+    bottom: -2%;
+    width: min(340px, 48vw);
+    height: min(160px, 28vh);
+    background: radial-gradient(
+      ellipse 95% 90% at 100% 100%,
+      rgba(18, 28, 16, 0.92) 0%,
+      rgba(18, 28, 16, 0.55) 38%,
+      rgba(18, 28, 16, 0.18) 62%,
+      transparent 78%
+    );
+    pointer-events: none;
+  }
   .hero-content { color: var(--white); }
 
+  /* --- Pasek aktualności nad nagłówkiem (wzór: bobolobo) ---
+     Concentric: label 16 + pad 8 = outer 24. */
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    padding-inline-end: 18px;
+    margin-bottom: 24px;
+    border-radius: 24px;
+    background: rgba(20, 30, 18, .48);
+    backdrop-filter: blur(6px);
+    color: var(--white);
+    min-height: 44px;
+    max-width: min(100%, 36rem);
+    transition: background-color var(--duration-quick) var(--ease-smooth-out),
+                transform var(--duration-quick) var(--ease-smooth-out);
+  }
+  .hero-tag:hover { background: rgba(20, 30, 18, .62); }
+  .hero-tag:active { transform: scale(var(--scale-large)); }
+  .hero-tag-etykieta {
+    background: var(--white);
+    color: var(--ink);
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: .9rem;
+    font-weight: var(--weight-ui);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .hero-tag-tresc {
+    font-size: var(--text-caption);
+    font-weight: var(--weight-emphasis);
+    text-align: start;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 900px) {
+    /* Mobile: hero w flow — mniej janku, CTA w thumb zone */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: auto;
+      align-items: flex-end;
+      padding-top: 100px;
+      padding-bottom: max(48px, env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-tag { gap: 8px; padding-inline-end: 14px; }
+    .hero-tag-tresc { font-size: var(--text-caption); }
+  }
+
   /* --- Wejście hero: rozmycie + delikatne uniesienie, raz przy wczytaniu ---
-     Animujemy trzy osobne kawałki z kaskadą 100ms, a nie cały kontener naraz —
-     dzięki temu czyta się jak sekwencja, nie jak jeden skok.
-     `both` trzyma stan początkowy przed startem, więc nic nie mignie.
-     Rozmycie jest TYLKO tutaj: to jedyny moment na stronie, gdzie blur jest
-     tani — trzy elementy, jeden raz, przy wczytaniu. Przy przewijaniu sekcji
-     używamy samego opacity (patrz global.css), bo blur na każdej sekcji
-     kosztowałby GPU przez cały czas scrollowania. */
+     Kaskada na --duration-micro (80ms) — 4 elementy × 80 = 240ms < ~300ms cap.
+     Blur/dystans z tokenów text-reveal. */
+  .hero-tag,
   .hero-content h1,
   .hero-content p,
   .hero-content .btn {
-    animation: heroWejscie .75s cubic-bezier(.2, .8, .2, 1) both;
+    animation: heroWejscie var(--duration-very-slow) var(--ease-smooth-out) both;
   }
-  .hero-content h1 { animation-delay: .15s; }
-  .hero-content p { animation-delay: .25s; }
-  .hero-content .btn { animation-delay: .35s; }
+  .hero-tag { animation-delay: calc(1 * var(--duration-micro)); }
+  .hero-content h1 { animation-delay: calc(2 * var(--duration-micro)); }
+  .hero-content p { animation-delay: calc(3 * var(--duration-micro)); }
+  .hero-content .btn { animation-delay: calc(4 * var(--duration-micro)); }
 
   @keyframes heroWejscie {
-    from { opacity: 0; filter: blur(8px); translate: 0 14px; }
+    from { opacity: 0; filter: blur(var(--blur-medium)); translate: 0 var(--distance-medium); }
     to   { opacity: 1; filter: blur(0);   translate: 0 0; }
   }
   /* akapit ma docelowo .95 krycia — bez tego animacja podbiłaby go do 1 */
   .hero-content p { animation-name: heroWejscieAkapit; }
   @keyframes heroWejscieAkapit {
-    from { opacity: 0; filter: blur(8px); translate: 0 14px; }
+    from { opacity: 0; filter: blur(var(--blur-medium)); translate: 0 var(--distance-medium); }
     to   { opacity: .95; filter: blur(0); translate: 0 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-content h1,
     .hero-content p,
-    .hero-content .btn { animation: none; }
+    .hero-content .btn,
+    .hero-tag { animation: none; }
   }
   .hero-content h1 {
-    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
-    line-height: 1.05;         /* ciaśniejsza interlinia dla dużego display */
+    /* 4.5rem = 72px w szczycie — jak nagłówek hero w bobolobo.
+       line-height 1.06 to ich 76/72; tracking zacieśniony, ale nie do -4px:
+       Parkinsans + zaokrąglone body; przy -0.055em glify zaczynają się
+       zlepiać. -0.03em daje ten sam zwarty efekt bez sklejania. */
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    line-height: 1.06;
     max-width: 24ch;           /* mieści „Edukacja i doświadczenie" w jednej linii */
     margin-inline: auto;
-    letter-spacing: -0.01em;   /* delikatniejszy tracking */
+    letter-spacing: -0.03em;
     text-shadow: 0 2px 24px rgba(0,0,0,.25);
   }
   .hero-content p {

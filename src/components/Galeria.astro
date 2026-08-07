@@ -5,7 +5,24 @@ import g2 from '../assets/img/galeria-2.jpeg';
 import g3 from '../assets/img/galeria-3.jpeg';
 import g4 from '../assets/img/galeria-4.jpeg';
 
-const zdjecia = [g1, g2, g3, g4];
+const zdjecia = [
+  {
+    src: g1,
+    alt: 'Dziewczynki na kocach na łące lepią z gliny podczas warsztatów plenerowych',
+  },
+  {
+    src: g2,
+    alt: 'Stół warsztatowy z paprociami, gliną i przepisem na łąkowy napar',
+  },
+  {
+    src: g3,
+    alt: 'Kompozycja z suszonych ziół i kwiatów na drewnianej deseczce',
+  },
+  {
+    src: g4,
+    alt: 'Dzieci pokazują karty z zebranymi liśćmi i roślinami z łąki',
+  },
+];
 // Powielamy listę, aby pas przewijał się w nieskończoność bez przerwy.
 const petla = [...zdjecia, ...zdjecia];
 ---
@@ -17,8 +34,13 @@ const petla = [...zdjecia, ...zdjecia];
 
   <div class="marquee">
     <div class="track">
-      {petla.map((img) => (
-        <Image src={img} alt="Zdjęcie z warsztatów Ziołowej Akademii" widths={[400, 800]} sizes="400px" />
+      {petla.map((item, i) => (
+        <Image
+          src={item.src}
+          alt={i < zdjecia.length ? item.alt : ''}
+          widths={[400, 800]}
+          sizes="(max-width: 720px) 72vw, 400px"
+        />
       ))}
     </div>
   </div>
@@ -35,14 +57,19 @@ const petla = [...zdjecia, ...zdjecia];
     display: flex;
     gap: 20px;
     width: max-content;
-    animation: scroll 30s linear infinite;
+    animation: scroll 48s linear infinite;
+  }
+  /* Pauza przy najechaniu — mniej rozpraszające, treść da się obejrzeć */
+  .marquee:hover .track,
+  .marquee:focus-within .track {
+    animation-play-state: paused;
   }
   .track img {
     width: 400px;
     height: 400px;
     object-fit: cover;
     border-radius: var(--radius);
-    outline: 1px solid oklch(0 0 0 / 0.1);   /* subtelny obrys — głębia */
+    outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
     flex-shrink: 0;
   }
@@ -50,8 +77,22 @@ const petla = [...zdjecia, ...zdjecia];
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
   }
-  /* Szanujemy ustawienie "ogranicz animacje" w systemie */
+  @media (max-width: 720px) {
+    .track img {
+      width: min(280px, 72vw);
+      height: min(280px, 72vw);
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .track { animation: none; flex-wrap: nowrap; overflow-x: auto; }
+    .track {
+      animation: none;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-inline: 24px;
+      gap: 16px;
+    }
+    .track img { scroll-snap-align: start; }
   }
 </style>

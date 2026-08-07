@@ -1,33 +1,92 @@
 ---
-// Sekcja „Wartość dla uczestników" — treść 1:1 jak w oryginale.
-// Styl kafli odwzorowany z Framera: wysokie kafle z dużym, pogrubionym
-// tekstem wypełniającym kafel (tło #f0f5f2, zaokrąglenie 32px).
-const items = [
-  'Zajęcia oparte na doświadczeniu i pracy z naturą',
-  'Rozwój uważności, ciekawości i koncentracji',
-  'Edukacja dla dzieci oraz regenerujące spotkania dla dorosłych',
-  'Doświadczanie natury dla dorosłych',
+// Sekcja łączona: wprowadzenie o Ziołowej Akademii + cztery wartości.
+// Układ 1:1 z sekcją „Gentle by design. Curious by nature." (bobolobo):
+// u góry wyśrodkowany blok 680px (mała etykieta + duży tekst), pod nim
+// siatka czterech kafelków z ikoną, tytułem i opisem.
+const wartosci = [
+  {
+    ikona: 'lisc',
+    tytul: 'Przez doświadczenie',
+    opis: 'Zajęcia oparte na bezpośrednim kontakcie z naturą i pracy własnymi rękami.',
+  },
+  {
+    ikona: 'oko',
+    tytul: 'Uważność i ciekawość',
+    opis: 'Ćwiczymy koncentrację, obserwację i cierpliwe przyglądanie się przyrodzie.',
+  },
+  {
+    ikona: 'ludzie',
+    tytul: 'Dla dzieci i dorosłych',
+    opis: 'Warsztaty dla przedszkoli i szkół oraz spokojne spotkania dla dorosłych.',
+  },
+  {
+    ikona: 'slonce',
+    tytul: 'Blisko natury',
+    opis: 'Spacery botaniczne i kąpiele leśne, w których natura jest miejscem zajęć.',
+  },
 ];
 ---
-<section class="section wartosci">
+<section class="section wartosci" id="o-mnie">
   <div class="container">
-    <h2 class="section-title">Wartość dla uczestników</h2>
+    {/* Wprowadzenie — wyśrodkowany blok jak `wrap-about-home` */}
+    <div class="w-intro">
+      <span class="w-label">O Ziołowej Akademii</span>
+      <h2 class="w-headline">
+        Natury nie da się nauczyć z książki. Ziołowa Akademia to warsztaty,
+        spacery botaniczne i&nbsp;kąpiele leśne, w&nbsp;których dzieci i&nbsp;dorośli
+        poznają rośliny wszystkimi zmysłami. Tam, gdzie zabawa staje się nauką,
+        a&nbsp;nauka zabawą.
+      </h2>
+    </div>
 
-    <div class="grid">
-      {items.map((text, i) => (
-        <article class="card">
-          <p>{text}</p>
-          {/* Grafika przy dole karty. Wgraj pliki do public/img/ jako
-              wartosc-1.png … wartosc-4.png — pojawią się automatycznie.
-              Dopóki pliku nie ma, obrazek znika (onerror). */}
-          <img
-            class="card-graphic"
-            src={`/img/wartosc-${i + 1}.jpg`}
-            style={`-webkit-mask-image:url(/img/maska-${i + 1}.svg);mask-image:url(/img/maska-${i + 1}.svg)`}
-            alt=""
-            aria-hidden="true"
-            onerror="this.remove()"
-          />
+    {/* Cztery kafelki — jak `features-grid` */}
+    <div class="w-grid">
+      {wartosci.map((w) => (
+        <article class="w-karta">
+          <span class="w-ikona" aria-hidden="true">
+            {w.ikona === 'lisc' && (
+              <svg viewBox="0 0 64 64" fill="currentColor">
+                <path d="M30.6,8.3c8.4,4.9,14.6,12.2,17.1,21.7c2.6,9.9-0.4,18.6-8.1,25.6c-3.6,3.3-8,4.2-12.5,2.4c-6.9-2.7-11.4-8-13.4-15.1c-3.2-11.4,0.4-21.2,8.7-29.3c2.2-2.2,5-3.9,8.2-5.3z M30.2,12.4c-2.4,1.2-4.4,2.6-6.1,4.3c-7.3,7.1-10.4,15.6-7.6,25.6c1.7,6,5.4,10.3,11.1,12.6c3.2,1.3,6.1,0.7,8.7-1.7c6.7-6.1,9.2-13.4,7-22c-2.2-8.3-7.5-14.7-14.8-19.1z" />
+                <path d="M29.8,14.2c1.7,14.1,2.9,28.2,3.5,42.4c0.1,2.2-3.3,2.3-3.4,0.1c-0.6-14.1-1.8-28.1-3.4-42.1C26.2,12.4,29.6,12,29.8,14.2z" />
+                <path d="M31,26.2c3.4-2.3,7-4.1,10.8-5.5c2.1-0.8,3.2,2.4,1.1,3.2c-3.5,1.3-6.9,3-10.1,5.1C31,30.2,29.2,27.4,31,26.2z" />
+                <path d="M29.4,28.9c-2.6-2.4-5.4-4.5-8.5-6.2c-1.9-1.1-0.2-4,1.7-2.9c3.3,1.9,6.4,4.1,9.2,6.7C33.4,28,31,30.4,29.4,28.9z" />
+                <path d="M31.9,38.4c3-1.9,6.2-3.5,9.5-4.7c2.1-0.8,3.2,2.4,1.1,3.2c-3.1,1.1-6,2.6-8.8,4.4C31.9,42.5,30,39.6,31.9,38.4z" />
+                <path d="M30.5,42.6c-2.2-2-4.6-3.7-7.2-5.2c-1.9-1.1-0.2-4,1.7-2.9c2.8,1.6,5.4,3.5,7.8,5.6C34.4,41.7,32.1,44,30.5,42.6z" />
+              </svg>
+            )}
+            {w.ikona === 'oko' && (
+              <svg viewBox="0 0 64 64" fill="currentColor">
+                <path d="M3.9,33.4C11.5,21.8,21.6,15.7,34,15.9c11.9,0.2,21.6,6.4,28.6,18c0.6,1,0.5,2.1-0.2,3c-7.9,10.4-17.9,15.6-30,15.3C20.7,51.9,11,46,3.7,36.4C3,35.5,3.2,34.4,3.9,33.4z M8,34.9c6.6,8.2,15,12.6,25.2,12.9c10.3,0.3,18.7-3.9,25.5-12.6C52,25,43.7,19.6,33.7,19.4C23.9,19.2,15.2,24.4,8,34.9z" />
+                <path d="M33.8,23.6c5.2,0.3,9.1,4.7,8.8,9.9c-0.3,5.2-4.8,9.1-10,8.7c-5-0.4-8.8-4.8-8.5-9.9C24.4,27.2,28.8,23.3,33.8,23.6z M33.6,27.1c-3.2-0.2-5.9,2.2-6.1,5.4c-0.2,3.2,2.2,5.9,5.4,6.1c3.2,0.2,6-2.2,6.2-5.4C39.3,30,36.8,27.3,33.6,27.1z" />
+                <path d="M33.2,29.6c1.9,0.1,3.4,1.8,3.3,3.7c-0.1,1.9-1.8,3.4-3.7,3.2c-1.8-0.1-3.2-1.8-3.1-3.7C29.8,31,31.4,29.5,33.2,29.6z" />
+              </svg>
+            )}
+            {w.ikona === 'ludzie' && (
+              <svg viewBox="0 0 64 64" fill="currentColor">
+                <path d="M24.4,10.2c6.4-0.5,11.9,4.5,12.3,11.1c0.4,6.5-4.7,12-11.2,12.3c-6.3,0.3-11.6-4.7-11.9-11.1C13.4,16,18.1,10.7,24.4,10.2z M24.7,13.7c-4.3,0.3-7.6,4-7.4,8.4c0.2,4.3,4,7.6,8.4,7.4c4.2-0.2,7.5-4,7.2-8.3C32.7,16.9,29,13.4,24.7,13.7z" />
+                <path d="M7.6,53.5c-1-10.9,7.5-20.1,18.4-20.5c11.1-0.4,20.4,8,21,19.1c0.1,1.9-2.9,2.1-3.1,0.2c-0.7-9.2-8.5-16-17.7-15.6c-8.8,0.4-15.4,8-14.7,16.7C11.7,55.2,8.7,55.4,7.6,53.5z" />
+                <path d="M45.4,15c4.8-0.4,9,3.4,9.3,8.2c0.3,4.8-3.5,9-8.3,9.2c-1.6,0.1-1.9-3.3-0.3-3.4c2.9-0.2,5.1-2.7,4.9-5.6c-0.2-2.9-2.7-5-5.6-4.8C43.9,18.7,43.8,15.1,45.4,15z" />
+                <path d="M48.5,35.2c8.6,1.3,15,8.8,14.6,17.5c-0.1,1.5-2.1,1.9-2.8,0.6c-0.3-0.5-0.3-1-0.3-1.5c0.3-6.9-4.8-12.7-11.6-13.6C46.6,38,46.9,35,48.5,35.2z" />
+              </svg>
+            )}
+            {w.ikona === 'slonce' && (
+              <svg viewBox="0 0 64 64" fill="currentColor">
+                <path d="M32.6,17.9c8.2,0.4,14.5,7.2,14.1,15.4c-0.4,8.1-7.4,14.4-15.6,13.9c-7.9-0.5-14-7.3-13.6-15.3C17.9,23.8,24.6,17.5,32.6,17.9z M32.4,21.4c-6.1-0.3-11.2,4.4-11.5,10.6c-0.3,6.1,4.4,11.2,10.5,11.6c6.3,0.4,11.6-4.4,11.9-10.6C43.6,26.8,38.7,21.7,32.4,21.4z" />
+                <path d="M30.8,13.2c-0.5-3.1-0.7-6.2-0.5-9.3c0.1-1.9,2.9-1.8,2.9,0.1c0,3-0.1,6.1-0.4,9.1C32.7,14.9,31.1,15,30.8,13.2z" />
+                <path d="M31,51.5c0.2-1.8,2.9-1.7,2.9,0.2c-0.2,3-0.3,6-0.2,9c0,1.9-2.7,2-2.9,0.1C30.6,57.7,30.7,54.6,31,51.5z" />
+                <path d="M51.3,30.9c3.1-0.5,6.2-0.6,9.3-0.4c1.9,0.1,1.8,2.9-0.1,2.9c-3,0-6.1-0.1-9.1-0.5C49.6,32.8,49.5,31.2,51.3,30.9z" />
+                <path d="M3.4,31c3-0.4,6-0.5,9-0.3c1.9,0.1,1.8,2.9-0.1,2.9c-2.9,0-5.8-0.1-8.7-0.4C1.7,32.9,1.6,31.3,3.4,31z" />
+                <path d="M44.9,17.4c2-2.4,4.2-4.6,6.6-6.6c1.5-1.2,3.3,0.9,1.9,2.1c-2.3,1.9-4.4,4-6.3,6.3C46,20.5,43.9,18.9,44.9,17.4z" />
+                <path d="M12.6,50.5c1.9-2.3,4-4.5,6.2-6.4c1.4-1.2,3.3,0.9,1.9,2.2c-2.1,1.8-4.1,3.8-5.9,6C13.7,53.6,11.6,51.9,12.6,50.5z" />
+                <path d="M51.4,53.2c-2.4-2-4.6-4.2-6.6-6.6c-1.2-1.5,0.9-3.2,2.1-1.8c1.9,2.3,4,4.4,6.3,6.3C54.5,52.3,52.9,54.4,51.4,53.2z" />
+                <path d="M12.9,13.4c-1.2-1.4,0.9-3.2,2.2-1.9c1.8,2.1,3.8,4.1,6,5.9c1.4,1.2-0.3,3.3-1.8,2.1C16.9,17.7,14.8,15.6,12.9,13.4z" />
+              </svg>
+            )}
+          </span>
+          <div class="w-tekst">
+            <h3>{w.tytul}</h3>
+            <p>{w.opis}</p>
+          </div>
         </article>
       ))}
     </div>
@@ -35,120 +94,112 @@ const items = [
 </section>
 
 <script>
-  // Blob pojawia się, gdy karta wjedzie w widok (z lekkim opóźnieniem kolejno).
-  const cards = document.querySelectorAll('.wartosci .card');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const el = entry.target as HTMLElement;
-        const g = el.querySelector('.card-graphic') as HTMLElement | null;
-        if (g) g.style.transitionDelay = (el.dataset.i || '0') + 'ms';
-        el.classList.add('in-view');
-        io.unobserve(el);
-      }
+  // Kafelki pojawiają się kolejno, gdy sekcja wjedzie w widok.
+  const karty = document.querySelectorAll('.wartosci .w-karta');
+  const io = new IntersectionObserver((wpisy) => {
+    wpisy.forEach((w) => {
+      if (!w.isIntersecting) return;
+      const el = w.target as HTMLElement;
+      el.style.transitionDelay = (el.dataset.i || '0') + 'ms';
+      el.classList.add('in-view');
+      io.unobserve(el);
     });
   }, { threshold: 0.25 });
-  cards.forEach((c, i) => {
-    (c as HTMLElement).dataset.i = String(i * 120);
+  karty.forEach((c, i) => {
+    (c as HTMLElement).dataset.i = String(i * 80);
     io.observe(c);
   });
-
-  // Lekki parallax POZIOMY: karty dryfują na boki z różną prędkością podczas
-  // przewijania. Ten sam kierunek, różne prędkości → delikatnie się rozjeżdżają,
-  // ale nigdy na siebie nie nachodzą (względne przesunięcie < odstępu 20px).
-  // Sterowany scrollem (nie ciągła pętla) + zapamiętana pozycja kart,
-  // żeby nie wymuszać przeliczania layoutu (reflow) w każdej klatce.
-  const speeds = [34, 18, 28, 12];
-  const els = [...cards] as HTMLElement[];
-  let centers: number[] = [];
-  const measure = () => {
-    centers = els.map((el) => {
-      const r = el.getBoundingClientRect();
-      return r.top + window.scrollY + r.height / 2; // środek karty w dokumencie
-    });
-  };
-  const render = () => {
-    const mid = window.scrollY + window.innerHeight / 2;
-    els.forEach((el, i) => {
-      const rel = (mid - centers[i]) / window.innerHeight; // ~ -0.5..0.5
-      el.style.transform = `translateX(${(rel * speeds[i % speeds.length]).toFixed(1)}px)`;
-    });
-  };
-  let ticking = false;
-  const onScroll = () => {
-    if (!ticking) { requestAnimationFrame(() => { render(); ticking = false; }); ticking = true; }
-  };
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    measure();
-    render();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => { measure(); render(); });
-  }
 </script>
 
 <style>
-  .grid {
-    margin-top: 40px;
+  /* Bez własnego tła — sekcja siedzi na białym tle strony.
+     Odstęp między sekcjami daje wyłącznie `.page-content` gap. */
+  .wartosci { padding: 0; }
+
+  /* --- Wprowadzenie --- */
+  .w-intro {
+    max-width: 680px;
+    margin: 0 auto 72px; /* cięższe intro → większy krok do siatki (celowe) */
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+  }
+  /* Mała etykieta 13px/500 — odpowiednik `label-large` */
+  .w-label {
+    font-size: .8rem;
+    font-weight: var(--weight-emphasis);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  /* Duży tekst lead — wieloliniowy, więc lh prose (≥1.4) */
+  .w-headline {
+    /* Dolna granica 1.15rem, nie 1.5rem: na 390px tekst w 24px zajmował
+       osiem linii i wypełniał cały ekran przed kafelkami. */
+    font-size: clamp(1.15rem, 2.6vw, 2rem);
+    font-weight: var(--weight-emphasis);
+    line-height: var(--lh-prose);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* --- Siatka kafelków --- */
+  .w-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    align-items: stretch;         /* wszystkie karty równej wysokości */
+    gap: 32px;
   }
-  .card {
-    position: relative;           /* dla blobu na absolucie */
-    overflow: hidden;             /* przycina blob do zaokrąglonych rogów */
-    background: #f0f5f2;          /* jak w oryginale */
-    border-radius: 32px;
-    padding: 30px;
-    height: 400px;                /* równa wysokość wszystkich kart */
+  .w-karta {
     display: flex;
-    flex-direction: column;       /* tekst u góry */
-  }
-  /* Duży, pogrubiony (black) napis u góry kafla */
-  .card p {
-    position: relative;
-    z-index: 1;                   /* tekst nad blobem */
-    font-size: 1.5rem;            /* ~24px jak w oryginale */
-    font-weight: 900;
-    line-height: 1.2;
-    color: #000;
-  }
-  /* Blob wycentrowany, wchodzi lekko pod dolną krawędź karty */
-  .card-graphic {
-    position: absolute;
-    left: 50%;
-    margin-left: -69%;            /* wycentrowanie przy szerokości 138% */
-    bottom: -44px;                /* chowa się pod dolną krawędź (przycięty) */
-    width: 138%;                  /* ~18% większy */
-    height: 250px;                /* większy blob */
-    object-fit: cover;
-    z-index: 0;
-    pointer-events: none;
-    /* maska w kształcie bloba (ustawiana per karta w atrybucie style) */
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    -webkit-mask-position: center;
-    mask-position: center;
-    /* stan początkowy do animacji pojawiania */
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    /* stan początkowy animacji pojawiania */
     opacity: 0;
-    transform: translateY(24px) scale(.92);
-    transition: opacity var(--duration-very-slow) var(--ease-in-out), transform var(--duration-very-slow) var(--ease-in-out);
+    transform: translateY(var(--distance-medium));
+    transition: opacity var(--duration-very-slow) var(--ease-in-out),
+                transform var(--duration-very-slow) var(--ease-in-out);
   }
-  /* gdy karta wjedzie w widok — blob „wskakuje" */
-  .card.in-view .card-graphic {
-    opacity: 1;
-    transform: none;
+  .w-karta.in-view { opacity: 1; transform: none; }
+
+  /* Ikona 64×64 w kolorowym kółku — każdy kafelek w innym pastelu,
+     tej samej palety co karty w Ofercie i chipsy. */
+  /* Każdy kafelek ma parę: jasny pastel na kółko i ciemny wariant TEGO
+     SAMEGO odcienia na rysunek. Ciemny NIE powstaje przez mieszanie z --ink
+     (ten jest zielony i ściągał każdą ikonę w szarą zieleń) — to osobno
+     dobrane kolory o tym samym odcieniu, niższej jasności. */
+  .w-karta:nth-child(1) .w-ikona { --ikona: var(--pastel-limonka); --ikona-ciemna: oklch(0.52 0.11 82);  } /* miód */
+  .w-karta:nth-child(2) .w-ikona { --ikona: var(--pastel-szczaw);  --ikona-ciemna: oklch(0.50 0.10 155); } /* mech */
+  .w-karta:nth-child(3) .w-ikona { --ikona: var(--pastel-piasek);  --ikona-ciemna: oklch(0.52 0.10 48);  } /* glina */
+  .w-karta:nth-child(4) .w-ikona { --ikona: var(--pastel-lipa);    --ikona-ciemna: oklch(0.52 0.08 35);  } /* pyłek */
+  .w-ikona {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--ikona);
+    color: var(--ikona-ciemna);
   }
+  .w-ikona svg { width: 30px; height: 30px; display: block; }
+
+  .w-tekst { display: flex; flex-direction: column; gap: 8px; }
+  .w-tekst h3 { font-size: 1.15rem; font-weight: 700; color: var(--ink); }
+  .w-tekst p { font-size: var(--text-body); line-height: 1.55; color: var(--muted); }
+
   @media (prefers-reduced-motion: reduce) {
-    .card-graphic { transition: none; opacity: 1; transform: none; }
+    .w-karta { transition: none; opacity: 1; transform: none; }
   }
 
   @media (max-width: 900px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
+    .w-intro { margin-bottom: 40px; gap: 16px; }
+    .w-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
   }
   @media (max-width: 520px) {
-    .grid { grid-template-columns: 1fr; }
+    .w-grid { grid-template-columns: 1fr; gap: 32px; }
   }
 </style>

@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import Wartosci from '../components/Wartosci.astro';
-import OMnie from '../components/OMnie.astro';
 import Oferta from '../components/Oferta.astro';
 import Opinie from '../components/Opinie.astro';
 import Galeria from '../components/Galeria.astro';
@@ -14,16 +13,17 @@ import Footer from '../components/Footer.astro';
 ---
 <Layout>
   <Nav />
-  <Hero />
-  {/* Treść przewija się NAD przyklejonym w tle hero */}
-  <div class="page-content falbanka-gora">
-    <Wartosci />
-    <OMnie />
-    <Oferta />
-    <Opinie />
-    <Galeria />
-    <Faq />
-    <Kontakt />
-    <Footer />
-  </div>
+  <main id="main">
+    <Hero />
+    {/* Treść przewija się NAD przyklejonym w tle hero */}
+    <div class="page-content falbanka-gora">
+      <Wartosci />
+      <Oferta />
+      <Opinie />
+      <Galeria />
+      <Faq />
+      <Kontakt />
+      <Footer />
+    </div>
+  </main>
 </Layout>

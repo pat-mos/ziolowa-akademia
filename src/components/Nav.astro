@@ -6,11 +6,11 @@
     <a href="#top" class="nav-logo" aria-label="Ziołowa Akademia — strona główna">
       <img
         src="/img/logo-mark.png"
-        alt="Ziołowa Akademia"
+        alt=""
         class="nav-logo-img"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+        width="52"
+        height="51"
       />
-      <span class="nav-logo-text" style="display:none">Ziołowa Akademia</span>
     </a>
     <nav class="nav-links">
       <a href="#o-mnie">O mnie</a>
@@ -48,31 +48,36 @@
 
 <style>
   .nav {
-    position: fixed;      /* zawsze widoczna, podąża za scrollem */
-    top: 24px;
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
     left: 0;
     right: 0;
     z-index: 50;
+    padding-inline: max(16px, env(safe-area-inset-left))
+                    max(16px, env(safe-area-inset-right));
   }
   .nav-pill {
-    max-width: 800px;      /* węższa nawigacja, jak w oryginale */
+    max-width: 800px;
     margin-inline: auto;
     display: flex;
     align-items: center;
     gap: 24px;
-    padding: 12px 12px 12px 28px;
+    padding: 10px 12px 10px 18px;
     background: rgba(245, 244, 238, 0.85);
     backdrop-filter: blur(10px);
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow);
   }
-  .nav-logo { display: flex; align-items: center; }
-  .nav-logo-img { height: 44px; width: auto; display: block; }
-  .nav-logo-text { font-weight: 800; font-size: 1.15rem; }
+  .nav-logo { display: flex; align-items: center; min-height: 44px; }
+  .nav-logo-img {
+    height: 52px;
+    width: auto;
+    display: block;
+  }
   .nav-links {
     display: flex;
     gap: 32px;
-    margin-left: auto;
+    margin-inline-start: auto;
     font-weight: 600;
   }
   /* Sam napis ma 26px wysokości. min-height podnosi pole kliknięcia do 44px
@@ -91,20 +96,19 @@
     display: none;               /* na desktopie niepotrzebny */
     position: relative;
     width: 44px; height: 44px;   /* pełne pole dotyku */
-    margin-left: auto;
+    margin-inline-start: auto;
     border: none;
     background: transparent;
     border-radius: 50%;
     color: var(--ink);
     cursor: pointer;
-    transition: background-color .15s ease, transform .1s ease;
+    transition: background-color var(--duration-quick) var(--ease-smooth-out),
+                transform var(--duration-quick) var(--ease-smooth-out);
   }
-  .nav-burger:active { transform: scale(.96); }
+  .nav-burger:active { transform: scale(var(--scale-large)); }
   .nav-burger:hover { background: rgba(0, 0, 0, .05); }
 
-  /* Obie ikony leżą na sobie i przenikają się: skala 0.25→1, krycie 0→1,
-     rozmycie 4px→0. Trzymanie obu w DOM daje animację w obie strony bez
-     żadnej biblioteki. */
+  /* Icon swap: skala bliżej UI chrome (nie .25 = zoom), blur-small. */
   .nav-burger-ic {
     position: absolute;
     inset: 0;
@@ -114,8 +118,8 @@
                 scale var(--duration-fast) var(--ease-in-out),
                 filter var(--duration-fast) var(--ease-in-out);
   }
-  .nav-burger-ic--zamknij { opacity: 0; scale: .25; filter: blur(4px); }
-  .nav[data-open='true'] .nav-burger-ic--menu { opacity: 0; scale: .25; filter: blur(4px); }
+  .nav-burger-ic--zamknij { opacity: 0; scale: .85; filter: blur(var(--blur-small)); }
+  .nav[data-open='true'] .nav-burger-ic--menu { opacity: 0; scale: .85; filter: blur(var(--blur-small)); }
   .nav[data-open='true'] .nav-burger-ic--zamknij { opacity: 1; scale: 1; filter: blur(0); }
 
   /* --- Panel mobilny --- */
@@ -132,7 +136,7 @@
     /* visibility w przejściu, żeby zamknięty panel nie łapał tabulatora */
     visibility: hidden;
     opacity: 0;
-    translate: 0 -8px;
+    translate: 0 calc(-1 * var(--distance-base));
     transition: opacity var(--duration-quick) var(--ease-smooth-out),
                 translate var(--duration-quick) var(--ease-smooth-out),
                 visibility 0s linear var(--duration-quick);
@@ -152,22 +156,32 @@
     padding-inline: 16px;
     border-radius: 16px;
     font-weight: 700;
-    transition: background-color .15s ease;
+    transition: background-color var(--duration-quick) var(--ease-smooth-out);
   }
   .nav-panel a:hover { background: rgba(0, 0, 0, .05); }
-  .nav-panel-cta { justify-content: center; margin-top: 6px; }
+  .nav-panel-cta { justify-content: center; margin-top: 8px; }
   .nav-panel-cta:hover { background: var(--lime-dark); }
 
   @media (prefers-reduced-motion: reduce) {
     .nav-burger-ic, .nav-panel { transition-duration: .01ms; }
   }
 
-  /* Na telefonie linki i CTA przenoszą się z pigułki do panelu */
+  /* Na telefonie: linki do panelu; CTA zostaje w pigułce (thumb / discoverability) */
   @media (max-width: 720px) {
-    .nav-links, .nav-cta { display: none; }
+    .nav-links { display: none; }
     .nav-burger { display: block; }
     .nav-panel { display: flex; flex-direction: column; }
-    .nav-pill { padding: 12px 12px 12px 20px; }
+    .nav-pill {
+      gap: 12px;
+      padding: 10px 10px 10px 16px;
+    }
+    .nav-cta {
+      margin-inline-start: auto;
+      padding: 10px 16px;
+      font-size: .9rem;
+      min-height: 44px;
+    }
+    .nav-panel-cta { display: none; } /* duplikat — CTA już w pillu */
   }
 </style>
 

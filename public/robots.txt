@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap pojawi się automatycznie, gdy ustawisz prawdziwy `site` w astro.config.mjs
+# i dodasz @astrojs/sitemap — na razie wystarczy index.

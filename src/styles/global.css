@@ -4,34 +4,38 @@
    Zmieniając wartości w :root, zmieniasz wygląd całej strony.
    ========================================================= */
 
-/* Czcionka Nunito (self-hosted, ładowana z pakietu @fontsource) */
-@import '@fontsource/nunito/400.css';
-@import '@fontsource/nunito/600.css';
-@import '@fontsource/nunito/700.css';
-@import '@fontsource/nunito/800.css';
-@import '@fontsource/nunito/900.css';
+/* Czcionka Quicksand (self-hosted, ładowana z pakietu @fontsource).
+   Wagi do 700 — cięższe żądania (800/900) na body trafiają w 700
+   (font-synthesis: none, bez sztucznego pogrubienia). */
+@import '@fontsource/quicksand/400.css';
+@import '@fontsource/quicksand/500.css';
+@import '@fontsource/quicksand/600.css';
+@import '@fontsource/quicksand/700.css';
+/* Parkinsans (variable, wagi 300–800) — wyłącznie do nagłówków.
+   Obejmuje latin-ext, więc polskie znaki (ą, ę, ł, ń, ś, ź, ż) są pokryte. */
+@import '@fontsource-variable/parkinsans';
 
 :root {
-  /* Kolory marki (OKLCH — perceptualnie równomierne, łatwe do strojenia) */
-  --lime: oklch(0.882 0.181 120.5);   /* limonkowy akcent (przyciski) */
-  --lime-dark: oklch(0.828 0.182 121.8); /* limonka na hover */
-  --ink: oklch(0.270 0.030 139);      /* ciemna zieleń — główny tekst i stopka */
-  --herb: oklch(0.430 0.085 145);     /* średnia zieleń ziołowa — ciemne panele,
-                                         które nie mogą zlewać się ze stopką */
-  --muted: oklch(0.507 0.033 138.8);  /* przygaszony tekst */
-  --cream: oklch(0.966 0.008 98.9);   /* jasne tło sekcji */
+  /* Kolory marki — hybryda: CTA z Lasu (mech), powierzchnie miód×glina,
+     struktura edukacyjny mech. Dawna elektryczna limonka odrzucona. */
+  --lime: oklch(0.855 0.130 128);     /* CTA — miękka zieleń leśna (kierunek B) */
+  --lime-dark: oklch(0.800 0.135 129); /* hover CTA */
+  --ink: oklch(0.255 0.040 152);      /* atrament — głęboki mech */
+  --herb: oklch(0.400 0.090 155);     /* panele / akcenty strukturalne */
+  --muted: oklch(0.500 0.032 148);    /* przygaszony tekst */
+  --cream: oklch(0.962 0.014 86);     /* jasne tło — ciepły miód/glina */
   --white: oklch(1 0 0);
-  --paper: oklch(0.988 0.006 95);     /* ciepła biel papieru — baza strony */
-  --line: oklch(0.918 0.014 97.5);    /* delikatne linie/obramowania */
+  --paper: oklch(0.984 0.011 84);     /* papier warsztatowy */
+  --line: oklch(0.912 0.018 88);      /* linie — lekka glina */
 
-  /* Pastele — ozdoby i chipsy. Ziołowe odpowiedniki przedszkolnych pasteli:
-     każdy inny, ale wszystkie z rodziny zieleni/ciepła, żeby strona nie
-     przestała być Ziołową Akademią. Jasność ~0.90 trzyma je na tyle jasno,
-     że ciemny tekst (--ink) ma na nich komfortowy kontrast. */
-  --pastel-limonka: oklch(0.915 0.095 122);   /* jasna limonka */
-  --pastel-szczaw:  oklch(0.900 0.070 158);   /* chłodna zieleń/szczaw */
-  --pastel-piasek:  oklch(0.925 0.055 78);    /* ciepły piaskowy */
-  --pastel-lipa:    oklch(0.905 0.050 25);    /* bladoróżowy kwiat lipy */
+  /* Pastele — miód / mech / glina / pyłek / bławatek. Jasność ~0.90, żeby --ink
+     miał na nich komfortowy kontrast. Nazwy tokenów zostawione pod
+     kompatybilność; znaczenie = nowa hybryda. */
+  --pastel-limonka: oklch(0.915 0.070 82);    /* miód / nagietek */
+  --pastel-szczaw:  oklch(0.905 0.060 158);   /* mech / szałwia */
+  --pastel-piasek:  oklch(0.920 0.055 52);    /* glina */
+  --pastel-lipa:    oklch(0.915 0.045 35);    /* pyłek / ciepły róż gliny */
+  --pastel-blawatek: oklch(0.920 0.035 285);  /* bławatek / klitoria — herbata */
 
   /* Wygląd */
   --radius: 22px;           /* zaokrąglenie kart */
@@ -39,18 +43,40 @@
   --shadow: 0 10px 30px rgba(31, 42, 28, 0.08);
   --container: 1400px;      /* maks. szerokość treści (padding 80px w środku) */
 
-  --font: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font: 'Quicksand', system-ui, -apple-system, sans-serif;
+  /* Krój nagłówkowy — geometryczny, mocniejszy charakter niż body */
+  --font-naglowek: 'Parkinsans Variable', 'Quicksand', system-ui, sans-serif;
+
+  /* Typografia — mała skala ról (Quicksand max 700; Parkinsans do 800) */
+  --text-caption: 0.8125rem;   /* 13px — floor captionów */
+  --text-label: 0.875rem;      /* 14px — field labels, małe UI */
+  --text-sm: 0.9375rem;        /* 15px — rzadko; preferuj body */
+  --text-body: 1rem;           /* 16px */
+  --text-lead: 1.125rem;       /* 18px */
+  --ls-label: 0.06em;          /* uppercase eyebrows / kolumny */
+  --lh-body: 1.6;
+  --lh-prose: 1.45;            /* wieloliniowy lead / cytat */
+  --lh-heading: 1.1;
+  --weight-body: 500;
+  --weight-emphasis: 600;
+  --weight-ui: 700;            /* najcięższy Quicksand */
+  --weight-display: 800;       /* Parkinsans headlines */
 
   /* --- Skala ruchu (motion tokens, transitions.dev) ---
-     Wspólne czasy i krzywe dla całej strony, żeby przejścia nie rozjeżdżały
-     się między komponentami. Zainstalowany jest tylko wykorzystywany podzbiór.
-     Uwaga: --ease-smooth-out zastępuje dawny cubic-bezier(.2,.8,.2,1) — krzywa
-     jest bliska, ale nie identyczna. */
-  --duration-quick: 150ms;      /* zamknięcie modala/dropdownu */
-  --duration-fast: 250ms;       /* otwarcie modala/dropdownu, icon swap, slide zakładki */
-  --duration-very-slow: 500ms;  /* reveal treści */
-  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);  /* open/close, resize, pozycja */
+     Pełniejszy podzbiór skali transitions-polish — wartości po usage, nie „najbliższa liczba”. */
+  --duration-stagger: 40ms;     /* per-item stagger */
+  --duration-micro: 80ms;       /* duże itemy / intent delay */
+  --duration-quick: 150ms;      /* modal/dropdown close, press, micro UI */
+  --duration-fast: 250ms;       /* open, icon swap, tabs, accordion */
+  --duration-very-slow: 500ms;  /* reveal treści, wejście hero */
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);  /* open/close, pozycja */
   --ease-in-out: ease-in-out;                          /* icon swap, reveal */
+  --ease-linear: linear;                               /* shimmer / pętle */
+  --distance-base: 8px;         /* page/tab slide */
+  --distance-medium: 12px;      /* text reveal */
+  --scale-large: 0.96;          /* modal / :active */
+  --blur-small: 2px;            /* icon swap */
+  --blur-medium: 3px;           /* text / page reveal */
 }
 
 /* --- Reset / podstawy --- */
@@ -69,9 +95,10 @@ html.lenis, html.lenis body { height: auto; }
 body {
   margin: 0;
   font-family: var(--font);
+  font-weight: var(--weight-body);  /* Quicksand Medium */
   color: var(--ink);
   background: var(--white);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis: none;         /* brak sztucznego pogrubienia/kursywy */
@@ -83,9 +110,39 @@ img { max-width: 100%; display: block; height: auto; }
 
 a { color: inherit; text-decoration: none; }
 
-h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; text-wrap: balance; }
+h1, h2, h3, h4 {
+  font-family: var(--font-naglowek);
+  line-height: var(--lh-heading);
+  margin: 0;
+  font-weight: var(--weight-display);
+  text-wrap: balance;
+}
 
 p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej linii */
+
+/* Skip link — widoczny dopiero przy fokusie klawiatury */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 16px;
+  top: 16px;
+  z-index: 1000;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--white);
+  font-weight: var(--weight-ui);
+  font-size: 0.95rem;
+  box-shadow: var(--shadow);
+  transform: translateY(-120%);
+  transition: transform var(--duration-quick) var(--ease-smooth-out);
+}
+.skip-link:focus {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
 
 /* --- Elementy wielokrotnego użytku --- */
 
@@ -95,9 +152,17 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   max-width: var(--container);
   margin-inline: auto;
   padding-inline: 80px;
+  /* kotwica dla ozdób przy nagłówkach (komponent Ozdoby.astro) */
+  position: relative;
 }
-@media (max-width: 768px) {
-  .container { padding-inline: 24px; }
+@media (max-width: 900px) {
+  .container { padding-inline: 40px; }
+}
+@media (max-width: 720px) {
+  .container {
+    padding-inline: max(24px, env(safe-area-inset-left))
+                    max(24px, env(safe-area-inset-right));
+  }
 }
 
 /* Rytm pionowy: sekcje nie mają własnego paddingu — odstęp 160px daje
@@ -106,15 +171,13 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
 
 /* Wyjątek: sekcje z własnym tłem potrzebują wewnętrznego oddechu,
    inaczej kolorowe tło przykleiłoby się do tekstu. */
-.o-mnie,
 .galeria { padding-block: 160px; }
 
 /* --- Ciepłe tło tylko w wybranych sekcjach ---
-   Baza strony jest biała (lepszy kontrast). Ciepły akcent dostają wyłącznie
-   „O mnie" i galeria „Nasze zajęcia", żeby odciąć je od reszty.
+   Baza strony jest biała (lepszy kontrast). Ciepły akcent dostaje wyłącznie
+   galeria „Nasze zajęcia", żeby odciąć ją od reszty.
    Tło musi być JEDNOLITE: falbanka na krawędziach to płaski kolor, więc każdy
    gradient tutaj tworzyłby widoczny szew między brzuszkami a sekcją. */
-.o-mnie,
 .galeria {
   background-color: var(--paper);
   position: relative;
@@ -179,8 +242,7 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   .falbanka-dol::after { animation: none; }
 }
 
-/* Sekcje z ciepłym tłem: brzuszki w kolorze tła, wychodzą na białą stronę. */
-.o-mnie,
+/* Sekcja z ciepłym tłem: brzuszki w kolorze tła, wychodzą na białą stronę. */
 .galeria {
   --bump: 100px;
   --falbanka-kolor: var(--paper);
@@ -192,22 +254,24 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
    ponad nawigację, a treść i tak maluje się nad hero (kolejność DOM). */
 .page-content {
   position: relative;
-  margin-top: 100vh;         /* startuje pod pierwszym ekranem = hero */
+  /* dvh = dynamic viewport — bez dziur/obcięć pod paskiem URL na iOS */
+  margin-top: 100vh;
+  margin-top: 100dvh;
   background: var(--white);
-  /* rytm pionowy całej strony — jedna liczba zamiast paddingów w sekcjach */
   display: flex;
   flex-direction: column;
   gap: 160px;
-  /* gap działa tylko MIĘDZY sekcjami — pierwsza (Wartość) potrzebuje
-     własnego odstępu od góry, żeby nie kleiła się do hero */
   padding-top: 160px;
-  /* Falbanka domykająca hero: treść najeżdża na hero białymi brzuszkami. */
   --bump: 100px;
   --falbanka-kolor: var(--white);
 }
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  /* Na mobile hero jest w flow (nie fixed) — bez sztucznego margin-top */
+  .page-content { margin-top: 0; }
+}
+@media (max-width: 720px) {
   .page-content { gap: 88px; padding-top: 88px; --bump: 64px; }
-  .o-mnie, .galeria { padding-block: 88px; --bump: 64px; }
+  .galeria { padding-block: 88px; --bump: 64px; }
 }
 
 /* --- Stopka najeżdża na Kontakt (ten sam trik co hero) ---
@@ -246,7 +310,7 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
    Samo opacity jest składane przez GPU i nie wymusza przeliczania układu. */
 html.js-anim .page-content .section > .container {
   opacity: 0;
-  transition: opacity .6s cubic-bezier(.2, .8, .2, 1);
+  transition: opacity var(--duration-very-slow) var(--ease-smooth-out);
 }
 html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
 
@@ -263,7 +327,7 @@ html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
   left: 0;
   right: 0;
   bottom: 0;
-  height: 40px;
+  height: calc(40px + env(safe-area-inset-bottom, 0px));
   z-index: 45;
   pointer-events: none;
   backdrop-filter: blur(6px);
@@ -271,26 +335,29 @@ html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
   -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%);
   mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%);
 }
+@media (max-width: 720px) {
+  .page-bottom-blur { height: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
 
 /* Przycisk-pigułka */
 .btn {
   display: inline-block;
   padding: 14px 28px;
   border-radius: var(--radius-pill);
-  font-weight: 800;
-  font-size: 1rem;
+  font-weight: var(--weight-ui);
+  font-size: var(--text-body);
   cursor: pointer;
   border: none;
-  /* Sprężysta animacja (jak we Framerze): lekkie powiększenie na hover,
-     wciśnięcie na kliknięcie. */
-  transition: transform .28s cubic-bezier(.34, 1.56, .64, 1),
-              background .2s ease, box-shadow .2s ease;
+  /* Hover-in: krótko + smooth-out (bez bounce na wejściu). */
+  transition: transform var(--duration-fast) var(--ease-smooth-out),
+              background-color var(--duration-quick) var(--ease-smooth-out),
+              box-shadow var(--duration-quick) var(--ease-smooth-out);
 }
 /* hover-scale tylko dla myszy — na dotyku nie zostaje „przyklejony" */
 @media (hover: hover) and (pointer: fine) {
   .btn:hover { transform: scale(1.03); }
 }
-.btn:active { transform: scale(.96); }
+.btn:active { transform: scale(var(--scale-large)); }
 
 .btn-lime { background: var(--lime); color: var(--ink); position: relative; overflow: hidden; }
 .btn-lime:hover { background: var(--lime-dark); }
@@ -304,15 +371,19 @@ html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
   transform: translateX(-130%);
 }
 @media (hover: hover) and (pointer: fine) {
-  /* jednorazowy przejazd połysku (bez poświaty) */
+  /* jednorazowy przejazd połysku — linear jak shimmer */
   .btn-lime:hover::before {
     transform: translateX(130%);
-    transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+    transition: transform var(--duration-very-slow) var(--ease-linear);
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn-lime::before { display: none; }
 }
+
+/* Ciemny CTA — gdy limonka zlewałaby się z pastelowym tłem (np. formularz) */
+.btn-ink { background: var(--ink); color: var(--white); }
+.btn-ink:hover { background: var(--herb); }
 
 .btn-outline {
   background: transparent;
@@ -325,11 +396,11 @@ html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
 .eyebrow {
   display: block;
   text-align: center;      /* nagłówki sekcji wyśrodkowane dla spójności */
-  font-weight: 700;
+  font-weight: var(--weight-ui);
   color: var(--muted);
-  letter-spacing: .04em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  font-size: .85rem;
+  font-size: 0.85rem;
   margin-bottom: 12px;
 }
 

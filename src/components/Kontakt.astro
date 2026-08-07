@@ -1,80 +1,62 @@
 ---
+import { Image } from 'astro:assets';
+import plakat from '../assets/img/oferta-2.jpeg';
+
 // UWAGA: uzupełnij prawdziwe dane kontaktowe poniżej.
 const email = 'kontakt@ziolowa-akademia.pl';
-const telefon = '+48 000 000 000';
+
+// FILM — jak wrzucić własne wideo:
+// 1. skopiuj plik .mp4 do folderu `public/video/` (np. public/video/kontakt.mp4)
+// 2. wpisz tu ścieżkę: const film = '/video/kontakt.mp4';
+// Puste = pokazuje zdjęcie zamiast wideo.
+const film = '';
 ---
 <section class="section kontakt" id="kontakt">
   <div class="container">
+
     <div class="k-card">
-      <!-- Lewy panel: informacje -->
+      {/* --- LEWY: tekst + krótki formularz --- */}
       <div class="k-info">
-        <span class="eyebrow">Kontakt</span>
-        <h2 class="section-title">Porozmawiajmy o warsztatach</h2>
+        <h2 class="section-title">Natura to najlepsza sala lekcyjna</h2>
         <p class="k-lead">
-          Napisz kilka słów o grupie i temacie, który Cię interesuje —
-          dobierzemy ofertę i zaproponujemy dostępny termin.
+          Napisz kilka słów o grupie — dobierzemy warsztat i zaproponujemy termin.
         </p>
 
-        <ul class="k-details">
-          <li>
-            <span class="k-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
-            </span>
-            <a href={`mailto:${email}`}>{email}</a>
-          </li>
-          <li>
-            <span class="k-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-            </span>
-            <a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a>
-          </li>
-          <li>
-            <span class="k-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg>
-            </span>
-            <span>Województwo śląskie i&nbsp;cała Polska (dojazd)</span>
-          </li>
-        </ul>
+        <form class="k-form" data-email={email}>
+          <div class="k-row">
+            <label class="field">
+              <span class="field-label">Imię</span>
+              <input type="text" name="imie" autocomplete="given-name" placeholder="np. Anna" required />
+            </label>
+            <label class="field">
+              <span class="field-label">Telefon <span class="field-opc">(opcjonalnie)</span></span>
+              <input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="np. 500 000 000" />
+            </label>
+          </div>
+          <label class="field">
+            <span class="field-label">E-mail</span>
+            <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="np. anna@szkola.pl" required />
+          </label>
+          <label class="field">
+            <span class="field-label">Wiadomość</span>
+            <textarea name="wiadomosc" rows="3" placeholder="Wiek grupy, liczba osób, temat…" required></textarea>
+          </label>
+          <button type="submit" class="btn btn-ink">Wyślij wiadomość</button>
+          {/* komunikat po wysłaniu — pusty do czasu kliknięcia */}
+          <p class="k-note" role="status" aria-live="polite"></p>
+        </form>
+
+
       </div>
 
-      <!-- Prawy panel: formularz -->
-      <form class="k-form" data-email={email}>
-        <div class="k-row">
-          <label class="field">
-            <span class="field-label">Imię</span>
-            <span class="field-wrap">
-              <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-              <input type="text" name="imie" autocomplete="given-name" placeholder="Jak masz na imię?" required />
-            </span>
-          </label>
-          <label class="field">
-            <span class="field-label">Telefon <span class="field-opt">(opcjonalnie)</span></span>
-            <span class="field-wrap">
-              <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              <input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="np. 600 000 000" />
-            </span>
-          </label>
-        </div>
-
-        <label class="field">
-          <span class="field-label">E-mail</span>
-          <span class="field-wrap">
-            <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
-            <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="twoj@email.pl" required />
-          </span>
-        </label>
-
-        <label class="field">
-          <span class="field-label">Wiadomość</span>
-          <span class="field-wrap field-wrap--area">
-            <svg class="field-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-            <textarea name="wiadomosc" rows="4" placeholder="Napisz, czego szukasz — wiek grupy, liczba osób, temat…" required></textarea>
-          </span>
-        </label>
-
-        <button type="submit" class="btn btn-lime">Wyślij wiadomość</button>
-        <p class="k-note" role="status" aria-live="polite">Formularz otworzy Twój program pocztowy z gotową wiadomością.</p>
-      </form>
+      {/* --- PRAWY: zdjęcie / film --- */}
+      <div class="k-film">
+        {film ? (
+          <video class="k-video" src={film} controls preload="none" poster={plakat.src}></video>
+        ) : (
+          <Image src={plakat} alt="Kadr z warsztatów Ziołowej Akademii" widths={[600, 1000]} sizes="(max-width: 900px) 90vw, 620px" />
+        )}
+      </div>
     </div>
   </div>
 </section>
@@ -96,7 +78,6 @@ const telefon = '+48 000 000 000';
     );
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
 
-    // Potwierdzenie (mailto nie przeładowuje strony)
     const note = form.querySelector('.k-note');
     if (note) {
       note.textContent = '✓ Otwieramy Twój program pocztowy z gotową wiadomością…';
@@ -106,119 +87,145 @@ const telefon = '+48 000 000 000';
 </script>
 
 <style>
+  /* Dwa bloki obok siebie. Wysokość rzędu = treść formularza;
+     film dogania przez min-height:100% + height:0 (bez pustki pod CTA). */
   .k-card {
     display: grid;
-    grid-template-columns: 1fr 1.05fr;
-    border-radius: 32px;
-    overflow: hidden;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
   }
 
-  /* Lewy panel — ta sama rodzina co formularz obok (--cream, hue 98.9),
-     tylko o krok ciemniejszy: 0.966 → 0.925 jasności, chroma odrobinę w górę,
-     żeby odcięcie czytało się jako ciepłe i zamierzone, a nie jak szara plama.
-     Celowo BLISKO formularza — chodzi o delikatny podział, nie o kontrast.
-     Panel jest jasny, więc cała typografia poniżej jest ciemna (kiedyś był
-     ciemnozielony z białym tekstem). */
+  /* Lewa karta: mech / szałwia — spokojniej niż glina, bliżej FAQ */
   .k-info {
-    background: oklch(0.925 0.014 98.9);
+    background: var(--pastel-szczaw);
     color: var(--ink);
-    padding: 56px 48px;
-  }
-  .k-info .eyebrow { text-align: left; color: var(--muted); }
-  .k-info .section-title { text-align: left; margin-inline: 0; color: var(--ink); }
-  .k-lead { color: var(--muted); margin: 20px 0 32px; max-width: 40ch; }
-
-  .k-details { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
-  .k-details li { display: flex; align-items: center; gap: 12px; color: var(--ink); overflow-wrap: anywhere; }
-  .k-ic {
-    width: 40px; height: 40px; flex-shrink: 0;
-    display: grid; place-items: center;
-    /* przyciemnienie zamiast rozjaśnienia — kółko musi się odciąć od jasnego tła */
-    background: rgba(0, 0, 0, .06);
-    border-radius: 50%;
-    /* NIE --lime: limonka ma jasność 0.88 i na tak jasnym tle znika.
-       Ciemna zieleń trzyma ikonę czytelną. */
-    color: var(--herb);
-  }
-  .k-ic svg { width: 18px; height: 18px; display: block; }
-  /* mail i telefon to najważniejsze linki na stronie — muszą dać się trafić
-     palcem, a sam tekst ma tylko 26px wysokości */
-  .k-details a {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-  .k-details a:hover { color: var(--herb); }
-
-  /* Prawy panel — jasny formularz */
-  .k-form {
-    background: var(--cream);
-    padding: 56px 48px;
+    border-radius: 32px;
+    padding: 36px 36px 32px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
-  .k-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .k-info .section-title {
+    text-align: start;
+    margin-inline: 0;
+    color: var(--ink);
+    font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  }
+  .k-lead { color: var(--muted); margin: 12px 0 20px; max-width: 34ch; }
 
-  .field { display: flex; flex-direction: column; gap: 8px; }
-  .field-label { font-weight: 700; font-size: .95rem; color: var(--ink); }
-  .field-opt { font-weight: 500; color: var(--muted); }
-
-  /* Pole z wiodącą ikoną */
-  .field-wrap { position: relative; display: block; }
-  .field-ic {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px; height: 18px;
+  /* --- Formularz --- */
+  .k-form { display: flex; flex-direction: column; gap: 12px; }
+  .k-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field-label {
+    font-size: var(--text-label);
+    font-weight: var(--weight-ui);
+    color: var(--ink);
+    padding-inline-start: 4px;
+  }
+  .field-opc {
+    font-weight: var(--weight-body);
     color: var(--muted);
-    pointer-events: none;
-    transition: color .15s ease;
   }
-  .field-wrap--area .field-ic { top: 18px; transform: none; }
-
   .k-form input,
   .k-form textarea {
     width: 100%;
     font-family: var(--font);
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 14px 16px 14px 46px;   /* miejsce na ikonę */
-    border: 2px solid var(--line);
-    border-radius: 16px;            /* miększe niż wcześniej (14) */
-    background: var(--white);
+    font-size: var(--text-body);
+    font-weight: var(--weight-body);
     color: var(--ink);
-    resize: vertical;
-    transition: border-color .15s ease, box-shadow .15s ease;
+    background: var(--white);
+    border: 1.5px solid transparent;
+    border-radius: 16px;
+    padding: 12px 16px;
+    min-height: 44px;
+    box-shadow: 0 1px 2px oklch(0.255 0.040 152 / 0.06),
+                0 0 0 1px oklch(0.255 0.040 152 / 0.04);
+    transition: border-color var(--duration-quick) var(--ease-smooth-out),
+                box-shadow var(--duration-quick) var(--ease-smooth-out);
   }
-  .k-form textarea { min-height: 120px; }
+  .k-form textarea { resize: vertical; min-height: 88px; }
   .k-form input::placeholder,
-  .k-form textarea::placeholder { color: oklch(0.618 0.029 138.3); font-weight: 400; }
-
-  /* hover tylko dla myszy — subtelne przyciemnienie ramki */
-  @media (hover: hover) and (pointer: fine) {
-    .k-form input:hover,
-    .k-form textarea:hover { border-color: #cdd6c3; }
+  .k-form textarea::placeholder { color: var(--muted); }
+  .k-form input:hover,
+  .k-form textarea:hover {
+    box-shadow: 0 1px 3px oklch(0.255 0.040 152 / 0.08),
+                0 0 0 1px oklch(0.55 0.06 155 / 0.35);
   }
-  .k-form input:focus,
-  .k-form textarea:focus {
+  .k-form input:focus-visible,
+  .k-form textarea:focus-visible {
     outline: none;
-    border-color: var(--lime-dark);
-    box-shadow: 0 0 0 4px rgba(200, 233, 76, .25);
+    border-color: oklch(0.55 0.09 155);
+    box-shadow: 0 0 0 4px oklch(0.82 0.05 155 / 0.45);
   }
-  /* ikona „ożywa" na fokusie pola */
-  .field-wrap:focus-within .field-ic { color: var(--ink); }
+  .k-form .btn { margin-top: 2px; width: 100%; }
+  .k-note {
+    font-size: .85rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .k-note:empty { display: none; }
+  .k-note--ok { color: var(--herb); font-weight: 700; }
 
-  .k-form .btn { margin-top: 6px; width: 100%; }
-  .k-note { font-size: .85rem; color: var(--muted); text-align: center; margin: 0; transition: color .2s ease; }
-  .k-note--ok { color: var(--ink); font-weight: 700; }
+  /* --- Film: bez paddingu/ramki, ten sam rozmiar i radius co formularz --- */
+  .k-film {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    background: var(--cream);
+    height: 0;
+    min-height: 100%;
+  }
+  .k-film img,
+  .k-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 32px;
+    outline: 1px solid oklch(0 0 0 / 0.1);
+    outline-offset: -1px;
+  }
+  .k-play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 72px; height: 72px;
+    border: none;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--herb);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 30px rgba(31, 42, 28, .25);
+    transition: transform var(--duration-quick) var(--ease-smooth-out),
+                background-color var(--duration-quick) var(--ease-smooth-out);
+  }
+  .k-play svg { width: 28px; height: 28px; margin-inline-start: 3px; }
+  .k-play:hover { transform: scale(1.04); }
+  .k-play:active { transform: scale(var(--scale-large)); }
 
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
     .k-card { grid-template-columns: 1fr; }
-    .k-info, .k-form { padding: 40px 28px; }
-  }
-  @media (max-width: 480px) {
+    .k-info,
+    .k-film { border-radius: 26px; }
+    .k-info { padding: 28px 24px 24px; }
     .k-row { grid-template-columns: 1fr; }
+    .k-film {
+      height: auto;
+      min-height: 240px;
+      aspect-ratio: 16 / 10;
+    }
+    .k-film img,
+    .k-video { border-radius: 26px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .k-play { transition: none; }
   }
 </style>

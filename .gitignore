@@ -2,3 +2,7 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+_sources
+.agents/
+.claude/
+skills-lock.json

@@ -13,7 +13,7 @@ const {
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -38,27 +38,33 @@ const {
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Przejdź do treści</a>
     <slot />
 
     <!-- Pasek z blurem u dołu ekranu — maskuje nadchodzącą sekcję -->
     <div class="page-bottom-blur" aria-hidden="true"></div>
 
     <script>
-      // Smooth scroll z bezwładnością (jak we Framerze) — biblioteka Lenis.
+      // Smooth scroll (Lenis) — tylko desktop / fine pointer.
+      // Na telefonie natywny momentum scroll jest lepszy i nie gryzie się z fixed hero.
       import Lenis from 'lenis';
-      const lenis = new Lenis({ duration: 1.1 });
-      // Udostępniamy globalnie, by modale mogły zatrzymać przewijanie strony.
-      (window as any).lenis = lenis;
-      function raf(time: number) {
-        lenis.raf(time);
+
+      const prefersCoarse = window.matchMedia('(pointer: coarse)').matches;
+      const isNarrow = window.matchMedia('(max-width: 900px)').matches;
+      const useLenis = !prefersCoarse && !isNarrow;
+
+      let lenis: InstanceType<typeof Lenis> | null = null;
+      if (useLenis) {
+        lenis = new Lenis({ duration: 1.1 });
+        function raf(time: number) {
+          lenis!.raf(time);
+          requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
       }
-      requestAnimationFrame(raf);
+      (window as any).lenis = lenis;
 
       // --- Wjazd sekcji ---
-      // Jeden obserwator na całą stronę, a każdy kontener po odsłonięciu jest
-      // odpinany (`unobserve`). Po pokazaniu wszystkich sekcji koszt spada do
-      // zera — nic nie wisi na zdarzeniu scroll.
       const doWjazdu = document.querySelectorAll('.page-content .section > .container');
       const obserwator = new IntersectionObserver(
         (wpisy) => {
@@ -68,24 +74,18 @@ const {
             obserwator.unobserve(w.target);
           });
         },
-        // 12% sekcji w kadrze wystarczy; margines -8% odpala rzecz odrobinę
-        // wcześniej, żeby fade kończył się mniej więcej wtedy, gdy sekcja
-        // jest już dobrze widoczna
         { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
       );
       doWjazdu.forEach((el) => obserwator.observe(el));
-      // Rozbraja bezpiecznik z <head> — obserwator wystartował i od teraz on
-      // odpowiada za odsłanianie.
       (window as any).__wjazdGotowy = true;
 
-      // Kliknięcia w linki-kotwice (#sekcja) też płynnie przewijają.
       document.querySelectorAll('a[href^="#"]').forEach((a) => {
         a.addEventListener('click', (e) => {
           const href = a.getAttribute('href') || '';
-          if (href.length > 1) {
-            e.preventDefault();
-            lenis.scrollTo(href);
-          }
+          if (href.length <= 1) return;
+          e.preventDefault();
+          if (lenis) lenis.scrollTo(href);
+          else document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
         });
       });
     </script>
