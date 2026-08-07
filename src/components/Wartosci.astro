@@ -7,22 +7,22 @@ const wartosci = [
   {
     ikona: 'lisc',
     tytul: 'Przez doświadczenie',
-    opis: 'Zajęcia oparte na bezpośrednim kontakcie z naturą i pracy własnymi rękami.',
+    opis: 'Zajęcia oparte na bezpośrednim kontakcie z\u00A0naturą i\u00A0pracy własnymi rękami.',
   },
   {
     ikona: 'oko',
-    tytul: 'Uważność i ciekawość',
-    opis: 'Ćwiczymy koncentrację, obserwację i cierpliwe przyglądanie się przyrodzie.',
+    tytul: 'Uważność i\u00A0ciekawość',
+    opis: 'Ćwiczymy koncentrację, obserwację i\u00A0cierpliwe przyglądanie się przyrodzie.',
   },
   {
     ikona: 'ludzie',
-    tytul: 'Dla dzieci i dorosłych',
-    opis: 'Warsztaty dla przedszkoli i szkół oraz spokojne spotkania dla dorosłych.',
+    tytul: 'Dla dzieci i\u00A0dorosłych',
+    opis: 'Warsztaty dla przedszkoli i\u00A0szkół oraz spokojne spotkania dla dorosłych.',
   },
   {
     ikona: 'slonce',
     tytul: 'Blisko natury',
-    opis: 'Spacery botaniczne i kąpiele leśne, w których natura jest miejscem zajęć.',
+    opis: 'Spacery botaniczne i\u00A0kąpiele leśne, w\u00A0których natura jest miejscem zajęć.',
   },
 ];
 ---
@@ -188,8 +188,14 @@ const wartosci = [
   .w-ikona svg { width: 30px; height: 30px; display: block; }
 
   .w-tekst { display: flex; flex-direction: column; gap: 8px; }
-  .w-tekst h3 { font-size: 1.15rem; font-weight: 700; color: var(--ink); }
-  .w-tekst p { font-size: var(--text-body); line-height: 1.55; color: var(--muted); }
+  .w-tekst h3 { font-size: 1.15rem; font-weight: 700; color: var(--ink); text-wrap: balance; }
+  .w-tekst p {
+    font-size: var(--text-body);
+    line-height: 1.55;
+    color: var(--muted);
+    /* równe linie w wyśrodkowanym opisie — nie zostawia „schodków” */
+    text-wrap: balance;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .w-karta { transition: none; opacity: 1; transform: none; }

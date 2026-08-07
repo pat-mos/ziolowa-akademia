@@ -6,8 +6,7 @@ const telefon = '+48 000 000 000';
 ---
 <footer class="footer falbanka-gora">
   <div class="container">
-    {/* Desktop: logo | nawigacja | kontakt w jednym rzędzie (kolumny na środku
-        wysokości logo). Tagline tylko pod logo, żeby nie zaniżał środka. */}
+    {/* Desktop: logo | nawigacja | kontakt — kolumny na środku wysokości logo */}
     <div class="footer-top">
       <a href="#top" class="footer-logo">
         <img
@@ -31,10 +30,6 @@ const telefon = '+48 000 000 000';
         <a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a>
         <span class="footer-muted">Województwo śląskie · cała Polska</span>
       </div>
-
-      <p class="footer-tagline">
-        Warsztaty edukacyjne, spacery botaniczne i kąpiele leśne — dla dzieci i dorosłych.
-      </p>
     </div>
 
     <div class="footer-bottom">
@@ -72,21 +67,12 @@ const telefon = '+48 000 000 000';
 
   .footer-top {
     display: grid;
-    /* Logo | Nawigacja | Kontakt — równy rytm jak wcześniej, ale kolumny
-       na środku wysokości logo (nie przyklejone do jego czubka). */
+    /* Logo | Nawigacja | Kontakt — kolumny na środku wysokości logo */
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.15fr);
-    grid-template-areas:
-      "logo nav kontakt"
-      "tagline . .";
     column-gap: 48px;
-    row-gap: 20px;
     align-items: center;
     padding-bottom: 48px;
   }
-  .footer-logo { grid-area: logo; }
-  .footer-col--nav { grid-area: nav; }
-  .footer-col--kontakt { grid-area: kontakt; }
-  .footer-tagline { grid-area: tagline; }
 
   /* pole dotyku 44px */
   .footer-logo { display: inline-flex; align-items: center; min-height: 44px; width: fit-content; }
@@ -96,12 +82,6 @@ const telefon = '+48 000 000 000';
     width: min(240px, 60vw);
     /* czarna kreska → biel na ciemnym tle stopki */
     filter: brightness(0) invert(1);
-  }
-  .footer-tagline {
-    color: rgba(255, 255, 255, .72);
-    margin: 0;
-    max-width: 34ch;
-    line-height: var(--lh-body);
   }
 
   /* gap: 0, bo odstęp robi teraz padding samych linków —
@@ -175,17 +155,9 @@ const telefon = '+48 000 000 000';
   @media (max-width: 720px) {
     .footer-top {
       grid-template-columns: 1fr;
-      grid-template-areas:
-        "logo"
-        "tagline"
-        "nav"
-        "kontakt";
       gap: 28px;
       justify-items: center;
       text-align: center;
-    }
-    .footer-tagline {
-      max-width: 32ch;
     }
     .footer-col { align-items: center; }
     .footer-col a { margin-inline: auto; }
