@@ -52,22 +52,20 @@ npx wrangler pages deploy dist --project-name=ziolowa-akademia
 
 ### Zalecane: DNS w Cloudflare (nameservery)
 
-1. W Cloudflare: **Add a site** → wpisz domenę kupioną na GoDaddy (np. `ziolowa-akademia.pl`).
+1. W Cloudflare: **Add a site** → wpisz domenę kupioną na GoDaddy (`ziolowaakademia.pl`).
 2. Cloudflare pokaże **dwa nameservery** (np. `ada.ns.cloudflare.com`, `bob.ns.cloudflare.com`).
 3. W GoDaddy: **Moje produkty** → domena → **DNS** / **Nameservers** → **Zmień** na te z Cloudflare.
 4. Poczekaj na propagację (często 15 min–kilka godzin; max ~24–48 h).
-5. W Cloudflare Pages → projekt → **Custom domains** → **Set up a custom domain** → wpisz domenę (i opcjonalnie `www`).
+5. W Cloudflare Pages → projekt → **Custom domains** — domeny `ziolowaakademia.pl` i `www` są już dodane.
 6. SSL/TLS ustaw na **Full (strict)** — certyfikat wystawi Cloudflare sam.
 
-Po podpięciu zaktualizuj w projekcie:
+Po podpięciu `site` w `astro.config.mjs` jest już ustawione na:
 
 ```js
-// astro.config.mjs
-site: 'https://prawdziwa-domena.pl',
+site: 'https://ziolowaakademia.pl',
 ```
 
-i w `public/_redirects` odkomentuj regułę `www` → apex (podmień nazwę domeny).
-
+i w `public/_redirects` odkomentuj regułę `www` → apex.
 ### Alternatywa: DNS zostaje u GoDaddy
 
 Jeśli nameserverów nie chcecie ruszać:

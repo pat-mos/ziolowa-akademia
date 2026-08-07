@@ -1,7 +1,5 @@
 # Cloudflare Pages redirects
 # https://developers.cloudflare.com/pages/configuration/redirects/
 #
-# Po podpięciu domeny odkomentuj i podmień na prawdziwy adres
-# (www → bez www). Cloudflare SSL załatwia HTTPS automatycznie.
-#
-# https://www.TWOJA-DOMENA.pl/* https://TWOJA-DOMENA.pl/:splat 301
+# Po aktywacji DNS odkomentuj (www → apex):
+# https://www.ziolowaakademia.pl/* https://ziolowaakademia.pl/:splat 301
