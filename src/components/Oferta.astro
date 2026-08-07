@@ -336,9 +336,9 @@ const tabs = [
                         </p>
                       )}
                       {it.wkrotce ? (
-                        <a class="offer-cta" href="#kontakt">Zapytaj o termin</a>
+                        <a class="btn btn-lime offer-cta" href="#kontakt">Zapytaj o termin</a>
                       ) : (
-                        <button class="offer-cta" type="button">Zobacz szczegóły</button>
+                        <button class="btn btn-lime offer-cta" type="button">Zobacz szczegóły</button>
                       )}
                     </div>
                   </div>
@@ -806,8 +806,9 @@ const tabs = [
   .offer-kwota {
     font-family: var(--font-naglowek);
     font-size: 2.2rem;
-    font-weight: var(--weight-emphasis);
+    font-weight: var(--weight-display);
     line-height: 1;
+    letter-spacing: -0.02em;
     color: #000;
     font-variant-numeric: tabular-nums;
   }
@@ -816,11 +817,12 @@ const tabs = [
   .offer-wkrotce {
     font-family: var(--font-naglowek);
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--weight-display);
+    letter-spacing: -0.02em;
     color: rgb(51, 51, 51);
   }
 
-  /* Przycisk otwierający okno ze szczegółami — pigułka jak w oryginale */
+  /* CTA w karcie — te same btn-lime (błysk), tylko pełna szerokość */
   .offer-cta {
     display: inline-flex;
     align-items: center;
@@ -828,20 +830,8 @@ const tabs = [
     width: 100%;
     min-height: 46px;
     padding: 11px 28px;
-    border: none;
-    border-radius: var(--radius-pill);
-    /* CTA = leśna zieleń (--lime), spójna z resztą strony */
-    background: var(--lime);
-    color: var(--ink);
-    font-family: var(--font);
     font-size: .95rem;
-    font-weight: var(--weight-ui);
-    cursor: pointer;
-    transition: background-color var(--duration-quick) var(--ease-smooth-out),
-                transform var(--duration-quick) var(--ease-smooth-out);
   }
-  .offer-cta:hover { background: var(--lime-dark); }
-  .offer-cta:active { transform: scale(var(--scale-large)); }
   .offer-cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
   /* Wspólny próg ~900: stos, dwie kolumny i centrowanie kart. */

@@ -133,12 +133,13 @@ const wartosci = [
     text-transform: uppercase;
     color: var(--muted);
   }
-  /* Duży tekst lead — wieloliniowy, więc lh prose (≥1.4) */
+  /* Duży tekst lead — jak nagłówki (Parkinsans 800) */
   .w-headline {
     /* Dolna granica 1.15rem, nie 1.5rem: na 390px tekst w 24px zajmował
        osiem linii i wypełniał cały ekran przed kafelkami. */
+    font-family: var(--font-naglowek);
     font-size: clamp(1.15rem, 2.6vw, 2rem);
-    font-weight: var(--weight-emphasis);
+    font-weight: var(--weight-display);
     line-height: var(--lh-prose);
     letter-spacing: -0.01em;
     color: var(--ink);
