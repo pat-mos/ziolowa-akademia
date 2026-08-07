@@ -606,6 +606,29 @@ const tabs = [
     display: flex; flex-wrap: wrap; gap: 12px; margin: 40px 0;
     justify-content: center;   /* wyśrodkowane pod nagłówkiem */
   }
+  /* Mobile: chipy w jednym rzędzie, przewijane w poziomie */
+  @media (max-width: 720px) {
+    .tabs {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
+      margin-block: 32px 28px;
+      padding-inline: max(24px, env(safe-area-inset-left))
+                      max(24px, env(safe-area-inset-right));
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex: 0 0 auto;
+      padding: 12px 22px;
+      white-space: nowrap;
+    }
+  }
   /* Chipsy: każdy ZAWSZE ma swój własny pastel — kolor jest tożsamością grupy,
      nie stanem. Aktywny nie zmienia barwy, tylko dostaje pierścień wokół
      (odstęp robi pierwszy, biały cień). Dzięki temu zaznaczenie czyta się
@@ -1048,6 +1071,8 @@ const tabs = [
   @media (max-width: 900px) {
     .offer-body { align-items: center; text-align: center; }
     .offer-body p { margin-inline: auto; }
-    .offer-tags { justify-content: center; }
+    /* Tagi oferty — zawsze do lewej (nie centruj na mobile) */
+    .offer-tags { justify-content: flex-start; }
+    .offer-lewa { text-align: start; }
   }
 </style>

@@ -166,22 +166,16 @@
     .nav-burger-ic, .nav-panel { transition-duration: .01ms; }
   }
 
-  /* Na telefonie: linki do panelu; CTA zostaje w pigułce (thumb / discoverability) */
+  /* Na telefonie: CTA tylko w hamburgerze — w pigułce logo + burger */
   @media (max-width: 720px) {
     .nav-links { display: none; }
+    .nav-cta { display: none; }
     .nav-burger { display: block; }
     .nav-panel { display: flex; flex-direction: column; }
     .nav-pill {
       gap: 12px;
       padding: 10px 10px 10px 16px;
     }
-    .nav-cta {
-      margin-inline-start: auto;
-      padding: 10px 16px;
-      font-size: .9rem;
-      min-height: 44px;
-    }
-    .nav-panel-cta { display: none; } /* duplikat — CTA już w pillu */
   }
 </style>
 

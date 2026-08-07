@@ -160,8 +160,28 @@ const telefon = '+48 000 000 000';
   }
 
   @media (max-width: 720px) {
-    .footer-top { grid-template-columns: 1fr; gap: 36px; }
-    .footer-bottom { flex-direction: column; text-align: center; align-items: center; }
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 36px;
+      justify-items: center;
+      text-align: center;
+    }
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .footer-brand p {
+      margin-inline: auto;
+      max-width: 32ch;
+    }
+    .footer-col { align-items: center; }
+    .footer-col a { margin-inline: auto; }
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
     .footer { --bump: 64px; padding-top: 64px; }
     .footer-wordmark { margin-top: 40px; }
   }
