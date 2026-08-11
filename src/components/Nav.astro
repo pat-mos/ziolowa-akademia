@@ -192,6 +192,7 @@
     burger?.setAttribute('aria-expanded', String(open));
     // blokada scrolla jak w modalach — inaczej tło przewija się pod panelem
     document.body.style.overflow = open ? 'hidden' : '';
+    document.documentElement.style.overflow = open ? 'hidden' : '';
     if (open) (window as any).lenis?.stop();
     else (window as any).lenis?.start();
   };
@@ -219,5 +220,10 @@
   // razem z zablokowanym scrollem
   waskiEkran.addEventListener('change', (e) => {
     if (!e.matches && otwarty()) ustaw(false);
+  });
+
+  // iOS bfcache / powrót z tła — odblokuj scroll na wszelki wypadek
+  window.addEventListener('pageshow', () => {
+    if (!otwarty()) ustaw(false);
   });
 </script>

@@ -561,6 +561,7 @@ const tabs = [
     modal.setAttribute('aria-hidden', 'false');
     modal.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     window.lenis?.stop();
     startModalScroll(modal);
     modal.addEventListener('keydown', trapTab);
@@ -573,6 +574,7 @@ const tabs = [
     modal.setAttribute('aria-hidden', 'true');
     modal.setAttribute('inert', '');
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     window.lenis?.start();
     stopModalScroll();
     modal.removeEventListener('keydown', trapTab);
@@ -615,12 +617,14 @@ const tabs = [
       margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
       margin-block: 32px 28px;
       padding-inline: max(24px, env(safe-area-inset-left))
-                      max(24px, env(safe-area-inset-right));
+                      max(40px, env(safe-area-inset-right));
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       overscroll-behavior-x: contain;
+      /* nie przejmuj gestu pionowego — scroll strony musi działać */
+      touch-action: pan-x pan-y;
     }
     .tabs::-webkit-scrollbar { display: none; }
     .tab {
@@ -695,15 +699,14 @@ const tabs = [
        w kolejności DOM i nowa wsuwałaby się pod spód. */
     z-index: calc(var(--i) + 1);
   }
-  /* Stos ma sens tylko wtedy, gdy karta mieści się w oknie — inaczej
-     przyklejanie chowałoby jej dół.
-     Skąd 600px: karta ma ~400px, a najniższa przykleja się na 174px
-     (96 + 3 × 26), czyli potrzeba ~575px. Próg 720px był ustawiony, gdy karty
-     miały jeszcze 469–605px, i po skróceniu opisów gasił stos na zwykłych
-     laptopach z oknem ~700px. Jeśli karta znów urośnie, tę liczbę trzeba
-     podnieść razem z nią. */
-  @media (max-height: 600px), (max-width: 900px) {
-    .stos .offer-card { position: static; }
+  /* Stos sticky tylko na dużym desktopie z wysokim oknem.
+     Na telefonie / tablecie / touch: static — inaczej karta wyższa niż viewport
+     ucina CTA i „więzi” scroll (klasyczny bug sticky stack). */
+  @media (max-width: 1024px), (max-height: 720px), (pointer: coarse) {
+    .stos .offer-card {
+      position: static;
+      top: auto;
+    }
   }
 
   /* --- Karta w stylu „pricing" z tinylo ---

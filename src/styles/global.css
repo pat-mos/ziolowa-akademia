@@ -102,6 +102,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis: none;         /* brak sztucznego pogrubienia/kursywy */
+  /* nie rozszerzaj strony w poziomie (chipy oferty scrollują w sobie) */
+  overflow-x: clip;
 }
 
 /* height:auto sprawia, że obrazy skalują się zgodnie z proporcjami,
