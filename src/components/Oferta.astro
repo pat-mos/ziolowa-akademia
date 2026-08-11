@@ -608,29 +608,43 @@ const tabs = [
     display: flex; flex-wrap: wrap; gap: 12px; margin: 40px 0;
     justify-content: center;   /* wyśrodkowane pod nagłówkiem */
   }
-  /* Mobile: chipy w jednym rzędzie, przewijane w poziomie */
+  /* Mobile: chipy w jednym rzędzie ze SCROLLEM poziomym.
+     Klucz: max-width/min-width:0 — inaczej flex rośnie z treścią,
+     overflow nie powstaje i chipy są ucięte bez możliwości przesunięcia. */
   @media (max-width: 720px) {
+    .oferta,
+    .oferta .container {
+      min-width: 0;
+      max-width: 100%;
+    }
     .tabs {
       flex-wrap: nowrap;
       justify-content: flex-start;
+      align-items: center;
       gap: 10px;
-      margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
-      margin-block: 32px 28px;
-      padding-inline: max(24px, env(safe-area-inset-left))
-                      max(40px, env(safe-area-inset-right));
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      margin-inline: 0;
+      margin-block: 28px 24px;
+      /* padding-block: pierścień active; padding-end: ostatni chip da się dociągnąć */
+      padding-block: 10px;
+      padding-inline: 2px 28px;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       overscroll-behavior-x: contain;
-      /* nie przejmuj gestu pionowego — scroll strony musi działać */
       touch-action: pan-x pan-y;
+      scroll-snap-type: x proximity;
     }
     .tabs::-webkit-scrollbar { display: none; }
     .tab {
       flex: 0 0 auto;
       padding: 12px 22px;
       white-space: nowrap;
+      scroll-snap-align: start;
     }
   }
   /* Chipsy: każdy ZAWSZE ma swój własny pastel — kolor jest tożsamością grupy,

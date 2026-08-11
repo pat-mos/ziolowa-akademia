@@ -280,7 +280,11 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   padding-top: 160px;
   --bump: 100px;
   --falbanka-kolor: var(--white);
+  /* flex item default min-width:auto blokuje overflow-x w dzieciach (chipy) */
+  min-width: 0;
+  max-width: 100%;
 }
+.page-content > * { min-width: 0; max-width: 100%; }
 @media (max-width: 900px) {
   /* Na mobile hero jest w flow (nie fixed) — bez sztucznego margin-top */
   .page-content { margin-top: 0; }
