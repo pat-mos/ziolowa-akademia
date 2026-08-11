@@ -37,7 +37,7 @@ const pytania = [
     <div class="faq-list">
       {pytania.map((p) => (
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">
+          <button class="faq-q" type="button" aria-expanded="false">
             <span>{p.q}</span>
             <span class="faq-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -108,6 +108,8 @@ const pytania = [
     font-size: 1.2rem;
     line-height: 1.4;
     color: #000;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; /* bez 300ms delay / double-tap zoom */
   }
   .faq-icon {
     display: grid;
@@ -122,15 +124,19 @@ const pytania = [
   /* „+" obraca się o 45° → wygląda jak „×" po otwarciu */
   .faq-item.open .faq-icon { transform: rotate(45deg); }
 
-  /* Płynne rozwijanie wysokości dzięki grid-template-rows 0fr → 1fr
-     Accordion: ta sama długość open/close (--duration-fast). */
+  /* Płynne rozwijanie: 0fr → 1fr. min-height:0 na inner jest WYMAGANE —
+     bez tego Safari/iOS przy pierwszym kliknięciu zostawia wysokość 0
+     (min-height:auto nie pozwala zwinąć poniżej treści). */
   .faq-a {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows var(--duration-fast) var(--ease-smooth-out);
   }
   .faq-item.open .faq-a { grid-template-rows: 1fr; }
-  .faq-a-inner { overflow: hidden; }
+  .faq-a-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
   .faq-a p { color: var(--muted); padding: 0 30px 28px; line-height: var(--lh-body); }
 
   @media (max-width: 520px) {

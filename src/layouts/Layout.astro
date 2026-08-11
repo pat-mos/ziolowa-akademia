@@ -78,7 +78,9 @@ const {
             obserwator.unobserve(w.target);
           });
         },
-        { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        // Dodatni dolny rootMargin: sekcja dostaje .widoczny zanim użytkownik
+        // zdąży w nią kliknąć (wcześniej -8% + opacity:0 = „martwy” pierwszy tap).
+        { threshold: 0.08, rootMargin: '0px 0px 12% 0px' }
       );
       doWjazdu.forEach((el) => obserwator.observe(el));
       (window as any).__wjazdGotowy = true;

@@ -248,7 +248,11 @@ const tabs = [
   <div class="container">
     <span class="eyebrow">Oferta</span>
     <h2 class="section-title">Zajęcia dopasowane do uczestników</h2>
+  </div>
 
+  {/* Scroller poza .container — pełna szerokość viewportu, żeby overflow-x
+      nie był obcinany przez padding kontenera. */}
+  <div class="tabs-scroller">
     <div class="tabs" role="tablist" aria-label="Grupy zajęć">
       {tabs.map((t, i) => (
         <button
@@ -259,10 +263,13 @@ const tabs = [
           aria-controls={`panel-${t.id}`}
           aria-selected={i === 0 ? 'true' : 'false'}
           tabindex={i === 0 ? 0 : -1}
+          type="button"
         >{t.label}</button>
       ))}
     </div>
+  </div>
 
+  <div class="container">
     {tabs.map((t, i) => (
       <div
         class:list={['panel', { active: i === 0 }]}
@@ -602,27 +609,38 @@ const tabs = [
 </script>
 
 <style>
-  .tabs {
-    display: flex; flex-wrap: wrap; gap: 12px; margin: 40px 0;
-    justify-content: center;   /* wyśrodkowane pod nagłówkiem */
+  .tabs-scroller {
+    margin: 40px 0;
   }
-  /* Mobile: chipy w jednym rzędzie, przewijane w poziomie */
+  .tabs {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center;   /* wyśrodkowane pod nagłówkiem */
+    /* padding na pierścień aktywnego chipa — bez obcinania box-shadow */
+    padding-block: 8px;
+  }
+  /* Mobile: pełny bleed + poziomy scroll (touch-action, żeby nie brał go scroll strony) */
   @media (max-width: 720px) {
+    .tabs-scroller {
+      margin-block: 32px 28px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+    .tabs-scroller::-webkit-scrollbar { display: none; }
     .tabs {
       flex-wrap: nowrap;
       justify-content: flex-start;
       gap: 10px;
-      margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
-      margin-block: 32px 28px;
+      width: max-content;
+      min-width: 100%;
+      box-sizing: border-box;
       padding-inline: max(24px, env(safe-area-inset-left))
-                      max(24px, env(safe-area-inset-right));
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      overscroll-behavior-x: contain;
+                      max(40px, env(safe-area-inset-right));
+      padding-block: 10px;
     }
-    .tabs::-webkit-scrollbar { display: none; }
     .tab {
       flex: 0 0 auto;
       padding: 12px 22px;

@@ -327,6 +327,14 @@ html.js-anim .page-content .section > .container {
   transition: opacity var(--duration-very-slow) var(--ease-smooth-out);
 }
 html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
+/* Oferta: chipy poza kontenerem — też wjeżdżają z sekcją (pierwszy kontener) */
+html.js-anim .page-content .oferta > .tabs-scroller {
+  opacity: 0;
+  transition: opacity var(--duration-very-slow) var(--ease-smooth-out);
+}
+html.js-anim .page-content .oferta:has(> .container.widoczny) > .tabs-scroller {
+  opacity: 1;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html.js-anim .page-content .section > .container {
