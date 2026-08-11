@@ -249,18 +249,21 @@ const tabs = [
     <span class="eyebrow">Oferta</span>
     <h2 class="section-title">Zajęcia dopasowane do uczestników</h2>
 
-    <div class="tabs" role="tablist" aria-label="Grupy zajęć">
-      {tabs.map((t, i) => (
-        <button
-          class:list={['tab', { active: i === 0 }]}
-          data-tab={t.id}
-          role="tab"
-          id={`tab-${t.id}`}
-          aria-controls={`panel-${t.id}`}
-          aria-selected={i === 0 ? 'true' : 'false'}
-          tabindex={i === 0 ? 0 : -1}
-        >{t.label}</button>
-      ))}
+    <!-- tabs-scroller = osobny scrollport; sam .tabs nie może rosnąć z treścią -->
+    <div class="tabs-scroller" data-lenis-prevent>
+      <div class="tabs" role="tablist" aria-label="Grupy zajęć">
+        {tabs.map((t, i) => (
+          <button
+            class:list={['tab', { active: i === 0 }]}
+            data-tab={t.id}
+            role="tab"
+            id={`tab-${t.id}`}
+            aria-controls={`panel-${t.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >{t.label}</button>
+        ))}
+      </div>
     </div>
 
     {tabs.map((t, i) => (
@@ -465,6 +468,8 @@ const tabs = [
       panel.classList.add('active', 'slide-in');
       panel.hidden = false;
     }
+    // Na mobile chip poza kadrem — dociągnij go w widoczny obszar scrollporta
+    tab.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
   }
 
   tabs.forEach((tab, idx) => {
@@ -604,33 +609,37 @@ const tabs = [
 </script>
 
 <style>
+  .tabs-scroller {
+    /* desktop: przezroczysty wrapper — bez własnego layoutu */
+    display: block;
+  }
   .tabs {
     display: flex; flex-wrap: wrap; gap: 12px; margin: 40px 0;
     justify-content: center;   /* wyśrodkowane pod nagłówkiem */
   }
   /* Mobile: chipy w jednym rzędzie ze SCROLLEM poziomym.
-     Klucz: max-width/min-width:0 — inaczej flex rośnie z treścią,
-     overflow nie powstaje i chipy są ucięte bez możliwości przesunięcia. */
+     Scrollport = .tabs-scroller (ograniczona szerokość).
+     .tabs = szerokość treści (max-content) — wtedy overflow-x działa.
+     Bez tego flex min-width:auto rośnie z chipami, body clipuje, scrolla nie ma. */
   @media (max-width: 720px) {
     .oferta,
     .oferta .container {
       min-width: 0;
       max-width: 100%;
+      overflow-x: clip; /* nie puszczaj chipów poza sekcję — scroll tylko w scrollerze */
     }
-    .tabs {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 10px;
+    .tabs-scroller {
       width: 100%;
       max-width: 100%;
       min-width: 0;
       box-sizing: border-box;
-      margin-inline: 0;
       margin-block: 28px 24px;
-      /* padding-block: pierścień active; padding-end: ostatni chip da się dociągnąć */
+      /* bleed do krawędzi ekranu — widać, że jest więcej chipów */
+      margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
+      padding-inline: max(24px, env(safe-area-inset-left))
+                      max(40px, env(safe-area-inset-right));
+      /* padding-block: pierścień .active nie jest ucięty */
       padding-block: 10px;
-      padding-inline: 2px 28px;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
@@ -639,7 +648,18 @@ const tabs = [
       touch-action: pan-x pan-y;
       scroll-snap-type: x proximity;
     }
-    .tabs::-webkit-scrollbar { display: none; }
+    .tabs-scroller::-webkit-scrollbar { display: none; }
+    .tabs {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
     .tab {
       flex: 0 0 auto;
       padding: 12px 22px;
