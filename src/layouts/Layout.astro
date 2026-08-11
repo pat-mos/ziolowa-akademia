@@ -89,9 +89,16 @@ const {
         a.addEventListener('click', (e) => {
           const href = a.getAttribute('href') || '';
           if (href.length <= 1) return;
+          const cel = document.querySelector(href);
+          if (!cel) return;
           e.preventDefault();
-          if (lenis) lenis.scrollTo(href);
-          else document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          // Offset pod fixed nav (~88px) — inaczej nagłówek sekcji chowa się pod paskiem
+          const offset = 96;
+          if (lenis) lenis.scrollTo(cel as HTMLElement, { offset: -offset });
+          else {
+            const top = (cel as HTMLElement).getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
         });
       });
     </script>

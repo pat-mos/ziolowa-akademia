@@ -32,7 +32,7 @@ const petla = [...zdjecia, ...zdjecia];
     <h2 class="section-title">Chwile uchwycone podczas warsztatów</h2>
   </div>
 
-  <div class="marquee">
+  <div class="marquee" data-galeria tabindex="0" role="region" aria-label="Galeria zdjęć z warsztatów — przeciągnij, aby przewinąć">
     <div class="track">
       {petla.map((item, i) => (
         <Image
@@ -40,6 +40,7 @@ const petla = [...zdjecia, ...zdjecia];
           alt={i < zdjecia.length ? item.alt : ''}
           widths={[400, 800]}
           sizes="(max-width: 720px) 72vw, 400px"
+          draggable="false"
         />
       ))}
     </div>
@@ -49,20 +50,26 @@ const petla = [...zdjecia, ...zdjecia];
 <style>
   .marquee {
     margin-top: 40px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    cursor: grab;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee::-webkit-scrollbar { display: none; }
+  .marquee.is-dragging {
+    cursor: grabbing;
+    user-select: none;
   }
   .track {
     display: flex;
     gap: 20px;
     width: max-content;
-    animation: scroll 48s linear infinite;
-  }
-  /* Pauza przy najechaniu — mniej rozpraszające, treść da się obejrzeć */
-  .marquee:hover .track,
-  .marquee:focus-within .track {
-    animation-play-state: paused;
+    padding-inline: 24px;
   }
   .track img {
     width: 400px;
@@ -72,27 +79,87 @@ const petla = [...zdjecia, ...zdjecia];
     outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
     flex-shrink: 0;
-  }
-  @keyframes scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    pointer-events: none;
   }
   @media (max-width: 720px) {
     .track img {
       width: min(280px, 72vw);
       height: min(280px, 72vw);
     }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .track {
-      animation: none;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding-inline: 24px;
-      gap: 16px;
-    }
-    .track img { scroll-snap-align: start; }
+    .track { gap: 16px; }
   }
 </style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-galeria]');
+  if (root) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let dragging = false;
+    let startX = 0;
+    let startScroll = 0;
+    let moved = false;
+
+    const half = () => root.scrollWidth / 2;
+
+    const loopScroll = () => {
+      const h = half();
+      if (h <= 0) return;
+      if (root.scrollLeft >= h) root.scrollLeft -= h;
+      else if (root.scrollLeft < 0) root.scrollLeft += h;
+    };
+
+    root.addEventListener('pointerdown', (e) => {
+      // Dotyk: natywny scroll; mysz/pióro: drag
+      if (e.pointerType === 'touch') return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = root.scrollLeft;
+      root.classList.add('is-dragging');
+      root.setPointerCapture(e.pointerId);
+    });
+
+    root.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      root.scrollLeft = startScroll - dx;
+      loopScroll();
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      root.classList.remove('is-dragging');
+    };
+    root.addEventListener('pointerup', endDrag);
+    root.addEventListener('pointercancel', endDrag);
+    root.addEventListener('lostpointercapture', endDrag);
+
+    // Po drag nie otwieraj obrazka / nie zaznaczaj
+    root.addEventListener('click', (e) => {
+      if (moved) {
+        e.preventDefault();
+        e.stopPropagation();
+        moved = false;
+      }
+    });
+
+    root.addEventListener('scroll', () => loopScroll(), { passive: true });
+
+    if (!reduce) {
+      let last = performance.now();
+      const speed = 0.035; // px / ms ≈ CSS 48s na pełną pętlę przy typowej szerokości
+      const tick = (now: number) => {
+        const dt = now - last;
+        last = now;
+        if (!dragging && !root.matches(':hover') && document.visibilityState === 'visible') {
+          root.scrollLeft += dt * speed;
+          loopScroll();
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  }
+</script>
