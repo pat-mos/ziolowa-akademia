@@ -68,6 +68,16 @@ const {
       }
       (window as any).lenis = lenis;
 
+      // iOS: odblokuj scroll po powrocie z bfcache (menu/modal mogły zostawić lock)
+      window.addEventListener('pageshow', () => {
+        if (!document.querySelector('.nav[data-open="true"]') &&
+            !document.getElementById('offer-modal')?.classList.contains('open')) {
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+          (window as any).lenis?.start();
+        }
+      });
+
       // --- Wjazd sekcji ---
       const doWjazdu = document.querySelectorAll('.page-content .section > .container');
       const obserwator = new IntersectionObserver(

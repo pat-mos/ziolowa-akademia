@@ -249,18 +249,21 @@ const tabs = [
     <span class="eyebrow">Oferta</span>
     <h2 class="section-title">Zajęcia dopasowane do uczestników</h2>
 
-    <div class="tabs" role="tablist" aria-label="Grupy zajęć">
-      {tabs.map((t, i) => (
-        <button
-          class:list={['tab', { active: i === 0 }]}
-          data-tab={t.id}
-          role="tab"
-          id={`tab-${t.id}`}
-          aria-controls={`panel-${t.id}`}
-          aria-selected={i === 0 ? 'true' : 'false'}
-          tabindex={i === 0 ? 0 : -1}
-        >{t.label}</button>
-      ))}
+    <!-- tabs-scroller = osobny scrollport; sam .tabs nie może rosnąć z treścią -->
+    <div class="tabs-scroller" data-lenis-prevent>
+      <div class="tabs" role="tablist" aria-label="Grupy zajęć">
+        {tabs.map((t, i) => (
+          <button
+            class:list={['tab', { active: i === 0 }]}
+            data-tab={t.id}
+            role="tab"
+            id={`tab-${t.id}`}
+            aria-controls={`panel-${t.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >{t.label}</button>
+        ))}
+      </div>
     </div>
 
     {tabs.map((t, i) => (
@@ -465,6 +468,8 @@ const tabs = [
       panel.classList.add('active', 'slide-in');
       panel.hidden = false;
     }
+    // Na mobile chip poza kadrem — dociągnij go w widoczny obszar scrollporta
+    tab.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
   }
 
   tabs.forEach((tab, idx) => {
@@ -561,6 +566,7 @@ const tabs = [
     modal.setAttribute('aria-hidden', 'false');
     modal.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     window.lenis?.stop();
     startModalScroll(modal);
     modal.addEventListener('keydown', trapTab);
@@ -573,6 +579,7 @@ const tabs = [
     modal.setAttribute('aria-hidden', 'true');
     modal.setAttribute('inert', '');
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     window.lenis?.start();
     stopModalScroll();
     modal.removeEventListener('keydown', trapTab);
@@ -602,31 +609,62 @@ const tabs = [
 </script>
 
 <style>
+  .tabs-scroller {
+    /* desktop: przezroczysty wrapper — bez własnego layoutu */
+    display: block;
+  }
   .tabs {
     display: flex; flex-wrap: wrap; gap: 12px; margin: 40px 0;
     justify-content: center;   /* wyśrodkowane pod nagłówkiem */
   }
-  /* Mobile: chipy w jednym rzędzie, przewijane w poziomie */
+  /* Mobile: chipy w jednym rzędzie ze SCROLLEM poziomym.
+     Scrollport = .tabs-scroller (ograniczona szerokość).
+     .tabs = szerokość treści (max-content) — wtedy overflow-x działa.
+     Bez tego flex min-width:auto rośnie z chipami, body clipuje, scrolla nie ma. */
   @media (max-width: 720px) {
-    .tabs {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 10px;
+    .oferta,
+    .oferta .container {
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: clip; /* nie puszczaj chipów poza sekcję — scroll tylko w scrollerze */
+    }
+    .tabs-scroller {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      margin-block: 28px 24px;
+      /* bleed do krawędzi ekranu — widać, że jest więcej chipów */
       margin-inline: calc(-1 * max(24px, env(safe-area-inset-left)));
-      margin-block: 32px 28px;
       padding-inline: max(24px, env(safe-area-inset-left))
-                      max(24px, env(safe-area-inset-right));
+                      max(40px, env(safe-area-inset-right));
+      /* padding-block: pierścień .active nie jest ucięty */
+      padding-block: 10px;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       overscroll-behavior-x: contain;
+      touch-action: pan-x pan-y;
+      scroll-snap-type: x proximity;
     }
-    .tabs::-webkit-scrollbar { display: none; }
+    .tabs-scroller::-webkit-scrollbar { display: none; }
+    .tabs {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
     .tab {
       flex: 0 0 auto;
       padding: 12px 22px;
       white-space: nowrap;
+      scroll-snap-align: start;
     }
   }
   /* Chipsy: każdy ZAWSZE ma swój własny pastel — kolor jest tożsamością grupy,
@@ -695,15 +733,14 @@ const tabs = [
        w kolejności DOM i nowa wsuwałaby się pod spód. */
     z-index: calc(var(--i) + 1);
   }
-  /* Stos ma sens tylko wtedy, gdy karta mieści się w oknie — inaczej
-     przyklejanie chowałoby jej dół.
-     Skąd 600px: karta ma ~400px, a najniższa przykleja się na 174px
-     (96 + 3 × 26), czyli potrzeba ~575px. Próg 720px był ustawiony, gdy karty
-     miały jeszcze 469–605px, i po skróceniu opisów gasił stos na zwykłych
-     laptopach z oknem ~700px. Jeśli karta znów urośnie, tę liczbę trzeba
-     podnieść razem z nią. */
-  @media (max-height: 600px), (max-width: 900px) {
-    .stos .offer-card { position: static; }
+  /* Stos sticky tylko na dużym desktopie z wysokim oknem.
+     Na telefonie / tablecie / touch: static — inaczej karta wyższa niż viewport
+     ucina CTA i „więzi” scroll (klasyczny bug sticky stack). */
+  @media (max-width: 1024px), (max-height: 720px), (pointer: coarse) {
+    .stos .offer-card {
+      position: static;
+      top: auto;
+    }
   }
 
   /* --- Karta w stylu „pricing" z tinylo ---

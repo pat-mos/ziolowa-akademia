@@ -82,8 +82,13 @@
 /* --- Reset / podstawy --- */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* Rezerwacja miejsca na pasek przewijania — brak skoku przy otwieraniu modalu */
-html { scrollbar-gutter: stable; }
+/* Rezerwacja miejsca na pasek przewijania — brak skoku przy otwieraniu modalu.
+   overflow-x:clip — strona nie rośnie w poziomie; chipy scrollują we własnym porcie. */
+html {
+  scrollbar-gutter: stable;
+  overflow-x: clip;
+  max-width: 100%;
+}
 
 /* Style wymagane przez smooth-scroll Lenis */
 html.lenis, html.lenis body { height: auto; }
@@ -102,6 +107,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-synthesis: none;         /* brak sztucznego pogrubienia/kursywy */
+  /* nie rozszerzaj strony w poziomie — chipy oferty scrollują we własnym porcie */
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 /* height:auto sprawia, że obrazy skalują się zgodnie z proporcjami,
@@ -168,6 +176,8 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   padding-inline: 80px;
   /* kotwica dla ozdób przy nagłówkach (komponent Ozdoby.astro) */
   position: relative;
+  min-width: 0;
+  box-sizing: border-box;
 }
 @media (max-width: 900px) {
   .container { padding-inline: 40px; }
@@ -278,7 +288,11 @@ p { margin: 0; text-wrap: pretty; }   /* brak osamotnionego słowa w ostatniej l
   padding-top: 160px;
   --bump: 100px;
   --falbanka-kolor: var(--white);
+  /* flex item default min-width:auto blokuje overflow-x w dzieciach (chipy) */
+  min-width: 0;
+  max-width: 100%;
 }
+.page-content > * { min-width: 0; max-width: 100%; }
 @media (max-width: 900px) {
   /* Na mobile hero jest w flow (nie fixed) — bez sztucznego margin-top */
   .page-content { margin-top: 0; }
