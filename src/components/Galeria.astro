@@ -1,28 +1,30 @@
 ---
 import { Image } from 'astro:assets';
-import g1 from '../assets/img/galeria-1.jpeg';
-import g2 from '../assets/img/galeria-2.jpeg';
-import g3 from '../assets/img/galeria-3.jpeg';
-import g4 from '../assets/img/galeria-4.jpeg';
+import type { ImageMetadata } from 'astro';
 
-const zdjecia = [
-  {
-    src: g1,
-    alt: 'Dziewczynki na kocach na łące lepią z gliny podczas warsztatów plenerowych',
-  },
-  {
-    src: g2,
-    alt: 'Stół warsztatowy z paprociami, gliną i przepisem na łąkowy napar',
-  },
-  {
-    src: g3,
-    alt: 'Kompozycja z suszonych ziół i kwiatów na drewnianej deseczce',
-  },
-  {
-    src: g4,
-    alt: 'Dzieci pokazują karty z zebranymi liśćmi i roślinami z łąki',
-  },
-];
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/img/galeria-*.jpeg',
+  { eager: true },
+);
+
+const altByIndex: Record<number, string> = {
+  1: 'Dziewczynki na kocach na łące lepią z gliny podczas warsztatów plenerowych',
+  2: 'Stół warsztatowy z paprociami, gliną i przepisem na łąkowy napar',
+  3: 'Kompozycja z suszonych ziół i kwiatów na drewnianej deseczce',
+  4: 'Dzieci pokazują karty z zebranymi liśćmi i roślinami z łąki',
+};
+
+const zdjecia = Object.entries(modules)
+  .map(([path, mod]) => {
+    const n = Number(path.match(/galeria-(\d+)\.jpeg$/)?.[1] ?? 0);
+    return {
+      n,
+      src: mod.default,
+      alt: altByIndex[n] ?? 'Zdjęcie z warsztatów Ziołowej Akademii',
+    };
+  })
+  .sort((a, b) => a.n - b.n);
+
 // Powielamy listę, aby pas przewijał się w nieskończoność bez przerwy.
 const petla = [...zdjecia, ...zdjecia];
 ---

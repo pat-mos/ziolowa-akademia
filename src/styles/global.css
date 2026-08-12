@@ -25,7 +25,7 @@
   --muted: oklch(0.500 0.032 148);    /* przygaszony tekst */
   --cream: oklch(0.962 0.014 86);     /* jasne tło — ciepły miód/glina */
   --white: oklch(1 0 0);
-  --paper: oklch(0.984 0.011 84);     /* papier warsztatowy */
+  --paper: #FFF6E5;                   /* ciepły papier — galeria + formularz */
   --line: oklch(0.912 0.018 88);      /* linie — lekka glina */
 
   /* Pastele — miód / mech / glina / pyłek / bławatek. Jasność ~0.90, żeby --ink

@@ -164,23 +164,30 @@ const social = {
   .footer-social {
     display: flex;
     align-items: center;
+    /* 16px między glyphami 24×24 — pole dotyku wychodzi poza box (nie wlicza się w gap) */
     gap: 16px;
     margin-top: 8px;
   }
   .footer-social-link {
+    position: relative;
     box-sizing: border-box;
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    min-height: 48px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px !important; /* nadpisuje .footer-col a (44px) */
     padding: 0;
     display: inline-grid !important;
     place-items: center;
-    color: rgba(255, 255, 255, .75);
-    border-radius: 50%;
+    color: var(--lime);
     background: transparent;
     transition: color var(--duration-quick) var(--ease-smooth-out),
                 filter var(--duration-quick) var(--ease-smooth-out);
+  }
+  /* hit 48×48 wokół glypha 24×24 — bez wpływu na gap */
+  .footer-social-link::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
   }
   .footer-social-link:hover {
     color: var(--lime);
@@ -189,8 +196,8 @@ const social = {
   }
   .footer-social-link svg {
     display: block;
-    width: 24px !important;
-    height: 24px !important;
+    width: 24px;
+    height: 24px;
   }
 
   .footer-bottom {
