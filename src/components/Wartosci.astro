@@ -113,7 +113,7 @@ const wartosci = [
         <path d="M18 6 6 18M6 6l12 12" />
       </svg>
     </button>
-    <div class="om-modal-scroll">
+    <div class="om-modal-scroll" data-lenis-prevent>
       <div class="om-modal-content">
         <figure class="om-photo">
           <Image
@@ -202,32 +202,59 @@ const wartosci = [
   });
 
   // --- Modal „O mnie” ---
+  import Lenis from 'lenis';
+
   const modal = document.getElementById('o-mnie-modal');
   const openBtn = document.querySelector<HTMLElement>('[data-o-mnie-open]');
   if (modal && openBtn) {
     let trigger: HTMLElement | null = null;
+    let modalLenis: InstanceType<typeof Lenis> | null = null;
+    let modalRaf: number | null = null;
+
+    const startModalScroll = () => {
+      const wrapper = modal.querySelector('.om-modal-scroll');
+      const content = modal.querySelector('.om-modal-content');
+      if (!(wrapper instanceof HTMLElement) || !(content instanceof HTMLElement) || modalLenis) return;
+      modalLenis = new Lenis({ wrapper, content, duration: 1.1 });
+      const loop = (time: number) => {
+        modalLenis?.raf(time);
+        modalRaf = requestAnimationFrame(loop);
+      };
+      modalRaf = requestAnimationFrame(loop);
+    };
+    const stopModalScroll = () => {
+      if (modalRaf) cancelAnimationFrame(modalRaf);
+      modalRaf = null;
+      modalLenis?.destroy();
+      modalLenis = null;
+    };
 
     const focusable = () =>
-      modal.querySelectorAll<HTMLElement>(
+      [...modal.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
+      )].filter((el) => el.offsetParent !== null);
 
     const open = () => {
       trigger = openBtn;
+      const scroller = modal.querySelector('.om-modal-scroll');
+      if (scroller instanceof HTMLElement) scroller.scrollTop = 0;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       modal.removeAttribute('inert');
-      document.documentElement.classList.add('om-modal-lock');
+      document.body.style.overflow = 'hidden';
       (window as any).lenis?.stop?.();
+      startModalScroll();
       modal.querySelector<HTMLElement>('.om-modal-close')?.focus();
     };
 
     const close = () => {
+      if (!modal.classList.contains('open')) return;
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       modal.setAttribute('inert', '');
-      document.documentElement.classList.remove('om-modal-lock');
+      document.body.style.overflow = '';
       (window as any).lenis?.start?.();
+      stopModalScroll();
       trigger?.focus();
       trigger = null;
     };
@@ -237,7 +264,6 @@ const wartosci = [
       el.addEventListener('click', (e) => {
         const a = el as HTMLAnchorElement;
         if (a.tagName === 'A' && a.getAttribute('href')?.startsWith('#')) {
-          // Zamknij, potem pozwól Layoutowi zescrollować do kotwicy
           close();
           return;
         }
@@ -254,7 +280,7 @@ const wartosci = [
         return;
       }
       if (e.key !== 'Tab') return;
-      const nodes = [...focusable()];
+      const nodes = focusable();
       if (!nodes.length) return;
       const first = nodes[0];
       const last = nodes[nodes.length - 1];
@@ -268,13 +294,6 @@ const wartosci = [
     });
   }
 </script>
-
-<style is:global>
-  html.om-modal-lock,
-  html.om-modal-lock body {
-    overflow: hidden;
-  }
-</style>
 
 <style>
   /* Bez własnego tła — sekcja siedzi na białym tle strony.
@@ -408,7 +427,7 @@ const wartosci = [
   .om-modal-dialog {
     position: relative; z-index: 1;
     background: var(--white); border-radius: var(--radius);
-    max-width: 720px; width: 100%;
+    max-width: 800px; width: 100%;
     max-height: 85vh;
     max-height: 85dvh;
     display: flex; flex-direction: column;
@@ -426,7 +445,10 @@ const wartosci = [
     .om-modal-dialog { transform: none; }
   }
   .om-modal-scroll {
+    flex: 1 1 auto;
+    min-height: 0; /* bez tego flex nie ściska obszaru → brak scrolla */
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 40px 40px 24px;
     -webkit-overflow-scrolling: touch;
   }
