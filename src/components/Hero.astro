@@ -174,7 +174,9 @@ const poster = await getImage({ src: heroImg, width: 1920, format: 'webp' });
   }
 
   @media (max-width: 900px) {
-    /* Mobile: hero w flow, treść wyśrodkowana (nie przyklejona do krawędzi) */
+    /* Mobile: hero w flow, treść wyśrodkowana (nie przyklejona do krawędzi).
+       Bez własnego padding-inline — szerokość CTA = ten sam .container
+       co „Więcej o mnie” (inaczej 20px + 24px = węższy przycisk). */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -184,8 +186,7 @@ const poster = await getImage({ src: heroImg, width: 1920, format: 'webp' });
       justify-content: center;
       padding-top: 100px;
       padding-bottom: max(48px, env(safe-area-inset-bottom));
-      padding-inline: max(20px, env(safe-area-inset-left))
-                      max(20px, env(safe-area-inset-right));
+      padding-inline: 0;
     }
     .hero-content {
       width: 100%;
