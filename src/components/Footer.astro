@@ -31,16 +31,16 @@ const social = {
       <div class="footer-col footer-col--kontakt">
         <h3>Kontakt</h3>
         <a href={`mailto:${email}`} class="footer-contact-link">
-          {/* Material Design Icons — Email */}
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
-            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4-8 5-8-5V6l8 5 8-5z" />
+          {/* Material Icons — mail */}
+          <svg class="footer-contact-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
           </svg>
           <span>{email}</span>
         </a>
         <a href={`tel:${telefonHref}`} class="footer-contact-link">
-          {/* Material Design Icons — Phone */}
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
-            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02z" />
+          {/* Material Icons — call */}
+          <svg class="footer-contact-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
           </svg>
           <span>{telefon}</span>
         </a>
@@ -150,36 +150,46 @@ const social = {
   }
   .footer-col a:hover { color: var(--lime); }
   .footer-contact-link {
-    gap: 10px;
+    gap: 12px;
   }
-  .footer-contact-link svg {
+  .footer-contact-icon {
     flex-shrink: 0;
-    opacity: .85;
+    width: 24px;
+    height: 24px;
+    display: block;
+    color: var(--lime);
   }
   .footer-muted { color: rgba(255, 255, 255, .55); }
 
   .footer-social {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-top: 4px;
+    gap: 8px;
+    margin-top: 8px;
   }
   .footer-social-link {
+    box-sizing: border-box;
     width: 48px;
     height: 48px;
+    min-width: 48px;
     min-height: 48px;
+    padding: 0;
     display: inline-grid !important;
     place-items: center;
-    color: rgba(255, 255, 255, .75);
+    color: var(--lime);
     border-radius: 50%;
     transition: color var(--duration-quick) var(--ease-smooth-out),
                 background-color var(--duration-quick) var(--ease-smooth-out);
   }
   .footer-social-link:hover {
-    color: var(--lime);
-    background: rgba(255, 255, 255, .08);
+    color: var(--white);
+    background: rgba(255, 255, 255, .12);
   }
-  .footer-social-link svg { display: block; width: 32px; height: 32px; }
+  .footer-social-link svg {
+    display: block;
+    width: 32px !important;
+    height: 32px !important;
+  }
 
   .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, .14);
