@@ -37,6 +37,9 @@ const wartosci = [
         poznają rośliny wszystkimi zmysłami. Tam, gdzie zabawa staje się nauką,
         a&nbsp;nauka zabawą.
       </h2>
+      <button type="button" class="btn btn-lime w-cta" data-o-mnie-open>
+        O mnie
+      </button>
     </div>
 
     {/* Cztery kafelki — jak `features-grid` */}
@@ -93,6 +96,81 @@ const wartosci = [
   </div>
 </section>
 
+{/* Modal „O mnie” — treść z opisu PDF, bez powtórzeń z intro sekcji */}
+<div class="om-modal" id="o-mnie-modal" aria-hidden="true" inert>
+  <div class="om-modal-backdrop" data-om-close></div>
+  <div
+    class="om-modal-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="om-modal-title"
+  >
+    <button type="button" class="om-modal-close" data-om-close aria-label="Zamknij">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="om-modal-scroll">
+      <div class="om-modal-content">
+        <p class="om-eyebrow">Twórczyni</p>
+        <h3 id="om-modal-title">Monika Wierus-Wieczorek</h3>
+        <p class="om-subtitle">Biolog, pedagog i&nbsp;edukatorka przyrodnicza</p>
+
+        <p class="om-lead">
+          Nazywam się Monika i&nbsp;jestem twórczynią Ziołowej Akademii.
+          Specjalizuję się w&nbsp;zajęciach edukacyjnych dla dzieci opartych
+          na bezpośrednim kontakcie z&nbsp;naturą — poza salą lekcyjną,
+          tam gdzie nauka staje się angażująca i&nbsp;bliska rzeczywistości.
+        </p>
+
+        <h4 class="om-h">Skąd biorę warsztaty</h4>
+        <p class="om-p">
+          Przez ponad 10&nbsp;lat pracowałam w&nbsp;zielarniach: poznawałam
+          praktyczne zastosowanie roślin i&nbsp;ich rolę w&nbsp;codziennym życiu.
+          Dziś łączę to doświadczenie z&nbsp;pracą pedagogiczną — tworzę
+          autorskie warsztaty przyrodnicze, biologiczne i&nbsp;zielarskie
+          dla przedszkoli i&nbsp;szkół podstawowych.
+        </p>
+        <p class="om-p">
+          Prowadzę też zajęcia w&nbsp;placówkach oświatowych oraz spacery
+          botaniczne i&nbsp;kąpiele leśne. W&nbsp;ofercie znajdziesz m.in.
+          Akademię Małego Odkrywcy Ciała i&nbsp;warsztaty o&nbsp;roślinach,
+          ziołach i&nbsp;dzikiej przyrodzie.
+        </p>
+
+        <h4 class="om-h">Co wspierają zajęcia</h4>
+        <ul class="om-check">
+          <li>treści przyrodnicze i&nbsp;biologiczne w&nbsp;praktyce</li>
+          <li>rozwój kompetencji poznawczych</li>
+          <li>naukę przez doświadczenie i&nbsp;eksperyment</li>
+          <li>budowanie relacji z&nbsp;naturą</li>
+          <li>pracę metodą aktywizującą</li>
+        </ul>
+
+        <h4 class="om-h">Dla przedszkoli i&nbsp;szkół</h4>
+        <p class="om-p">
+          Warsztaty sprawdzają się jako uzupełnienie programu nauczania,
+          zajęcia tematyczne, wydarzenia specjalne albo element edukacji
+          terenowej — tak, by placówka dostała konkretne doświadczenie,
+          a&nbsp;nauczyciele oddech.
+        </p>
+
+        <h4 class="om-h">Jak to się zaczęło</h4>
+        <p class="om-p">
+          Ziołowa Akademia wyrosła z&nbsp;obserwacji dzieci i&nbsp;ich potrzeby
+          odkrywania świata przez działanie. Chciałam stworzyć przestrzeń,
+          w&nbsp;której wiedza biologiczna spotyka się z&nbsp;pedagogiką
+          doświadczeń — z&nbsp;większą ilością natury, ruchu i&nbsp;realnej
+          pracy własnymi rękami.
+        </p>
+      </div>
+    </div>
+    <div class="om-modal-foot">
+      <a href="#kontakt" class="btn btn-lime" data-om-close>Zapytaj o termin</a>
+    </div>
+  </div>
+</div>
+
 <script>
   // Kafelki pojawiają się kolejno, gdy sekcja wjedzie w widok.
   const karty = document.querySelectorAll('.wartosci .w-karta');
@@ -109,7 +187,81 @@ const wartosci = [
     (c as HTMLElement).dataset.i = String(i * 80);
     io.observe(c);
   });
+
+  // --- Modal „O mnie” ---
+  const modal = document.getElementById('o-mnie-modal');
+  const openBtn = document.querySelector<HTMLElement>('[data-o-mnie-open]');
+  if (modal && openBtn) {
+    let trigger: HTMLElement | null = null;
+
+    const focusable = () =>
+      modal.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+    const open = () => {
+      trigger = openBtn;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.removeAttribute('inert');
+      document.documentElement.classList.add('om-modal-lock');
+      (window as any).lenis?.stop?.();
+      modal.querySelector<HTMLElement>('.om-modal-close')?.focus();
+    };
+
+    const close = () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('inert', '');
+      document.documentElement.classList.remove('om-modal-lock');
+      (window as any).lenis?.start?.();
+      trigger?.focus();
+      trigger = null;
+    };
+
+    openBtn.addEventListener('click', open);
+    modal.querySelectorAll('[data-om-close]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        const a = el as HTMLAnchorElement;
+        if (a.tagName === 'A' && a.getAttribute('href')?.startsWith('#')) {
+          // Zamknij, potem pozwól Layoutowi zescrollować do kotwicy
+          close();
+          return;
+        }
+        e.preventDefault();
+        close();
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const nodes = [...focusable()];
+      if (!nodes.length) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  }
 </script>
+
+<style is:global>
+  html.om-modal-lock,
+  html.om-modal-lock body {
+    overflow: hidden;
+  }
+</style>
 
 <style>
   /* Bez własnego tła — sekcja siedzi na białym tle strony.
@@ -127,6 +279,7 @@ const wartosci = [
     flex-direction: column;
     gap: 32px;
     text-align: center;
+    align-items: center;
   }
   /* Mała etykieta 13px/500 — odpowiednik `label-large` */
   .w-label {
@@ -148,12 +301,16 @@ const wartosci = [
     color: var(--ink);
     margin: 0;
   }
+  .w-cta {
+    margin-top: 0;
+    align-self: center;
+  }
 
   /* --- Siatka kafelków --- */
   .w-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
+    gap: 48px 40px;
   }
   .w-karta {
     display: flex;
@@ -206,10 +363,152 @@ const wartosci = [
   }
 
   @media (max-width: 900px) {
-    .w-intro { margin-bottom: 40px; gap: 16px; }
-    .w-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
+    .w-intro { margin-bottom: 48px; gap: 20px; }
+    .w-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 28px; }
   }
   @media (max-width: 520px) {
-    .w-grid { grid-template-columns: 1fr; gap: 32px; }
+    .w-grid { grid-template-columns: 1fr; gap: 44px; }
+  }
+
+  /* --- Modal „O mnie” --- */
+  .om-modal {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: max(16px, env(safe-area-inset-top))
+             max(16px, env(safe-area-inset-right))
+             max(16px, env(safe-area-inset-bottom))
+             max(16px, env(safe-area-inset-left));
+    opacity: 0; pointer-events: none;
+    visibility: hidden;
+    transition: opacity var(--duration-quick) var(--ease-smooth-out),
+                visibility 0s linear var(--duration-quick);
+  }
+  .om-modal.open {
+    opacity: 1; pointer-events: auto; visibility: visible;
+    transition: opacity var(--duration-fast) var(--ease-smooth-out),
+                visibility 0s;
+  }
+  .om-modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(20,30,18,.55); backdrop-filter: blur(3px);
+  }
+  .om-modal-dialog {
+    position: relative; z-index: 1;
+    background: var(--white); border-radius: var(--radius);
+    max-width: 720px; width: 100%;
+    max-height: 85vh;
+    max-height: 85dvh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.3);
+    transform: translateY(var(--distance-medium)) scale(var(--scale-large));
+    transition: transform var(--duration-quick) var(--ease-smooth-out);
+  }
+  .om-modal.open .om-modal-dialog {
+    transform: none;
+    transition: transform var(--duration-fast) var(--ease-smooth-out);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .om-modal, .om-modal-dialog { transition: none; }
+    .om-modal-dialog { transform: none; }
+  }
+  .om-modal-scroll {
+    overflow-y: auto;
+    padding: 40px 40px 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .om-modal-foot {
+    flex-shrink: 0;
+    padding: 32px 40px;
+    background: var(--white);
+    border-top: 1px solid var(--line);
+  }
+  .om-modal-foot .btn { margin: 0; width: auto; }
+  .om-modal-close {
+    position: absolute; top: 24px; inset-inline-end: 24px;
+    z-index: 2;
+    width: 44px; height: 44px; border-radius: 50%; border: none;
+    background: var(--cream); cursor: pointer;
+    color: var(--ink);
+    display: grid; place-items: center;
+    transition: background-color var(--duration-quick) var(--ease-smooth-out),
+                transform var(--duration-quick) var(--ease-smooth-out);
+  }
+  .om-modal-close:active { transform: scale(var(--scale-large)); }
+  .om-modal-close:hover { background: var(--line); }
+
+  .om-eyebrow {
+    font-size: .8rem;
+    font-weight: var(--weight-emphasis);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .om-modal-dialog h3 {
+    font-family: var(--font-naglowek);
+    font-size: 1.6rem;
+    font-weight: var(--weight-display);
+    margin: 0 0 6px;
+    padding-inline-end: 48px;
+    color: var(--ink);
+  }
+  .om-subtitle {
+    color: var(--lime-dark);
+    font-weight: var(--weight-ui);
+    letter-spacing: .01em;
+    margin: 0 0 20px;
+  }
+  .om-lead {
+    font-family: var(--font-naglowek);
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: var(--weight-display);
+    line-height: var(--lh-prose);
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .om-h {
+    font-size: 1.05rem;
+    font-weight: var(--weight-display);
+    color: var(--ink);
+    margin: 32px 0 12px;
+    padding-top: 20px;
+    border-top: 3px solid var(--pastel-szczaw);
+  }
+  .om-p {
+    color: var(--muted);
+    margin: 0 0 14px;
+    line-height: var(--lh-body);
+  }
+  .om-check {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .om-check li {
+    position: relative;
+    padding-inline-start: 26px;
+    color: var(--muted);
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+  .om-check li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0; top: .42em;
+    width: 14px; height: 8px;
+    border-inline-start: 2.5px solid var(--lime-dark);
+    border-bottom: 2.5px solid var(--lime-dark);
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 720px) {
+    .om-modal-scroll { padding: 24px 20px 16px; }
+    .om-modal-foot { padding: 32px 20px; }
+    .om-modal-foot .btn { width: 100%; }
+    .om-modal-close { top: 16px; inset-inline-end: 16px; }
+    .om-modal-dialog h3 { font-size: 1.35rem; }
   }
 </style>

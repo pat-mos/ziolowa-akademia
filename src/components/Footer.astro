@@ -1,8 +1,12 @@
 ---
 const rok = new Date().getFullYear();
-// UWAGA: te same dane placeholder co w sekcji kontaktu — podmień na prawdziwe.
-const email = 'kontakt@ziolowaakademia.pl';
-const telefon = '+48 000 000 000';
+const email = 'monikawierus@wp.pl';
+const telefon = '781 864 944';
+const telefonHref = '+48781864944';
+const social = {
+  facebook: 'https://www.facebook.com/ziolowaakademia25',
+  instagram: 'https://www.instagram.com/ziolowa.akademia/',
+};
 ---
 <footer class="footer falbanka-gora">
   <div class="container">
@@ -27,8 +31,33 @@ const telefon = '+48 000 000 000';
       <div class="footer-col footer-col--kontakt">
         <h3>Kontakt</h3>
         <a href={`mailto:${email}`}>{email}</a>
-        <a href={`tel:${telefon.replace(/\s/g, '')}`}>{telefon}</a>
-        <span class="footer-muted">Województwo śląskie · cała Polska</span>
+        <a href={`tel:${telefonHref}`}>{telefon}</a>
+        <div class="footer-social">
+          <a
+            href={social.facebook}
+            class="footer-social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook Ziołowa Akademia"
+          >
+            {/* Material Design Icons — Facebook */}
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="currentColor">
+              <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
+            </svg>
+          </a>
+          <a
+            href={social.instagram}
+            class="footer-social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram Ziołowa Akademia"
+          >
+            {/* Material Design Icons — Instagram */}
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="currentColor">
+              <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -110,6 +139,29 @@ const telefon = '+48 000 000 000';
   .footer-col a:hover { color: var(--lime); }
   .footer-muted { color: rgba(255, 255, 255, .55); }
 
+  .footer-social {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .footer-social-link {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    display: inline-grid !important;
+    place-items: center;
+    color: rgba(255, 255, 255, .75);
+    border-radius: 50%;
+    transition: color var(--duration-quick) var(--ease-smooth-out),
+                background-color var(--duration-quick) var(--ease-smooth-out);
+  }
+  .footer-social-link:hover {
+    color: var(--lime);
+    background: rgba(255, 255, 255, .08);
+  }
+  .footer-social-link svg { display: block; }
+
   .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, .14);
     padding-top: 28px;
@@ -161,6 +213,7 @@ const telefon = '+48 000 000 000';
     }
     .footer-col { align-items: center; }
     .footer-col a { margin-inline: auto; }
+    .footer-social { justify-content: center; }
     .footer-bottom {
       flex-direction: column;
       text-align: center;
