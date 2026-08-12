@@ -449,7 +449,18 @@ const wartosci = [
   }
 
   @media (max-width: 900px) {
-    .w-intro { margin-bottom: 48px; gap: 20px; }
+    .w-intro {
+      margin-bottom: 48px;
+      gap: 20px;
+      width: 100%;
+      max-width: none;
+    }
+    .w-cta {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      align-self: stretch;
+    }
     .w-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 28px; }
   }
   @media (max-width: 520px) {
@@ -516,7 +527,15 @@ const wartosci = [
     justify-content: space-between;
     gap: 20px;
   }
-  .om-modal-foot .btn { margin: 0; width: auto; flex: 0 1 auto; }
+  .om-modal-foot .btn {
+    margin: 0;
+    width: auto;
+    flex: 0 1 auto;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
   .om-modal-social {
     display: flex;
     align-items: center;
@@ -663,7 +682,13 @@ const wartosci = [
   @media (max-width: 720px) {
     .om-modal-scroll { padding: 24px 20px 16px; }
     .om-modal-foot { padding: 24px 20px; gap: 16px; }
-    .om-modal-foot .btn { flex: 1 1 auto; min-width: 0; }
+    .om-modal-foot .btn {
+      flex: 1 1 auto;
+      min-width: 0;
+      width: auto;
+      text-align: center;
+      justify-content: center;
+    }
     .om-modal-close { top: 16px; inset-inline-end: 16px; }
     .om-modal-dialog h3 { font-size: 1.35rem; }
     .om-photo {
