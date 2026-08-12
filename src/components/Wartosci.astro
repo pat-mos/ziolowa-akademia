@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import oMnieFoto from '../assets/img/o-mnie.jpeg';
+
 // Sekcja łączona: wprowadzenie o Ziołowej Akademii + cztery wartości.
 // Układ 1:1 z sekcją „Gentle by design. Curious by nature." (bobolobo):
 // u góry wyśrodkowany blok 680px (mała etykieta + duży tekst), pod nim
@@ -112,6 +115,16 @@ const wartosci = [
     </button>
     <div class="om-modal-scroll">
       <div class="om-modal-content">
+        <figure class="om-photo">
+          <Image
+            src={oMnieFoto}
+            alt="Monika Wierus-Wieczorek w wieńcu z kwiatów przy bramie Ziołowy Zakątek"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 720px) 92vw, 640px"
+            loading="lazy"
+          />
+        </figure>
+
         <p class="om-eyebrow">Twórczyni</p>
         <h3 id="om-modal-title">Monika Wierus-Wieczorek</h3>
         <p class="om-subtitle">Biolog, pedagog i&nbsp;edukatorka przyrodnicza</p>
@@ -428,14 +441,31 @@ const wartosci = [
     position: absolute; top: 24px; inset-inline-end: 24px;
     z-index: 2;
     width: 44px; height: 44px; border-radius: 50%; border: none;
-    background: var(--cream); cursor: pointer;
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
+    cursor: pointer;
     color: var(--ink);
     display: grid; place-items: center;
     transition: background-color var(--duration-quick) var(--ease-smooth-out),
                 transform var(--duration-quick) var(--ease-smooth-out);
   }
   .om-modal-close:active { transform: scale(var(--scale-large)); }
-  .om-modal-close:hover { background: var(--line); }
+  .om-modal-close:hover { background: var(--white); }
+
+  .om-photo {
+    margin: -40px -40px 28px;
+    overflow: hidden;
+    background: var(--cream);
+  }
+  .om-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    /* Twarz i wieniec są po prawej — kadr trzyma je w polu widzenia */
+    object-position: 78% 22%;
+  }
 
   .om-eyebrow {
     font-size: .8rem;
@@ -510,5 +540,12 @@ const wartosci = [
     .om-modal-foot .btn { width: 100%; }
     .om-modal-close { top: 16px; inset-inline-end: 16px; }
     .om-modal-dialog h3 { font-size: 1.35rem; }
+    .om-photo {
+      margin: -24px -20px 20px;
+    }
+    .om-photo img {
+      aspect-ratio: 5 / 4;
+      object-position: 82% 18%;
+    }
   }
 </style>
