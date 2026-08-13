@@ -96,7 +96,12 @@ const petla = [...zdjecia, ...zdjecia];
   const root = document.querySelector<HTMLElement>('[data-galeria]');
   if (root) {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Pause-on-hover tylko dla myszy — na mobile :hover „przykleja się”
+    // po tapnięciu i zabijało auto-scroll.
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     let dragging = false;
+    let touchPaused = false;
+    let touchResumeTimer: number | null = null;
     let startX = 0;
     let startScroll = 0;
     let moved = false;
@@ -138,6 +143,20 @@ const petla = [...zdjecia, ...zdjecia];
     root.addEventListener('pointercancel', endDrag);
     root.addEventListener('lostpointercapture', endDrag);
 
+    // Podczas przeciągania palcem pauza auto-scrollu; po chwili wznawia.
+    root.addEventListener('touchstart', () => {
+      touchPaused = true;
+      if (touchResumeTimer !== null) window.clearTimeout(touchResumeTimer);
+    }, { passive: true });
+    root.addEventListener('touchend', () => {
+      if (touchResumeTimer !== null) window.clearTimeout(touchResumeTimer);
+      touchResumeTimer = window.setTimeout(() => { touchPaused = false; }, 1800);
+    }, { passive: true });
+    root.addEventListener('touchcancel', () => {
+      if (touchResumeTimer !== null) window.clearTimeout(touchResumeTimer);
+      touchResumeTimer = window.setTimeout(() => { touchPaused = false; }, 1800);
+    }, { passive: true });
+
     // Po drag nie otwieraj obrazka / nie zaznaczaj
     root.addEventListener('click', (e) => {
       if (moved) {
@@ -155,7 +174,13 @@ const petla = [...zdjecia, ...zdjecia];
       const tick = (now: number) => {
         const dt = now - last;
         last = now;
-        if (!dragging && !root.matches(':hover') && document.visibilityState === 'visible') {
+        const hoverPause = finePointer.matches && root.matches(':hover');
+        if (
+          !dragging &&
+          !touchPaused &&
+          !hoverPause &&
+          document.visibilityState === 'visible'
+        ) {
           root.scrollLeft += dt * speed;
           loopScroll();
         }
