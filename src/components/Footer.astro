@@ -12,14 +12,17 @@ const social = {
   <div class="container">
     {/* Desktop: logo | nawigacja | kontakt — kolumny na środku wysokości logo */}
     <div class="footer-top">
-      <a href="#top" class="footer-logo">
-        <img
-          src="/img/logo-wordmark.png"
-          alt="Ziołowa Akademia"
-          width="240"
-          height="194"
-        />
-      </a>
+      <div class="footer-brand">
+        <a href="#top" class="footer-logo">
+          <img
+            src="/img/logo-wordmark.png"
+            alt="Ziołowa Akademia"
+            width="240"
+            height="194"
+          />
+        </a>
+        <p class="footer-place">Częstochowa i okolice</p>
+      </div>
 
       <nav class="footer-col footer-col--nav">
         <h3>Nawigacja</h3>
@@ -108,11 +111,23 @@ const social = {
 
   .footer-top {
     display: grid;
-    /* Logo | Nawigacja | Kontakt — kolumny na środku wysokości logo */
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.15fr);
     column-gap: 48px;
-    align-items: center;
+    align-items: start;
     padding-bottom: 48px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .footer-place {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .55);
+    line-height: 1.4;
   }
 
   /* pole dotyku 44px */
@@ -250,6 +265,7 @@ const social = {
       text-align: center;
     }
     .footer-col { align-items: center; }
+    .footer-brand { align-items: center; text-align: center; }
     .footer-col a { margin-inline: auto; }
     .footer-social { justify-content: center; }
     .footer-bottom {
