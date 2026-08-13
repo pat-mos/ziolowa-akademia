@@ -587,10 +587,10 @@ const tabs = [
     modalTrigger = null;
   }
 
-  // Okno otwiera przycisk w karcie, a nie cała karta. Wcześniej klikalna była
-  // karta (role="button" + tabindex) — teraz w środku jest prawdziwy <button>,
-  // więc zagnieżdżanie dwóch klikalnych warstw byłoby błędem dostępności.
-  document.querySelectorAll('.offer-card:not(.is-placeholder) .offer-cta').forEach((cta) => {
+  // Okno otwiera tylko przycisk „Zobacz szczegóły”. Linki „Zapytaj o termin”
+  // (karty wkrótce) mają class offer-cta dla stylu, ale prowadzą do #kontakt —
+  // nie wolno im odpalać modala.
+  document.querySelectorAll('.offer-card:not(.is-placeholder) button.offer-cta').forEach((cta) => {
     cta.addEventListener('click', () => {
       const card = cta.closest('.offer-card');
       if (card) openModal(card);
