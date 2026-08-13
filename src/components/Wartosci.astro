@@ -101,18 +101,6 @@ const wartosci = [
         </article>
       ))}
     </div>
-
-    {/* Lokalizacja — drugi blok nagłówkowy w sekcji O mnie */}
-    <div class="w-miejsce">
-      <span class="w-label">Gdzie działamy</span>
-      <h2 class="w-headline w-headline--miejsce">
-        Zajęcia prowadzimy w&nbsp;Częstochowie i&nbsp;okolicach
-      </h2>
-      <p class="w-miejsce-lead">
-        Szukacie warsztatów dalej?&nbsp;<a href="#kontakt">Napiszcie do nas</a>
-        — przy większej grupie lub kilku blokach chętnie ustalimy dojazd.
-      </p>
-    </div>
   </div>
 </section>
 
@@ -218,6 +206,15 @@ const wartosci = [
           doświadczeń — z&nbsp;większą ilością natury, ruchu i&nbsp;realnej
           pracy własnymi rękami.
         </p>
+
+        <div class="om-miejsce">
+          <span class="om-eyebrow">Gdzie działamy</span>
+          <h4 class="om-miejsce-h">Zajęcia prowadzimy w&nbsp;Częstochowie i&nbsp;okolicach</h4>
+          <p class="om-miejsce-lead">
+            Szukacie warsztatów dalej?&nbsp;<a href="#kontakt" data-om-close>Napiszcie do nas</a>
+            — przy większej grupie lub kilku blokach chętnie ustalimy dojazd.
+          </p>
+        </div>
       </div>
     </div>
     <div class="om-modal-foot">
@@ -408,36 +405,6 @@ const wartosci = [
     align-self: center;
   }
 
-  /* --- Lokalizacja --- */
-  .w-miejsce {
-    max-width: 640px;
-    margin: 88px auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-    align-items: center;
-  }
-  .w-headline--miejsce {
-    font-size: clamp(1.25rem, 2.4vw, 1.85rem);
-  }
-  .w-miejsce-lead {
-    margin: 0;
-    max-width: 40ch;
-    color: var(--muted);
-    font-size: var(--text-lead);
-    line-height: var(--lh-body);
-  }
-  .w-miejsce-lead a {
-    color: var(--ink);
-    font-weight: var(--weight-ui);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-    text-decoration-thickness: 1.5px;
-    transition: color var(--duration-quick) var(--ease-smooth-out);
-  }
-  .w-miejsce-lead a:hover { color: var(--herb); }
-
   /* --- Siatka kafelków --- */
   .w-grid {
     display: grid;
@@ -508,7 +475,6 @@ const wartosci = [
       align-self: stretch;
     }
     .w-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 28px; }
-    .w-miejsce { margin-top: 64px; gap: 12px; }
   }
   @media (max-width: 520px) {
     .w-grid { grid-template-columns: 1fr; gap: 44px; }
@@ -725,6 +691,56 @@ const wartosci = [
     color: var(--white);
   }
   .om-ptaszek svg { width: 15px; height: 15px; display: block; }
+
+  .om-miejsce {
+    margin-top: 32px;
+    padding-top: 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+  .om-miejsce::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline: 0;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--lime-dark) 0%,
+      var(--lime) 50%,
+      var(--lime-dark) 100%
+    );
+  }
+  .om-miejsce .om-eyebrow { margin: 0; }
+  .om-miejsce-h {
+    font-family: var(--font-naglowek);
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    font-weight: var(--weight-display);
+    line-height: var(--lh-prose);
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .om-miejsce-lead {
+    margin: 0;
+    max-width: 42ch;
+    color: var(--muted);
+    line-height: var(--lh-body);
+  }
+  .om-miejsce-lead a {
+    color: var(--ink);
+    font-weight: var(--weight-ui);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1.5px;
+    transition: color var(--duration-quick) var(--ease-smooth-out);
+  }
+  .om-miejsce-lead a:hover { color: var(--herb); }
 
   @media (max-width: 720px) {
     .om-modal-scroll { padding: 24px 20px 16px; }
