@@ -207,14 +207,12 @@ const wartosci = [
           pracy własnymi rękami.
         </p>
 
-        <div class="om-miejsce">
-          <span class="om-eyebrow">Gdzie działamy</span>
-          <h4 class="om-miejsce-h">Zajęcia prowadzimy w&nbsp;Częstochowie i&nbsp;okolicach</h4>
-          <p class="om-miejsce-lead">
-            Szukacie warsztatów dalej?&nbsp;<a href="#kontakt" data-om-close>Napisz do nas</a>.
-            Przy większej grupie lub kilku blokach chętnie ustalimy dojazd.
-          </p>
-        </div>
+        <h4 class="om-h">Gdzie działamy</h4>
+        <p class="om-p">
+          Zajęcia prowadzimy w&nbsp;Częstochowie i&nbsp;okolicach.
+          Szukacie warsztatów dalej?&nbsp;<a href="#kontakt" data-om-close>Napisz do nas</a>.
+          Przy większej grupie lub kilku blokach chętnie ustalimy dojazd.
+        </p>
       </div>
     </div>
     <div class="om-modal-foot">
@@ -663,6 +661,14 @@ const wartosci = [
     margin: 0 0 14px;
     line-height: var(--lh-body);
   }
+  .om-p a {
+    color: var(--ink);
+    font-weight: var(--weight-ui);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1.5px;
+  }
+  .om-p a:hover { color: var(--herb); }
   .om-check {
     list-style: none;
     padding: 0;
@@ -691,56 +697,6 @@ const wartosci = [
     color: var(--white);
   }
   .om-ptaszek svg { width: 15px; height: 15px; display: block; }
-
-  .om-miejsce {
-    margin-top: 32px;
-    padding-top: 28px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-  }
-  .om-miejsce::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    inset-inline: 0;
-    height: 1px;
-    border-radius: 999px;
-    background: linear-gradient(
-      90deg,
-      var(--lime-dark) 0%,
-      var(--lime) 50%,
-      var(--lime-dark) 100%
-    );
-  }
-  .om-miejsce .om-eyebrow { margin: 0; }
-  .om-miejsce-h {
-    font-family: var(--font-naglowek);
-    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
-    font-weight: var(--weight-display);
-    line-height: var(--lh-prose);
-    color: var(--ink);
-    margin: 0;
-    text-wrap: balance;
-  }
-  .om-miejsce-lead {
-    margin: 0;
-    max-width: 42ch;
-    color: var(--muted);
-    line-height: var(--lh-body);
-  }
-  .om-miejsce-lead a {
-    color: var(--ink);
-    font-weight: var(--weight-ui);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-    text-decoration-thickness: 1.5px;
-    transition: color var(--duration-quick) var(--ease-smooth-out);
-  }
-  .om-miejsce-lead a:hover { color: var(--herb); }
 
   @media (max-width: 720px) {
     .om-modal-scroll { padding: 24px 20px 16px; }
