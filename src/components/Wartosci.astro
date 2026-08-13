@@ -256,25 +256,29 @@ const wartosci = [
   });
 
   // --- Modal „O mnie” ---
-  import Lenis from 'lenis';
-
+  // Lenis ładujemy dynamicznie: awaria importu NIE może wyłączyć otwierania CTA.
   const modal = document.getElementById('o-mnie-modal');
   const openBtn = document.querySelector<HTMLElement>('[data-o-mnie-open]');
   if (modal && openBtn) {
     let trigger: HTMLElement | null = null;
-    let modalLenis: InstanceType<typeof Lenis> | null = null;
+    let modalLenis: { raf: (t: number) => void; destroy: () => void } | null = null;
     let modalRaf: number | null = null;
 
-    const startModalScroll = () => {
+    const startModalScroll = async () => {
       const wrapper = modal.querySelector('.om-modal-scroll');
       const content = modal.querySelector('.om-modal-content');
       if (!(wrapper instanceof HTMLElement) || !(content instanceof HTMLElement) || modalLenis) return;
-      modalLenis = new Lenis({ wrapper, content, duration: 1.1 });
-      const loop = (time: number) => {
-        modalLenis?.raf(time);
+      try {
+        const { default: Lenis } = await import('lenis');
+        modalLenis = new Lenis({ wrapper, content, duration: 1.1 });
+        const loop = (time: number) => {
+          modalLenis?.raf(time);
+          modalRaf = requestAnimationFrame(loop);
+        };
         modalRaf = requestAnimationFrame(loop);
-      };
-      modalRaf = requestAnimationFrame(loop);
+      } catch {
+        // Natywny scroll w .om-modal-scroll wystarczy.
+      }
     };
     const stopModalScroll = () => {
       if (modalRaf) cancelAnimationFrame(modalRaf);
@@ -297,7 +301,7 @@ const wartosci = [
       modal.removeAttribute('inert');
       document.body.style.overflow = 'hidden';
       (window as any).lenis?.stop?.();
-      startModalScroll();
+      void startModalScroll();
       modal.querySelector<HTMLElement>('.om-modal-close')?.focus();
     };
 
