@@ -101,6 +101,18 @@ const wartosci = [
         </article>
       ))}
     </div>
+
+    {/* Lokalizacja — drugi blok nagłówkowy w sekcji O mnie */}
+    <div class="w-miejsce">
+      <span class="w-label">Gdzie działamy</span>
+      <h2 class="w-headline w-headline--miejsce">
+        Zajęcia prowadzimy w&nbsp;Częstochowie i&nbsp;okolicach
+      </h2>
+      <p class="w-miejsce-lead">
+        Szukacie warsztatów dalej?&nbsp;<a href="#kontakt">Napiszcie do nas</a>
+        — przy większej grupie lub kilku blokach chętnie ustalimy dojazd.
+      </p>
+    </div>
   </div>
 </section>
 
@@ -396,6 +408,36 @@ const wartosci = [
     align-self: center;
   }
 
+  /* --- Lokalizacja --- */
+  .w-miejsce {
+    max-width: 640px;
+    margin: 88px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    align-items: center;
+  }
+  .w-headline--miejsce {
+    font-size: clamp(1.25rem, 2.4vw, 1.85rem);
+  }
+  .w-miejsce-lead {
+    margin: 0;
+    max-width: 40ch;
+    color: var(--muted);
+    font-size: var(--text-lead);
+    line-height: var(--lh-body);
+  }
+  .w-miejsce-lead a {
+    color: var(--ink);
+    font-weight: var(--weight-ui);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1.5px;
+    transition: color var(--duration-quick) var(--ease-smooth-out);
+  }
+  .w-miejsce-lead a:hover { color: var(--herb); }
+
   /* --- Siatka kafelków --- */
   .w-grid {
     display: grid;
@@ -466,6 +508,7 @@ const wartosci = [
       align-self: stretch;
     }
     .w-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 28px; }
+    .w-miejsce { margin-top: 64px; gap: 12px; }
   }
   @media (max-width: 520px) {
     .w-grid { grid-template-columns: 1fr; gap: 44px; }
