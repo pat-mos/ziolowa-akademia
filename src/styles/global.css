@@ -83,7 +83,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 /* Rezerwacja miejsca na pasek przewijania — brak skoku przy otwieraniu modalu */
-html { scrollbar-gutter: stable; }
+html {
+  scrollbar-gutter: stable;
+  scroll-padding-top: 96px; /* fixed nav — kotwice i native scroll */
+}
 
 /* Style wymagane przez smooth-scroll Lenis */
 html.lenis, html.lenis body { height: auto; }
@@ -376,6 +379,8 @@ html.js-anim .page-content .oferta:has(> .container.widoczny) > .tabs-scroller {
   font-size: var(--text-body);
   cursor: pointer;
   border: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   /* Hover-in: krótko + smooth-out (bez bounce na wejściu). */
   transition: transform var(--duration-fast) var(--ease-smooth-out),
               background-color var(--duration-quick) var(--ease-smooth-out),

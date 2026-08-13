@@ -105,12 +105,16 @@ const pytania = [
         panel.style.height = `${inner.scrollHeight}px`;
       });
     });
-    const onEnd = (e: TransitionEvent) => {
-      if (e.propertyName !== 'height') return;
+    const finish = () => {
       panel.removeEventListener('transitionend', onEnd);
       if (item.classList.contains('open')) panel.style.height = 'auto';
     };
+    const onEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== 'height') return;
+      finish();
+    };
     panel.addEventListener('transitionend', onEnd);
+    window.setTimeout(finish, 320);
   };
 
   items.forEach((item) => {

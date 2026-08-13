@@ -83,8 +83,14 @@ const social = {
     z-index: 50;
     padding-inline: max(16px, env(safe-area-inset-left))
                     max(16px, env(safe-area-inset-right));
+    /* Zamknięty panel jest visibility:hidden, ale nadal w layoutcie —
+       bez tego header ma ~360px i zjada tapnięcia pod pigułką (FAQ, CTA). */
+    pointer-events: none;
   }
   .nav-pill {
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
     max-width: 800px;
     margin-inline: auto;
     display: flex;
@@ -130,6 +136,8 @@ const social = {
     border-radius: 50%;
     color: var(--ink);
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     transition: background-color var(--duration-quick) var(--ease-smooth-out),
                 transform var(--duration-quick) var(--ease-smooth-out);
   }
@@ -153,6 +161,11 @@ const social = {
   /* --- Panel mobilny --- */
   .nav-panel {
     display: none;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
     max-width: 800px;
     margin: 10px auto 0;
     padding: 12px;
@@ -170,6 +183,7 @@ const social = {
                 visibility 0s linear var(--duration-quick);
   }
   .nav[data-open='true'] .nav-panel {
+    pointer-events: auto;
     visibility: visible;
     opacity: 1;
     translate: 0 0;

@@ -662,6 +662,8 @@ const tabs = [
     border: none; background: var(--chip); color: var(--ink);
     font-family: var(--font); font-weight: var(--weight-ui); font-size: var(--text-body);
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     box-shadow: 0 0 0 0 var(--white), 0 0 0 0 var(--chip);
     transition: box-shadow var(--duration-quick) var(--ease-smooth-out),
                 transform var(--duration-quick) var(--ease-smooth-out),
