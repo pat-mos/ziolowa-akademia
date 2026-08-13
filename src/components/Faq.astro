@@ -43,7 +43,7 @@ const pytania = [
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
             </span>
           </button>
-          <div class="faq-a">
+          <div class="faq-a" hidden>
             <div class="faq-a-inner">
               <p>{p.a}</p>
             </div>
@@ -55,21 +55,73 @@ const pytania = [
 </section>
 
 <script>
-  // Animowana rozwijanka (akordeon): płynnie rozwija wysokość odpowiedzi
-  // i obraca ikonę „+"/„×". Otwarcie jednego pytania zamyka pozostałe.
-  const items = document.querySelectorAll('.faq-item');
-  items.forEach((item) => {
-    const btn = item.querySelector('.faq-q');
-    btn?.addEventListener('click', () => {
-      const isOpen = item.classList.contains('open');
-      items.forEach((it) => {
-        it.classList.remove('open');
-        it.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
-      });
-      if (!isOpen) {
-        item.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
+  // Akordeon na wysokości (nie grid 0fr→1fr) — Safari/iOS przy pierwszym
+  // tapnięciu zostawiał panel na 0px mimo klasy .open.
+  const items = [...document.querySelectorAll<HTMLElement>('.faq-item')];
+
+  const panelOf = (item: HTMLElement) => item.querySelector<HTMLElement>('.faq-a');
+  const btnOf = (item: HTMLElement) => item.querySelector<HTMLButtonElement>('.faq-q');
+  const innerOf = (item: HTMLElement) => item.querySelector<HTMLElement>('.faq-a-inner');
+
+  const closeItem = (item: HTMLElement) => {
+    const panel = panelOf(item);
+    const btn = btnOf(item);
+    const inner = innerOf(item);
+    if (!panel || !btn || !inner) return;
+    if (!item.classList.contains('open')) {
+      panel.hidden = true;
+      panel.style.height = '';
+      return;
+    }
+    // Z auto → px, potem 0, żeby transition zadziałał.
+    panel.style.height = `${inner.scrollHeight}px`;
+    panel.getBoundingClientRect(); // reflow
+    item.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    panel.style.height = '0px';
+    const onEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== 'height') return;
+      panel.removeEventListener('transitionend', onEnd);
+      if (!item.classList.contains('open')) {
+        panel.hidden = true;
+        panel.style.height = '';
       }
+    };
+    panel.addEventListener('transitionend', onEnd);
+  };
+
+  const openItem = (item: HTMLElement) => {
+    const panel = panelOf(item);
+    const btn = btnOf(item);
+    const inner = innerOf(item);
+    if (!panel || !btn || !inner) return;
+    panel.hidden = false;
+    panel.style.height = '0px';
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    // Dwa rAF: pierwszy po usunięciu [hidden], drugi po zmierzeniu treści.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        panel.style.height = `${inner.scrollHeight}px`;
+      });
+    });
+    const onEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== 'height') return;
+      panel.removeEventListener('transitionend', onEnd);
+      if (item.classList.contains('open')) panel.style.height = 'auto';
+    };
+    panel.addEventListener('transitionend', onEnd);
+  };
+
+  items.forEach((item) => {
+    const btn = btnOf(item);
+    btn?.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('open');
+      items.forEach((it) => {
+        if (it !== item) closeItem(it);
+      });
+      if (willOpen) openItem(item);
+      else closeItem(item);
     });
   });
 </script>
@@ -124,23 +176,25 @@ const pytania = [
   /* „+" obraca się o 45° → wygląda jak „×" po otwarciu */
   .faq-item.open .faq-icon { transform: rotate(45deg); }
 
-  /* Płynne rozwijanie: 0fr → 1fr. min-height:0 na inner jest WYMAGANE —
-     bez tego Safari/iOS przy pierwszym kliknięciu zostawia wysokość 0
-     (min-height:auto nie pozwala zwinąć poniżej treści). */
   .faq-a {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows var(--duration-fast) var(--ease-smooth-out);
-  }
-  .faq-item.open .faq-a { grid-template-rows: 1fr; }
-  .faq-a-inner {
+    height: 0;
     overflow: hidden;
-    min-height: 0;
+    transition: height var(--duration-fast) var(--ease-smooth-out);
   }
+  .faq-a[hidden] {
+    display: block; /* height anim; hidden tylko dla a11y/stanu startowego */
+    height: 0;
+  }
+  .faq-a-inner { min-height: 0; }
   .faq-a p { color: var(--muted); padding: 0 30px 28px; line-height: var(--lh-body); }
 
   @media (max-width: 520px) {
     .faq-q { padding: 20px 24px; font-size: 1.05rem; }
     .faq-a p { padding: 0 24px 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-a { transition: none; }
+    .faq-icon { transition: none; }
   }
 </style>

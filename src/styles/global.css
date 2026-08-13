@@ -327,6 +327,11 @@ html.js-anim .page-content .section > .container {
   transition: opacity var(--duration-very-slow) var(--ease-smooth-out);
 }
 html.js-anim .page-content .section > .container.widoczny { opacity: 1; }
+/* FAQ: bez wjazdu opacity — na iOS pierwszy tap w sekcję jeszcze
+   przezroczystą bywał „martwy” (akordeon otwierał się dopiero za drugim). */
+html.js-anim .page-content .faq > .container {
+  opacity: 1;
+}
 /* Oferta: chipy poza kontenerem — też wjeżdżają z sekcją (pierwszy kontener) */
 html.js-anim .page-content .oferta > .tabs-scroller {
   opacity: 0;
